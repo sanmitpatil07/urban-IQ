@@ -1,0 +1,23 @@
+city_name: pune
+state: maharashtra
+country: india
+
+# Bounding box [west, south, east, north] in WGS84
+# Covers Pune Municipal Corporation area
+bbox: [73.75, 18.40, 73.98, 18.62]
+
+# OSM relation ID for precise municipal boundary (Pune City Subdistrict)
+osm_relation_id: 10351626
+
+# Satellite search parameters
+satellite:
+  date_range: "2026-03-01/2026-06-30"
+  max_cloud_cover: 15
+  landsat_platforms: ["landsat-8", "landsat-9"]
+  sentinel2_processing_level: "L2A"
+
+# Target CRS for all outputs (UTM Zone 43N — covers Pune)
+target_crs: "EPSG:32643"
+
+# Grid resolution for zone aggregation (meters)
+grid_resolution: 300

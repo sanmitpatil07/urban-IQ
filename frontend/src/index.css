@@ -1,0 +1,159 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #0B1220;
+    color: #EDF1F7;
+    font-family: 'Inter', 'Outfit', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', 'Outfit', sans-serif;
+  }
+
+  code, pre, .font-mono {
+    font-family: 'IBM Plex Mono', monospace;
+  }
+}
+
+:root {
+  --bg-color: #0B1220;
+  --bg-panel: #131B2E;
+  --text-primary: #EDF1F7;
+  --text-secondary: #8793A8;
+  --accent-color: #2FB8AC;
+  --accent-hover: #269B91;
+  --border-color: #263349;
+  --glass-bg: rgba(19, 27, 46, 0.85);
+  --glass-border: rgba(38, 51, 73, 0.7);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  
+  --heat-cool: #2FB8AC;
+  --heat-mid: #F2A93B;
+  --heat-hot: #E8632B;
+  --heat-crit: #C81E3A;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Scrollbar for Ops Console */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0B1220;
+}
+::-webkit-scrollbar-thumb {
+  background: #263349;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3A4D6E;
+}
+
+/* Dark Mission Control Grid pattern */
+.bg-ops-grid {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(38, 51, 73, 0.2) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(38, 51, 73, 0.2) 1px, transparent 1px);
+}
+
+/* Custom glowing pulse keyframes for map SVG polygons */
+@keyframes breathingPulse {
+  0%, 100% {
+    fill-opacity: 0.75;
+    stroke-opacity: 1;
+    stroke-width: 2.5px;
+  }
+  50% {
+    fill-opacity: 0.35;
+    stroke-opacity: 0.6;
+    stroke-width: 1.5px;
+  }
+}
+
+.ward-pulse-critical {
+  animation: breathingPulse 1.8s ease-in-out infinite;
+}
+
+.ward-pulse-high {
+  animation: breathingPulse 2.6s ease-in-out infinite;
+}
+
+.ward-pulse-moderate {
+  animation: breathingPulse 3.5s ease-in-out infinite;
+}
+
+.ward-pulse-safe {
+  animation: breathingPulse 4.8s ease-in-out infinite;
+}
+
+/* Custom Range Slider */
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  background: transparent;
+}
+input[type=range]:focus {
+  outline: none;
+}
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 6px;
+  cursor: pointer;
+  background: #1B2740;
+  border-radius: 3px;
+  border: 1px solid #263349;
+}
+input[type=range]::-webkit-slider-thumb {
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: #2FB8AC;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -5px;
+  box-shadow: 0 0 10px rgba(47, 184, 172, 0.6);
+  transition: transform 0.1s;
+}
+input[type=range]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* MapLibre Popup Overrides */
+.maplibregl-popup-content {
+  background: #0B1220 !important;
+  border: 1px solid #263349 !important;
+  color: #EDF1F7 !important;
+  border-radius: 8px !important;
+  padding: 12px 14px !important;
+  box-shadow: 0 8px 30px -4px rgba(0, 0, 0, 0.7) !important;
+  font-family: 'Inter', sans-serif !important;
+}
+.maplibregl-popup-tip {
+  border-top-color: #0B1220 !important;
+  border-bottom-color: #0B1220 !important;
+}
+
+/* Leaflet Container Overrides */
+.leaflet-container {
+  background: #0B1220 !important;
+  font-family: 'Inter', sans-serif !important;
+}
