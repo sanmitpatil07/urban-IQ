@@ -121,7 +121,7 @@ export function MapView() {
   const [isUsingMockData, setIsUsingMockData] = useState(false);
   const [dataFeedToast, setDataFeedToast] = useState(null);
 
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL.replace(/\/$/, '');
+  const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '');
   const demoModeEnabled = import.meta.env.VITE_ENABLE_DEMO_MODE === 'true';
 
   // Fetch real Pune heatmap GeoJSON from FastAPI backend
