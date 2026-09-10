@@ -3,6 +3,7 @@ Utilities — logging, CRS helpers, path builders.
 """
 
 import logging
+import os
 import sys
 from pathlib import Path
 
@@ -39,7 +40,9 @@ log = setup_logging()
 # ---------------------------------------------------------------------------
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]  # urban-heat-dss/
-DATA_DIR = PROJECT_ROOT / "data"
+# Production containers mount release artifacts at this location. Keeping the
+# default preserves the existing local pipeline layout.
+DATA_DIR = Path(os.environ.get("URBAN_HEAT_DATA_DIR", PROJECT_ROOT / "data"))
 CONFIG_DIR = PROJECT_ROOT / "config" / "cities"
 
 

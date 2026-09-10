@@ -1,6 +1,7 @@
-import os
 import json
+import os
 import sys
+from collections import OrderedDict
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request
@@ -12,7 +13,7 @@ import pandas as pd
 # Add src/ to path so we can import urban_heat modules
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
-from urban_heat.utils import processed_dir, log
+from urban_heat.utils import DATA_DIR, log, processed_dir
 from urban_heat.model import UrbanHeatModel
 from backend.models import SimulationRequest, SimulationResponse, SimulationResult
 
@@ -22,10 +23,15 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# CORS configuration: Restrict to explicit local development and demo origins.
-# NOTE: Loosened to standard local dev ports (5173, 3000, 8080) for hackathon demo convenience.
-# In a production deployment, this should be strictly locked down to verified production hostnames.
+# CORS configuration: deployment origins must be explicit in production.
+env_origins = os.environ.get("ALLOWED_ORIGINS", "")
+ENVIRONMENT = os.environ.get("ENVIRONMENT", "development").lower()
+API_KEY = os.environ.get("URBAN_HEAT_API_KEY")
+if ENVIRONMENT == "production" and not env_origins:
+    raise RuntimeError("ALLOWED_ORIGINS must be set in production.")
 ALLOWED_ORIGINS = [
+    origin.strip() for origin in env_origins.split(",") if origin.strip()
+] if env_origins else [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://localhost:3000",
@@ -37,18 +43,14 @@ ALLOWED_ORIGINS = [
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
+    allow_origin_regex=os.environ.get("CORS_ORIGIN_REGEX") or (
+        None if ENVIRONMENT == "production"
+        else r"https?://.*\.vercel\.app|https?://.*\.netlify\.app|https?://.*\.onrender\.com|https?://.*\.railway\.app"
+    ),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Configurable API Keys for secure endpoints
-DEFAULT_DEMO_KEY = "urban-heat-dev-key-2026"
-VALID_API_KEYS = {
-    os.environ.get("URBAN_HEAT_API_KEY", DEFAULT_DEMO_KEY),
-    DEFAULT_DEMO_KEY,
-    "demo-api-key"
-}
 
 @app.middleware("http")
 async def api_key_auth_middleware(request: Request, call_next):
@@ -56,14 +58,14 @@ async def api_key_auth_middleware(request: Request, call_next):
     Middleware checking API key authentication for protected endpoints (e.g., /simulate).
     Allows CORS preflight (OPTIONS) requests through unimpeded.
     """
-    if request.url.path.startswith("/simulate") and request.method != "OPTIONS":
+    if API_KEY and request.url.path.startswith("/simulate") and request.method != "OPTIONS":
         api_key = request.headers.get("x-api-key") or request.headers.get("X-API-Key")
         if not api_key:
             auth_header = request.headers.get("authorization", "")
             if auth_header.lower().startswith("bearer "):
                 api_key = auth_header[7:].strip()
                 
-        if not api_key or api_key not in VALID_API_KEYS:
+        if not api_key or api_key != API_KEY:
             return JSONResponse(
                 status_code=401,
                 content={
@@ -73,8 +75,6 @@ async def api_key_auth_middleware(request: Request, call_next):
 
     response = await call_next(request)
     return response
-
-from collections import OrderedDict
 
 # In-memory LRU cache for city geospatial datasets and trained ML models.
 # Prevents unbounded memory growth as more cities are queried across multi-city deployments.
@@ -146,9 +146,41 @@ def get_city_data(city: str) -> tuple[gpd.GeoDataFrame, dict, UrbanHeatModel]:
     return gdf, raw_geojson, model
 
 
+def ready_cities() -> list[str]:
+    """Return cities with both a processed heatmap and deployable model."""
+    if not DATA_DIR.exists():
+        return []
+    cities = []
+    for candidate in DATA_DIR.iterdir():
+        if not candidate.is_dir():
+            continue
+        city = candidate.name
+        processed = candidate / "processed"
+        model_dir = processed / "model"
+        has_model = any((model_dir / f"{city}_{name}").exists() for name in (
+            "pinn_model.joblib", "rf_model.joblib", "pinn_model.pt"
+        ))
+        if (processed / f"{city}_zones.geojson").exists() and has_model:
+            cities.append(city)
+    return sorted(cities)
+
+
 @app.get("/health")
 def health_check():
-    return {"status": "ok"}
+    return {"status": "ok", "environment": ENVIRONMENT}
+
+
+@app.get("/ready")
+def readiness_check():
+    cities = ready_cities()
+    if not cities:
+        raise HTTPException(status_code=503, detail="No processed city data and model artifacts are available.")
+    return {"status": "ready", "cities": cities}
+
+
+@app.get("/cities")
+def get_cities():
+    return {"cities": ready_cities()}
 
 
 @app.get("/heatmap/{city}")

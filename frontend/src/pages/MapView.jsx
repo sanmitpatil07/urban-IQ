@@ -121,12 +121,15 @@ export function MapView() {
   const [isUsingMockData, setIsUsingMockData] = useState(false);
   const [dataFeedToast, setDataFeedToast] = useState(null);
 
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL.replace(/\/$/, '');
+  const demoModeEnabled = import.meta.env.VITE_ENABLE_DEMO_MODE === 'true';
+
   // Fetch real Pune heatmap GeoJSON from FastAPI backend
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
       const cityName = currentCity.toLowerCase();
-      const response = await fetch(`http://localhost:8000/heatmap/${cityName}`);
+      const response = await fetch(`${API_BASE_URL}/heatmap/${cityName}`);
       if (response.ok) {
         const data = await response.json();
         setGeoData(data);
@@ -137,29 +140,37 @@ export function MapView() {
           message: `Streaming real satellite telemetry & Physics-Informed ML inference for ${currentCity}.`,
         });
         setTimeout(() => setDataFeedToast(null), 4000);
-      } else {
-        console.warn("Backend heatmap response not ok, falling back to mock dataset");
+      } else if (demoModeEnabled) {
         setGeoData(getMockPuneGeoJSON());
         setIsUsingMockData(true);
         setDataFeedToast({
           type: 'mock',
           title: 'Demo Mode: Backend API Offline',
-          message: `Unable to reach http://localhost:8000/heatmap/${cityName}. Rendering Pune municipal sample dataset.`,
+          message: `Unable to reach ${API_BASE_URL}/heatmap/${cityName}. Rendering Pune municipal sample dataset.`,
         });
+      } else {
+        setGeoData(null);
+        setIsUsingMockData(false);
+        setDataFeedToast({ type: 'error', title: 'Live data unavailable', message: `The API could not load ${currentCity} (HTTP ${response.status}).` });
       }
     } catch (error) {
-      console.warn("FastAPI backend heatmap not reachable, using offline sample dataset:", error);
-      setGeoData(getMockPuneGeoJSON());
-      setIsUsingMockData(true);
-      setDataFeedToast({
-        type: 'mock',
-        title: 'Demo Mode: Sample Data Active',
-        message: `FastAPI server (localhost:8000) not responding. Switched to Pune sample baseline dataset.`,
-      });
+      if (demoModeEnabled) {
+        setGeoData(getMockPuneGeoJSON());
+        setIsUsingMockData(true);
+        setDataFeedToast({
+          type: 'mock',
+          title: 'Demo Mode: Sample Data Active',
+          message: `FastAPI server (${API_BASE_URL}) not responding. Switched to Pune sample baseline dataset.`,
+        });
+      } else {
+        setGeoData(null);
+        setIsUsingMockData(false);
+        setDataFeedToast({ type: 'error', title: 'Live data unavailable', message: 'The production API is unreachable. No sample data is shown.' });
+      }
     } finally {
       setLoading(false);
     }
-  }, [currentCity]);
+  }, [currentCity, API_BASE_URL, demoModeEnabled]);
 
   useEffect(() => {
     fetchData();
@@ -226,12 +237,9 @@ export function MapView() {
           delta_ndbi: -((scenarioParams.coolRoofCoveragePct + scenarioParams.reflectivePavementAreaPct) / 200),
           zone_deltas: zoneDeltas
         };
-        const response = await fetch('http://localhost:8000/simulate', {
+        const response = await fetch(`${API_BASE_URL}/simulate`, {
           method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'X-API-Key': 'urban-heat-dev-key-2026'
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
         if (response.ok) {

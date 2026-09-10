@@ -57,7 +57,7 @@ export const DemoModeBanner = ({ isMock = true, city = 'Pune', onRetry = null })
           </div>
 
           <p className="text-[#D1D5DB] text-[11px] truncate">
-            Backend API unavailable at <code className="text-[#F2A93B] bg-[#0B1220] px-1 py-0.5 rounded border border-[#263349]">http://localhost:8000/heatmap/{city.toLowerCase()}</code>. Currently rendering offline municipal baseline sample dataset for <span className="text-[#EDF1F7] font-semibold">{city}</span>.
+            Backend API endpoint unreachable for <code className="text-[#F2A93B] bg-[#0B1220] px-1 py-0.5 rounded border border-[#263349]">{city}</code>. Currently rendering offline municipal baseline sample dataset.
           </p>
         </div>
 
