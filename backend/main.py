@@ -1,3 +1,4 @@
+import os
 import json
 import sys
 from pathlib import Path
@@ -21,24 +22,98 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# Allow CORS for frontend
+# CORS configuration: Restrict to explicit local development and demo origins.
+# NOTE: Loosened to standard local dev ports (5173, 3000, 8080) for hackathon demo convenience.
+# In a production deployment, this should be strictly locked down to verified production hostnames.
+ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:8080",
+    "http://127.0.0.1:8080",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# In-memory cache for data and models
-_CACHE = {
-    "geojsons": {},
-    "models": {}
+# Configurable API Keys for secure endpoints
+DEFAULT_DEMO_KEY = "urban-heat-dev-key-2026"
+VALID_API_KEYS = {
+    os.environ.get("URBAN_HEAT_API_KEY", DEFAULT_DEMO_KEY),
+    DEFAULT_DEMO_KEY,
+    "demo-api-key"
 }
 
+@app.middleware("http")
+async def api_key_auth_middleware(request: Request, call_next):
+    """
+    Middleware checking API key authentication for protected endpoints (e.g., /simulate).
+    Allows CORS preflight (OPTIONS) requests through unimpeded.
+    """
+    if request.url.path.startswith("/simulate") and request.method != "OPTIONS":
+        api_key = request.headers.get("x-api-key") or request.headers.get("X-API-Key")
+        if not api_key:
+            auth_header = request.headers.get("authorization", "")
+            if auth_header.lower().startswith("bearer "):
+                api_key = auth_header[7:].strip()
+                
+        if not api_key or api_key not in VALID_API_KEYS:
+            return JSONResponse(
+                status_code=401,
+                content={
+                    "detail": "Unauthorized: Missing or invalid API key. Please supply a valid 'X-API-Key' header."
+                }
+            )
+
+    response = await call_next(request)
+    return response
+
+from collections import OrderedDict
+
+# In-memory LRU cache for city geospatial datasets and trained ML models.
+# Prevents unbounded memory growth as more cities are queried across multi-city deployments.
+# NOTE: Configurable via MAX_CACHE_CITIES env var (default: 5 cities). Mentioned in pitch scaling plan.
+MAX_CACHE_CITIES = int(os.environ.get("MAX_CACHE_CITIES", "5"))
+
+class CityLRUCache:
+    def __init__(self, maxsize: int = 5):
+        self.maxsize = maxsize
+        self._cache: OrderedDict[str, dict] = OrderedDict()
+
+    def get(self, city: str) -> dict | None:
+        if city in self._cache:
+            self._cache.move_to_end(city)
+            return self._cache[city]
+        return None
+
+    def put(self, city: str, data: dict):
+        if city in self._cache:
+            self._cache.move_to_end(city)
+        else:
+            if len(self._cache) >= self.maxsize:
+                evicted_city, _ = self._cache.popitem(last=False)
+                log.info("LRU Cache: Evicted city '%s' from memory (maxsize=%d)", evicted_city, self.maxsize)
+        self._cache[city] = data
+
+    def __contains__(self, city: str) -> bool:
+        return city in self._cache
+
+    def __len__(self) -> int:
+        return len(self._cache)
+
+_CITY_CACHE = CityLRUCache(maxsize=MAX_CACHE_CITIES)
+
 def get_city_data(city: str) -> tuple[gpd.GeoDataFrame, dict, UrbanHeatModel]:
-    """Load and cache city GeoJSON and model."""
-    if city in _CACHE["geojsons"]:
-        return _CACHE["geojsons"][city]["gdf"], _CACHE["geojsons"][city]["raw"], _CACHE["models"][city]
+    """Load and cache city GeoJSON and model with LRU eviction."""
+    cached = _CITY_CACHE.get(city)
+    if cached is not None:
+        return cached["gdf"], cached["raw"], cached["model"]
 
     # Load GeoJSON
     geojson_path = processed_dir(city) / f"{city}_zones.geojson"
@@ -51,17 +126,22 @@ def get_city_data(city: str) -> tuple[gpd.GeoDataFrame, dict, UrbanHeatModel]:
     with open(geojson_path, "r", encoding="utf-8") as f:
         raw_geojson = json.load(f)
 
-    # Load Model
-    model_path = processed_dir(city) / "model" / f"{city}_rf_model.joblib"
-    if not model_path.exists():
-        raise HTTPException(status_code=404, detail=f"Model for city '{city}' not found. Run training first.")
+    # Load Model (detect PINN pt, PINN joblib, HGBR, or RF)
+    model_dir = processed_dir(city) / "model"
+    candidates = [
+        model_dir / f"{city}_pinn_model.joblib",
+        model_dir / f"{city}_rf_model.joblib",
+        model_dir / f"{city}_pinn_model.pt",
+    ]
+    model_path = next((p for p in candidates if p.exists()), None)
+    if not model_path:
+        raise HTTPException(status_code=404, detail=f"Model for city '{city}' not found in {model_dir}. Run training first.")
     
-    log.info(f"Loading ML model for {city} into memory...")
+    log.info(f"Loading model for {city} from {model_path} into memory...")
     model = UrbanHeatModel(model_path)
 
-    # Cache
-    _CACHE["geojsons"][city] = {"gdf": gdf, "raw": raw_geojson}
-    _CACHE["models"][city] = model
+    # Store in LRU cache
+    _CITY_CACHE.put(city, {"gdf": gdf, "raw": raw_geojson, "model": model})
 
     return gdf, raw_geojson, model
 

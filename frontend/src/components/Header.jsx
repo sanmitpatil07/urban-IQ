@@ -7,7 +7,8 @@ import {
   User, 
   ChevronDown, 
   SlidersHorizontal,
-  Home
+  Home,
+  Lock
 } from 'lucide-react';
 
 export const Header = ({
@@ -25,12 +26,12 @@ export const Header = ({
   const navigate = useNavigate();
 
   const CITIES = [
-    { name: 'Pune', state: 'Maharashtra', wardsCount: 165, activeWards: '1,000+ Zones', isLiveML: true },
-    { name: 'Bengaluru', state: 'Karnataka', wardsCount: 225, activeWards: 12, isLiveML: false },
-    { name: 'Ahmedabad', state: 'Gujarat', wardsCount: 192, activeWards: 14, isLiveML: false },
-    { name: 'Delhi NCR', state: 'Delhi', wardsCount: 250, activeWards: 18, isLiveML: false },
-    { name: 'Mumbai', state: 'Maharashtra', wardsCount: 227, activeWards: 16, isLiveML: false },
-    { name: 'Hyderabad', state: 'Telangana', wardsCount: 150, activeWards: 10, isLiveML: false }
+    { name: 'Pune', state: 'Maharashtra', wardsCount: 165, activeWards: '1,000+ Zones', isLiveML: true, isAvailable: true },
+    { name: 'Bengaluru', state: 'Karnataka', wardsCount: 225, activeWards: 'Coming Soon', isLiveML: false, isAvailable: false },
+    { name: 'Ahmedabad', state: 'Gujarat', wardsCount: 192, activeWards: 'Coming Soon', isLiveML: false, isAvailable: false },
+    { name: 'Delhi NCR', state: 'Delhi', wardsCount: 250, activeWards: 'Coming Soon', isLiveML: false, isAvailable: false },
+    { name: 'Mumbai', state: 'Maharashtra', wardsCount: 227, activeWards: 'Coming Soon', isLiveML: false, isAvailable: false },
+    { name: 'Hyderabad', state: 'Telangana', wardsCount: 150, activeWards: 'Coming Soon', isLiveML: false, isAvailable: false }
   ];
 
   const filteredWards = searchQuery.trim() === '' ? [] : wards.filter(w => 
@@ -87,33 +88,56 @@ export const Header = ({
           </button>
 
           {isCityDropdownOpen && (
-            <div className="absolute top-full left-0 mt-1 w-56 bg-[#131B2E] border border-[#263349] rounded shadow-panel-raised py-1 z-50">
-              <div className="px-3 py-1 text-[10px] font-mono uppercase text-[#8793A8] border-b border-[#263349]">
-                Select Municipal Jurisdiction
+            <div className="absolute top-full left-0 mt-1 w-64 bg-[#131B2E] border border-[#263349] rounded shadow-panel-raised py-1 z-50">
+              <div className="px-3 py-1.5 text-[10px] font-mono uppercase text-[#8793A8] border-b border-[#263349] flex items-center justify-between">
+                <span>Municipal Jurisdiction</span>
+                <span className="text-[#2FB8AC] text-[9px]">Hackathon Scope</span>
               </div>
               {CITIES.map(c => (
                 <button
                   key={c.name}
+                  disabled={!c.isAvailable}
                   onClick={() => {
-                    if (onSelectCity) onSelectCity(c.name);
+                    if (c.isAvailable && onSelectCity) {
+                      onSelectCity(c.name);
+                    }
                     setIsCityDropdownOpen(false);
                   }}
-                  className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between hover:bg-[#1B2740] transition-colors ${
-                    c.name === currentCity ? 'text-[#2FB8AC] bg-[#1B2740]/50 font-semibold' : 'text-[#EDF1F7]'
+                  className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between transition-colors ${
+                    !c.isAvailable 
+                      ? 'opacity-40 cursor-not-allowed bg-transparent hover:bg-transparent'
+                      : c.name === currentCity 
+                        ? 'text-[#2FB8AC] bg-[#1B2740]/70 font-semibold cursor-pointer' 
+                        : 'text-[#EDF1F7] hover:bg-[#1B2740] cursor-pointer'
                   }`}
+                  title={!c.isAvailable ? `${c.name} is not configured yet (no config/cities/${c.name.toLowerCase().replace(' ', '_')}.yaml)` : `Select ${c.name}`}
                 >
                   <div>
                     <div className="flex items-center space-x-1.5">
                       <span>{c.name}</span>
-                      {c.isLiveML && <span className="text-[9px] font-bold text-[#2FB8AC] bg-[#2FB8AC]/20 px-1 rounded">AI ENGINE</span>}
+                      {c.isLiveML && (
+                        <span className="text-[9px] font-bold text-[#2FB8AC] bg-[#2FB8AC]/20 px-1 rounded">
+                          ACTIVE
+                        </span>
+                      )}
+                      {!c.isAvailable && (
+                        <Lock className="w-3 h-3 text-[#8793A8]" />
+                      )}
                     </div>
                     <div className="text-[10px] text-[#8793A8]">{c.state}</div>
                   </div>
-                  <span className="font-mono text-[10px] text-[#8793A8] bg-[#0B1220] px-1.5 py-0.5 rounded">
+                  <span className={`font-mono text-[9px] px-1.5 py-0.5 rounded ${
+                    c.isAvailable 
+                      ? 'text-[#2FB8AC] bg-[#0B1220] border border-[#263349]' 
+                      : 'text-[#8793A8] bg-[#0B1220]/60 border border-[#263349]/40'
+                  }`}>
                     {c.activeWards}
                   </span>
                 </button>
               ))}
+              <div className="px-3 py-1.5 mt-1 border-t border-[#263349] text-[9px] font-mono text-[#8793A8] leading-tight bg-[#0B1220]/40">
+                Pune is the primary active dataset for this DSS submission. Additional cities unlock upon config ingestion.
+              </div>
             </div>
           )}
         </div>

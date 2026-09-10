@@ -38,9 +38,9 @@ export const TimelineScrubber = ({
     id: 'LIVE',
     satellite: 'Landsat-9 / Sentinel-2',
     sensor: 'Thermal & Multispectral',
-    timestamp: '2026-07-28 14:10 IST',
-    meanCityLst: 35.8,
-    maxLstRecorded: 42.4
+    timestamp: '2026-04-14 10:57 IST',
+    meanCityLst: 36.4,
+    maxLstRecorded: 42.1
   };
 
   return (

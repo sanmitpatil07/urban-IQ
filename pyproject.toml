@@ -3,7 +3,7 @@ name = "urban-heat-dss"
 version = "0.1.0"
 description = "Urban Heat Decision Support System — evidence-based heat mitigation for Indian cities"
 readme = "README.md"
-requires-python = ">=3.11,<3.14"
+requires-python = ">=3.11,<3.15"
 license = { text = "MIT" }
 
 dependencies = [
@@ -23,6 +23,7 @@ dependencies = [
     "fastapi>=0.139.0",
     "uvicorn>=0.51.0",
     "httpx>=0.28.1",
+    "torch>=2.3.0",
 ]
 
 [project.optional-dependencies]
