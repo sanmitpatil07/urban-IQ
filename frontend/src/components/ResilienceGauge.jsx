@@ -1,7 +1,7 @@
-import React from 'react';
+﻿import React from 'react';
 import { ShieldAlert } from 'lucide-react';
 
-export const ResilienceGauge = ({ score = 62, city = 'Pune' }) => {
+export const ResilienceGauge = ({ score = 62, city = 'Pune', scenarioParams = {} }) => {
   const radius = 60;
   const strokeWidth = 10;
   const normalizedRadius = radius - strokeWidth / 2;
@@ -62,7 +62,7 @@ export const ResilienceGauge = ({ score = 62, city = 'Pune' }) => {
           <ShieldAlert className="w-3 h-3 text-[#F2A93B]" />
           <span>Baseline: 54/100</span>
         </div>
-        <span className="text-[#2FB8AC] font-semibold">+8 pts projected</span>
+        {(() => { const pts = Math.round(((scenarioParams.treeCanopyIncreasePct || 0) * 0.15 + (scenarioParams.coolRoofCoveragePct || 0) * 0.08 + (scenarioParams.reflectivePavementAreaPct || 0) * 0.06) * Math.min(1, (scenarioParams.budgetInrLakhs || 0) / 300)); return <span className="text-[#2FB8AC] font-semibold">+{pts > 0 ? pts : 8} pts projected</span>; })()}
       </div>
     </div>
   );

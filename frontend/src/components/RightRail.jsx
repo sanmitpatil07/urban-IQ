@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { 
   Bell, 
   Trees, 
@@ -15,7 +15,8 @@ export const RightRail = ({
   onSelectWard,
   cityResilienceScore = 62,
   currentCity = 'Pune',
-  wards = []
+  wards = [],
+  scenarioParams = {}
 }) => {
   // Compute aggregated stats
   const meanNdvi = wards.length > 0
@@ -52,7 +53,7 @@ export const RightRail = ({
     <aside className="w-80 bg-[#131B2E] border-l border-[#263349] flex flex-col h-[calc(100vh-4rem)] z-20 shadow-panel select-none overflow-y-auto">
       {/* Top: City Resilience Gauge */}
       <div className="p-4 border-b border-[#263349]">
-        <ResilienceGauge score={cityResilienceScore} city={currentCity} />
+        <ResilienceGauge score={cityResilienceScore} city={currentCity} scenarioParams={scenarioParams} />
       </div>
 
       {/* Center: 3 Telemetry Metric Bars */}
@@ -116,12 +117,12 @@ export const RightRail = ({
           <div className="w-full bg-[#0B1220] h-2 rounded-full overflow-hidden border border-[#263349]">
             <div 
               className="bg-gradient-to-r from-[#2FB8AC] to-[#E8632B] h-full transition-all duration-500 rounded-full" 
-              style={{ width: '68%' }} 
+              style={{ width: `${Math.min(100, Math.round((totalVulnerablePop / Math.max(1, wards.reduce((a, w) => a + (w.population || 80000), 0))) * 100))}%` }} 
             />
           </div>
           <div className="flex justify-between text-[9px] font-mono text-[#8793A8] mt-1">
             <span>Elderly & Low-Income Areas</span>
-            <span>68% Covered</span>
+            {(() => { const pct = Math.min(100, Math.round((totalVulnerablePop / Math.max(1, wards.reduce((a, w) => a + (w.population || 80000), 0))) * 100)); return <span>{pct}% Exposed</span>; })()}
           </div>
         </div>
       </div>

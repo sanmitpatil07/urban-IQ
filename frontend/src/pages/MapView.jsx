@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+﻿import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import Map, { Source, Layer, Popup } from 'react-map-gl/maplibre';
-import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { Sparkles, X, Compass, Layers, AlertTriangle, CheckCircle2, RefreshCw } from 'lucide-react';
 import * as turf from '@turf/turf';
@@ -252,6 +251,30 @@ export function MapView() {
         }
       } catch (error) {
         console.warn("Backend ML simulation query error:", error);
+        // Local mock fallback when backend unreachable
+        if (geoData) {
+          const mockResults = {};
+          Array.from(selectedZones).forEach(zoneId => {
+            const feat = geoData.features.find(f => f.properties.zone_id === zoneId);
+            if (feat) {
+              const baseLst = Number(feat.properties.lst) || 35;
+              const delta = -(
+                (scenarioParams.treeCanopyIncreasePct || 0) * 0.04 +
+                (scenarioParams.coolRoofCoveragePct || 0) * 0.02 +
+                (scenarioParams.reflectivePavementAreaPct || 0) * 0.01
+              );
+              mockResults[zoneId] = {
+                zone_id: zoneId,
+                original_lst: baseLst,
+                new_lst: baseLst + delta,
+                lst_change: delta,
+                new_ndvi: Number(feat.properties.ndvi) || 0.22,
+                new_ndbi: Number(feat.properties.ndbi) || 0.05
+              };
+            }
+          });
+          if (Object.keys(mockResults).length > 0) setSimResults(mockResults);
+        }
       } finally {
         setIsSimulating(false);
       }
@@ -334,6 +357,18 @@ export function MapView() {
     features: drawnPolygons
   }), [drawnPolygons]);
 
+  // GeoJSON source for DISCOM grid stress layer (built from MOCK_WARDS)
+  const discomGeoJSON = useMemo(() => ({
+    type: "FeatureCollection",
+    features: MOCK_WARDS
+      .filter(w => w.center && Array.isArray(w.center) && w.center.length === 2)
+      .map(w => ({
+        type: "Feature",
+        geometry: { type: "Point", coordinates: [w.center[1], w.center[0]] },
+        properties: { gridLoadMw: w.gridLoadMw || 50, name: w.name || w.id }
+      }))
+  }), []);
+
   const activePolygonGeoJSON = useMemo(() => {
     if (currentPolygonPath.length < 2) return null;
     return {
@@ -375,7 +410,8 @@ export function MapView() {
   };
 
   const handleOptimizerComplete = () => {
-    const result = runScenarioOptimizer(scenarioParams);
+    const selectedIds = Array.from(selectedZones);
+    const result = runScenarioOptimizer(scenarioParams, selectedIds.length > 0 ? selectedIds : null);
     setOptimizationResult(result);
     setIsOptimizing(false);
   };
@@ -543,7 +579,7 @@ export function MapView() {
               <Sparkles className="w-4 h-4 text-[#2FB8AC] flex-shrink-0" />
               <div>
                 <div className="font-semibold flex items-center space-x-1.5">
-                  <span>Scenario Optimized:</span>
+                  <span>Scenario Optimized {selectedZones.size > 0 ? `(${selectedZones.size} Selected Ward${selectedZones.size > 1 ? 's' : ''})` : '(City-Wide)'}:</span>
                   <span className="text-[#2FB8AC] font-bold">-{optimizationResult.projectedTempReductionDegC}°C cooling</span>
                 </div>
                 <div className="text-[10px] font-mono text-[#8793A8]">
@@ -663,29 +699,29 @@ export function MapView() {
                               'interpolate',
                               ['linear'],
                               ['coalesce', ['get', 'display_lst'], 35.0],
-                              32, '#2FB8AC',
-                              36, '#7CB342',
-                              40, '#FDD835',
-                              44, '#FB8C00',
-                              48, '#E53935'
+                              33.0, '#10B981',  // Deep Green: Nominal / Cool (< 33°C)
+                              34.2, '#84CC16',  // Lime Green: Mild / Pleasant (33 - 34.5°C)
+                              35.5, '#FACC15',  // Yellow: Moderate Heat (35.5°C)
+                              36.6, '#F97316',  // Orange: High Heat Warning (36.6°C)
+                              37.8, '#EF4444'   // Bright Crimson Red: Severe Heat Hotspot (>= 37.8°C)
                             ]
                           : activeLayers.ndviVegetation
                             ? [
                                 'interpolate',
                                 ['linear'],
                                 ['coalesce', ['get', 'ndvi'], 0.22],
-                                0.05, '#3E2723',
-                                0.15, '#8D6E63',
-                                0.30, '#8BC34A',
-                                0.50, '#2E7D32'
+                                0.08, '#78350F',
+                                0.16, '#B45309',
+                                0.26, '#84CC16',
+                                0.38, '#15803D'
                               ]
                             : '#1B2740'
                       ],
                       'fill-opacity': [
                         'case',
                         ['==', ['get', 'is_selected'], 1],
-                        0.75,
-                        activeLayers.lstHeat || activeLayers.ndviVegetation ? 0.55 : 0.15
+                        0.45,
+                        activeLayers.lstHeat || activeLayers.ndviVegetation ? 0.28 : 0.08
                       ]
                     }} 
                   />
@@ -696,21 +732,83 @@ export function MapView() {
                       'line-color': [
                         'case',
                         ['==', ['get', 'is_selected'], 1],
-                        '#FFFFFF',
-                        '#263349'
+                        '#00FFF0',
+                        activeLayers.lstHeat
+                          ? [
+                              'interpolate',
+                              ['linear'],
+                              ['coalesce', ['get', 'display_lst'], 35.0],
+                              33.0, '#10B981',
+                              34.2, '#84CC16',
+                              35.5, '#FACC15',
+                              36.6, '#F97316',
+                              37.8, '#EF4444'
+                            ]
+                          : '#263349'
                       ],
                       'line-width': [
                         'case',
                         ['==', ['get', 'is_selected'], 1],
-                        2.0,
-                        0.5
+                        3.0,
+                        1.5
                       ],
                       'line-opacity': [
                         'case',
                         ['==', ['get', 'is_selected'], 1],
                         1.0,
-                        0.4
+                        0.9
                       ]
+                    }}
+                  />
+                </Source>
+              )}
+
+              {/* Driver Attribution Layer — anomaly intensity circles */}
+              {pointData && activeLayers.driverAttribution && (
+                <Source id="driver-attr" type="geojson" data={pointData}>
+                  <Layer
+                    id="driver-circles"
+                    type="circle"
+                    paint={{
+                      'circle-radius': ['interpolate', ['linear'], ['coalesce', ['get', 'anomaly'], 2], 0, 8, 6, 24],
+                      'circle-color': ['interpolate', ['linear'], ['coalesce', ['get', 'anomaly'], 2], 0, '#2FB8AC', 3, '#F2A93B', 5, '#C81E3A'],
+                      'circle-opacity': 0.75,
+                      'circle-stroke-width': 1.5,
+                      'circle-stroke-color': '#ffffff'
+                    }}
+                  />
+                </Source>
+              )}
+
+              {/* Population Density Layer — vulnerable pop circles */}
+              {pointData && activeLayers.populationDensity && (
+                <Source id="pop-density" type="geojson" data={pointData}>
+                  <Layer
+                    id="pop-circles"
+                    type="circle"
+                    paint={{
+                      'circle-radius': ['interpolate', ['linear'], ['coalesce', ['get', 'vulnerable_pop_pct'], 30], 0, 10, 60, 30],
+                      'circle-color': '#a855f7',
+                      'circle-opacity': 0.65,
+                      'circle-stroke-width': 1,
+                      'circle-stroke-color': '#d8b4fe'
+                    }}
+                  />
+                </Source>
+              )}
+
+              {/* DISCOM Grid Stress Layer — grid load circles */}
+              {activeLayers.discomGrid && (
+                <Source id="discom-grid" type="geojson" data={discomGeoJSON}>
+                  <Layer
+                    id="discom-circles"
+                    type="circle"
+                    paint={{
+                      'circle-radius': ['interpolate', ['linear'], ['get', 'gridLoadMw'], 30, 10, 110, 28],
+                      'circle-color': ['interpolate', ['linear'], ['get', 'gridLoadMw'], 50, '#F2A93B', 90, '#E8632B', 110, '#C81E3A'],
+                      'circle-opacity': 0.7,
+                      'circle-stroke-width': 1.5,
+                      'circle-stroke-color': '#ffffff'
                     }}
                   />
                 </Source>
@@ -770,10 +868,25 @@ export function MapView() {
               )}
             </Map>
 
-            {/* Compass badge */}
-            <div className="absolute bottom-4 left-4 z-20 pointer-events-none hidden md:flex items-center space-x-2 bg-[#131B2E]/90 border border-[#263349] px-3 py-1.5 rounded text-[10px] font-mono text-[#8793A8]">
-              <Compass className="w-4 h-4 text-[#2FB8AC]" />
-              <span>JURISDICTION: {currentCity.toUpperCase()} MUNICIPAL GRID</span>
+            {/* LST Thermal Heat Legend & Compass Badge */}
+            <div className="absolute bottom-4 left-4 z-20 flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
+              <div className="flex items-center space-x-2 bg-[#131B2E]/95 backdrop-blur-md border border-[#263349] px-3 py-1.5 rounded shadow-panel text-[10px] font-mono text-[#8793A8]">
+                <Compass className="w-4 h-4 text-[#2FB8AC]" />
+                <span>JURISDICTION: {currentCity.toUpperCase()} MUNICIPAL GRID</span>
+              </div>
+
+              {activeLayers.lstHeat && (
+                <div className="bg-[#131B2E]/95 backdrop-blur-md border border-[#263349] px-3 py-1.5 rounded shadow-panel text-[10px] font-mono text-[#EDF1F7] flex items-center space-x-2.5">
+                  <span className="text-[#8793A8] uppercase tracking-wider font-semibold">LST Heat Scale:</span>
+                  <div className="flex items-center space-x-1.5">
+                    <span className="flex items-center space-x-1"><span className="w-2.5 h-2.5 rounded-full bg-[#10B981] inline-block"></span><span className="text-[#8793A8]">&lt;33°C (Cool)</span></span>
+                    <span className="flex items-center space-x-1"><span className="w-2.5 h-2.5 rounded-full bg-[#84CC16] inline-block"></span><span className="text-[#8793A8]">34°C (Lime)</span></span>
+                    <span className="flex items-center space-x-1"><span className="w-2.5 h-2.5 rounded-full bg-[#FACC15] inline-block"></span><span className="text-[#8793A8]">35.5°C</span></span>
+                    <span className="flex items-center space-x-1"><span className="w-2.5 h-2.5 rounded-full bg-[#F97316] inline-block"></span><span className="text-[#8793A8]">36.5°C</span></span>
+                    <span className="flex items-center space-x-1"><span className="w-2.5 h-2.5 rounded-full bg-[#EF4444] inline-block"></span><span className="text-[#EF4444] font-bold">&gt;37.8°C (Critical)</span></span>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -792,9 +905,10 @@ export function MapView() {
             const w = MOCK_WARDS.find(item => item.id === id);
             if (w) setSelectedWardForModal(w);
           }}
-          cityResilienceScore={currentCity.toLowerCase() === 'pune' ? 64 : 58}
+          cityResilienceScore={Math.round(70 - (MOCK_WARDS.reduce((acc, w) => acc + (w.lstAnomaly || 0), 0) / Math.max(1, MOCK_WARDS.length)) * 3)}
           currentCity={currentCity}
           wards={MOCK_WARDS}
+          scenarioParams={scenarioParams}
         />
       </div>
 
@@ -809,7 +923,7 @@ export function MapView() {
       {/* Scanner Overlay during Optimizer simulation */}
       <OptimizingOverlay
         isOptimizing={isOptimizing}
-        wards={MOCK_WARDS}
+        wards={selectedZones.size > 0 ? MOCK_WARDS.filter(w => selectedZones.has(w.id)) : MOCK_WARDS}
         onComplete={handleOptimizerComplete}
       />
     </div>

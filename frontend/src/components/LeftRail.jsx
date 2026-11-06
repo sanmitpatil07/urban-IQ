@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { 
   Layers, 
   ThermometerSun, 
@@ -172,7 +172,7 @@ export const LeftRail = ({
             <span>Satellite Telemetry Layers</span>
           </div>
           <span className="text-[10px] font-mono text-[#2FB8AC] bg-[#2FB8AC]/10 px-1.5 py-0.5 rounded border border-[#2FB8AC]/30">
-            5 ACTIVE
+            {Object.values(activeLayers).filter(Boolean).length} ACTIVE
           </span>
         </div>
 

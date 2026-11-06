@@ -1,4 +1,4 @@
-import json
+﻿import json
 import os
 import sys
 from collections import OrderedDict
@@ -165,6 +165,26 @@ def ready_cities() -> list[str]:
     return sorted(cities)
 
 
+@app.get("/")
+def root():
+    cities = ready_cities()
+    return {
+        "service": "Urban Heat DSS API",
+        "version": "1.0.0",
+        "status": "online",
+        "environment": ENVIRONMENT,
+        "ready_cities": cities,
+        "docs": "/docs",
+        "endpoints": {
+            "health": "/health",
+            "ready": "/ready",
+            "cities": "/cities",
+            "heatmap": "/heatmap/{city}",
+            "simulate": "POST /simulate"
+        }
+    }
+
+
 @app.get("/health")
 def health_check():
     return {"status": "ok", "environment": ENVIRONMENT}
@@ -190,6 +210,23 @@ def get_heatmap(city: str):
     """
     _, raw_geojson, _ = get_city_data(city)
     return JSONResponse(content=raw_geojson)
+
+
+@app.get("/simulate")
+def simulate_get_info():
+    """Information endpoint for GET requests to /simulate."""
+    return {
+        "endpoint": "/simulate",
+        "method": "POST",
+        "description": "Run a what-if thermal cooling simulation for specific zones using Physics-Informed ML.",
+        "example_payload": {
+            "city": "pune",
+            "zone_ids": ["W-100", "W-101"],
+            "delta_ndvi": 0.15,
+            "delta_ndbi": -0.10,
+            "zone_deltas": {}
+        }
+    }
 
 
 @app.post("/simulate", response_model=SimulationResponse)

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { 
   X, 
   Cpu, 
@@ -30,11 +30,43 @@ export const WardDetailModal = ({ ward, onClose }) => {
 
   const handleExportReport = () => {
     setIsExporting(true);
+    const reportContent = [
+      'URBAN HEAT DSS — MUNICIPAL ACTION BRIEF',
+      `Report ID: URB-DSS-${wardId}-2026`,
+      `Generated: ${new Date().toISOString()}`,
+      '========================================',
+      `ZONE: ${wardName} (${wardId})`,
+      `ZONE TYPE: ${zoneName}`,
+      `RISK SEVERITY: ${String(riskSeverity).toUpperCase()}`,
+      '',
+      'THERMAL TELEMETRY',
+      `  LST Anomaly: +${anomaly}°C above baseline`,
+      `  Surface Temperature: ${surfaceTemp}°C`,
+      `  NDVI Canopy Index: ${ndvi}`,
+      `  Vulnerable Population: ${vulnerablePopPct}% (${population.toLocaleString()} total)`,
+      '',
+      'PHYSICS DRIVER ATTRIBUTION',
+      ...attributions.map(a => `  ${a.driverName}: ${a.contributionPct}% — ${a.description}`),
+      '',
+      'RANKED COOLING INTERVENTIONS',
+      ...interventions.map(i => `  #${i.roiRank} ${i.name}: -${i.estCoolingImpactDegC}°C | INR ${i.costInrLakhs}L | ${i.costPerDegreeAvertedLakhs}L/°C`),
+      '',
+      `Co-benefits: ${interventions.flatMap(i => i.coBenefits).join(', ')}`,
+    ].join('\n');
+    const blob = new Blob([reportContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `URB-DSS-${wardId}-2026.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
     setTimeout(() => {
       setIsExporting(false);
       setExportSuccess(true);
       setTimeout(() => setExportSuccess(false), 4000);
-    }, 1200);
+    }, 300);
   };
 
   const getSeverityBadgeColor = (sev) => {
