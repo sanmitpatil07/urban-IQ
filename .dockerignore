@@ -1,9 +1,9 @@
-.git
+﻿.git
 .venv
 .pytest_cache
 __pycache__
 frontend
 tests
 scripts
-data
+# data (kept for Pune baseline and model)
 *.pyc

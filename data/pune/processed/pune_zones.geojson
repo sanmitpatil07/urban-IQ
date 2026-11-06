@@ -1,0 +1,2463 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.84668,
+              18.52211
+            ],
+            [
+              73.82249,
+              18.53799
+            ],
+            [
+              73.82706,
+              18.54449
+            ],
+            [
+              73.83033,
+              18.54567
+            ],
+            [
+              73.85498,
+              18.54677
+            ],
+            [
+              73.86103,
+              18.53348
+            ],
+            [
+              73.86087,
+              18.53166
+            ],
+            [
+              73.84668,
+              18.52211
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-100",
+        "name": "Shivajinagar Core",
+        "zone": "Central Core",
+        "lst": 36.8,
+        "ndvi": 0.14,
+        "ndbi": 0.36,
+        "population": 142000,
+        "vulnerable_pop_pct": 38,
+        "anomaly": 3.8,
+        "risk_severity": "high",
+        "grid_mw": 78
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.82197,
+              18.52996
+            ],
+            [
+              73.82129,
+              18.53706
+            ],
+            [
+              73.82249,
+              18.53799
+            ],
+            [
+              73.84668,
+              18.52211
+            ],
+            [
+              73.84791,
+              18.50907
+            ],
+            [
+              73.84472,
+              18.5054
+            ],
+            [
+              73.84115,
+              18.50413
+            ],
+            [
+              73.82197,
+              18.52996
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-101",
+        "name": "FC Road & Deccan",
+        "zone": "Commercial Core",
+        "lst": 36.2,
+        "ndvi": 0.16,
+        "ndbi": 0.35,
+        "population": 98000,
+        "vulnerable_pop_pct": 32,
+        "anomaly": 3.2,
+        "risk_severity": "high",
+        "grid_mw": 65
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.8674,
+              18.51787
+            ],
+            [
+              73.8661,
+              18.5121
+            ],
+            [
+              73.84791,
+              18.50907
+            ],
+            [
+              73.84668,
+              18.52211
+            ],
+            [
+              73.86087,
+              18.53166
+            ],
+            [
+              73.8674,
+              18.51787
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-102",
+        "name": "Kasba & Shaniwar Peth",
+        "zone": "Heritage Old City",
+        "lst": 37.4,
+        "ndvi": 0.08,
+        "ndbi": 0.39,
+        "population": 115000,
+        "vulnerable_pop_pct": 44,
+        "anomaly": 4.4,
+        "risk_severity": "critical",
+        "grid_mw": 70
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.82197,
+              18.52996
+            ],
+            [
+              73.81678,
+              18.50725
+            ],
+            [
+              73.79057,
+              18.50494
+            ],
+            [
+              73.78947,
+              18.51611
+            ],
+            [
+              73.81512,
+              18.53704
+            ],
+            [
+              73.82129,
+              18.53706
+            ],
+            [
+              73.82197,
+              18.52996
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-103",
+        "name": "Kothrud North",
+        "zone": "West Residential",
+        "lst": 34.2,
+        "ndvi": 0.28,
+        "ndbi": 0.28,
+        "population": 120000,
+        "vulnerable_pop_pct": 20,
+        "anomaly": 1.2,
+        "risk_severity": "moderate",
+        "grid_mw": 52
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.80627,
+              18.48627
+            ],
+            [
+              73.7892,
+              18.5012
+            ],
+            [
+              73.79057,
+              18.50494
+            ],
+            [
+              73.81678,
+              18.50725
+            ],
+            [
+              73.82081,
+              18.50081
+            ],
+            [
+              73.80627,
+              18.48627
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-104",
+        "name": "Kothrud South",
+        "zone": "West Residential",
+        "lst": 33.9,
+        "ndvi": 0.3,
+        "ndbi": 0.27,
+        "population": 95000,
+        "vulnerable_pop_pct": 18,
+        "anomaly": 0.9,
+        "risk_severity": "nominal",
+        "grid_mw": 48
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.80627,
+              18.48627
+            ],
+            [
+              73.82081,
+              18.50081
+            ],
+            [
+              73.83266,
+              18.49494
+            ],
+            [
+              73.8336,
+              18.48548
+            ],
+            [
+              73.80952,
+              18.47557
+            ],
+            [
+              73.80627,
+              18.48627
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-105",
+        "name": "Karve Nagar",
+        "zone": "Southwest Core",
+        "lst": 34.5,
+        "ndvi": 0.24,
+        "ndbi": 0.3,
+        "population": 82000,
+        "vulnerable_pop_pct": 22,
+        "anomaly": 1.5,
+        "risk_severity": "moderate",
+        "grid_mw": 46
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.83266,
+              18.49494
+            ],
+            [
+              73.82081,
+              18.50081
+            ],
+            [
+              73.81678,
+              18.50725
+            ],
+            [
+              73.82197,
+              18.52996
+            ],
+            [
+              73.84115,
+              18.50413
+            ],
+            [
+              73.83266,
+              18.49494
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-106",
+        "name": "Erandwane & Law College",
+        "zone": "Educational Green",
+        "lst": 33.5,
+        "ndvi": 0.32,
+        "ndbi": 0.25,
+        "population": 72000,
+        "vulnerable_pop_pct": 16,
+        "anomaly": 0.5,
+        "risk_severity": "nominal",
+        "grid_mw": 40
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.76184,
+              18.54067
+            ],
+            [
+              73.75659,
+              18.54229
+            ],
+            [
+              73.797,
+              18.58177
+            ],
+            [
+              73.797,
+              18.54812
+            ],
+            [
+              73.76184,
+              18.54067
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-107",
+        "name": "Baner",
+        "zone": "Northwest Hub",
+        "lst": 34.8,
+        "ndvi": 0.26,
+        "ndbi": 0.29,
+        "population": 88000,
+        "vulnerable_pop_pct": 18,
+        "anomaly": 1.8,
+        "risk_severity": "moderate",
+        "grid_mw": 48
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.75659,
+              18.54229
+            ],
+            [
+              73.74,
+              18.54284
+            ],
+            [
+              73.74,
+              18.559
+            ],
+            [
+              73.79546,
+              18.6006
+            ],
+            [
+              73.7984,
+              18.58534
+            ],
+            [
+              73.797,
+              18.58177
+            ],
+            [
+              73.75659,
+              18.54229
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-108",
+        "name": "Balewadi High St",
+        "zone": "Commercial NW",
+        "lst": 35.1,
+        "ndvi": 0.21,
+        "ndbi": 0.32,
+        "population": 76000,
+        "vulnerable_pop_pct": 20,
+        "anomaly": 2.1,
+        "risk_severity": "moderate",
+        "grid_mw": 50
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.82129,
+              18.53706
+            ],
+            [
+              73.81512,
+              18.53704
+            ],
+            [
+              73.797,
+              18.54812
+            ],
+            [
+              73.797,
+              18.58177
+            ],
+            [
+              73.7984,
+              18.58534
+            ],
+            [
+              73.81891,
+              18.56866
+            ],
+            [
+              73.82706,
+              18.54449
+            ],
+            [
+              73.82129,
+              18.53706
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-109",
+        "name": "Aundh",
+        "zone": "Residential North",
+        "lst": 34.9,
+        "ndvi": 0.24,
+        "ndbi": 0.3,
+        "population": 98000,
+        "vulnerable_pop_pct": 19,
+        "anomaly": 1.9,
+        "risk_severity": "moderate",
+        "grid_mw": 54
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.78947,
+              18.51611
+            ],
+            [
+              73.76184,
+              18.54067
+            ],
+            [
+              73.797,
+              18.54812
+            ],
+            [
+              73.81512,
+              18.53704
+            ],
+            [
+              73.78947,
+              18.51611
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-110",
+        "name": "Pashan & Lake Zone",
+        "zone": "Eco Buffer",
+        "lst": 33.2,
+        "ndvi": 0.36,
+        "ndbi": 0.23,
+        "population": 62000,
+        "vulnerable_pop_pct": 15,
+        "anomaly": 0.2,
+        "risk_severity": "nominal",
+        "grid_mw": 38
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.75659,
+              18.54229
+            ],
+            [
+              73.76184,
+              18.54067
+            ],
+            [
+              73.78947,
+              18.51611
+            ],
+            [
+              73.79057,
+              18.50494
+            ],
+            [
+              73.7892,
+              18.5012
+            ],
+            [
+              73.74,
+              18.46283
+            ],
+            [
+              73.74,
+              18.54284
+            ],
+            [
+              73.75659,
+              18.54229
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-111",
+        "name": "Bavdhan",
+        "zone": "Hilly West",
+        "lst": 32.8,
+        "ndvi": 0.38,
+        "ndbi": 0.22,
+        "population": 54000,
+        "vulnerable_pop_pct": 14,
+        "anomaly": -0.2,
+        "risk_severity": "nominal",
+        "grid_mw": 34
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.7892,
+              18.5012
+            ],
+            [
+              73.80627,
+              18.48627
+            ],
+            [
+              73.80952,
+              18.47557
+            ],
+            [
+              73.80736,
+              18.46907
+            ],
+            [
+              73.74,
+              18.45335
+            ],
+            [
+              73.74,
+              18.46283
+            ],
+            [
+              73.7892,
+              18.5012
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-112",
+        "name": "Warje",
+        "zone": "Riverfront SW",
+        "lst": 34.5,
+        "ndvi": 0.22,
+        "ndbi": 0.31,
+        "population": 85000,
+        "vulnerable_pop_pct": 22,
+        "anomaly": 1.5,
+        "risk_severity": "moderate",
+        "grid_mw": 46
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.80736,
+              18.46907
+            ],
+            [
+              73.82158,
+              18.4527
+            ],
+            [
+              73.8125,
+              18.42
+            ],
+            [
+              73.74,
+              18.42
+            ],
+            [
+              73.74,
+              18.45335
+            ],
+            [
+              73.80736,
+              18.46907
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-113",
+        "name": "Dhayari",
+        "zone": "Southwest Fringe",
+        "lst": 33.6,
+        "ndvi": 0.31,
+        "ndbi": 0.26,
+        "population": 68000,
+        "vulnerable_pop_pct": 19,
+        "anomaly": 0.6,
+        "risk_severity": "nominal",
+        "grid_mw": 38
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.83712,
+              18.45943
+            ],
+            [
+              73.82158,
+              18.4527
+            ],
+            [
+              73.80736,
+              18.46907
+            ],
+            [
+              73.80952,
+              18.47557
+            ],
+            [
+              73.8336,
+              18.48548
+            ],
+            [
+              73.83823,
+              18.48011
+            ],
+            [
+              73.84113,
+              18.46628
+            ],
+            [
+              73.83712,
+              18.45943
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-114",
+        "name": "Sinhagad Road & Hingne",
+        "zone": "SW Linear Corridor",
+        "lst": 34.8,
+        "ndvi": 0.23,
+        "ndbi": 0.31,
+        "population": 89000,
+        "vulnerable_pop_pct": 24,
+        "anomaly": 1.8,
+        "risk_severity": "moderate",
+        "grid_mw": 50
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.83823,
+              18.48011
+            ],
+            [
+              73.8336,
+              18.48548
+            ],
+            [
+              73.83266,
+              18.49494
+            ],
+            [
+              73.84115,
+              18.50413
+            ],
+            [
+              73.84472,
+              18.5054
+            ],
+            [
+              73.86079,
+              18.48882
+            ],
+            [
+              73.83823,
+              18.48011
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-115",
+        "name": "Parvati & Sahakar Nagar",
+        "zone": "Central South",
+        "lst": 34.2,
+        "ndvi": 0.28,
+        "ndbi": 0.28,
+        "population": 78000,
+        "vulnerable_pop_pct": 20,
+        "anomaly": 1.2,
+        "risk_severity": "moderate",
+        "grid_mw": 44
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.86079,
+              18.48882
+            ],
+            [
+              73.84472,
+              18.5054
+            ],
+            [
+              73.84791,
+              18.50907
+            ],
+            [
+              73.8661,
+              18.5121
+            ],
+            [
+              73.87467,
+              18.4975
+            ],
+            [
+              73.86671,
+              18.48771
+            ],
+            [
+              73.86079,
+              18.48882
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-116",
+        "name": "Swargate Transit Hub",
+        "zone": "High Density Node",
+        "lst": 37.6,
+        "ndvi": 0.09,
+        "ndbi": 0.39,
+        "population": 134000,
+        "vulnerable_pop_pct": 42,
+        "anomaly": 4.6,
+        "risk_severity": "critical",
+        "grid_mw": 84
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.86966,
+              18.46678
+            ],
+            [
+              73.84113,
+              18.46628
+            ],
+            [
+              73.83823,
+              18.48011
+            ],
+            [
+              73.86079,
+              18.48882
+            ],
+            [
+              73.86671,
+              18.48771
+            ],
+            [
+              73.86966,
+              18.46678
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-117",
+        "name": "Bibwewadi",
+        "zone": "South Core",
+        "lst": 35.9,
+        "ndvi": 0.15,
+        "ndbi": 0.35,
+        "population": 118000,
+        "vulnerable_pop_pct": 32,
+        "anomaly": 2.9,
+        "risk_severity": "high",
+        "grid_mw": 64
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.86966,
+              18.46678
+            ],
+            [
+              73.85186,
+              18.44129
+            ],
+            [
+              73.83712,
+              18.45943
+            ],
+            [
+              73.84113,
+              18.46628
+            ],
+            [
+              73.86966,
+              18.46678
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-118",
+        "name": "Dhankawadi",
+        "zone": "South Corridor",
+        "lst": 35.4,
+        "ndvi": 0.17,
+        "ndbi": 0.34,
+        "population": 102000,
+        "vulnerable_pop_pct": 30,
+        "anomaly": 2.4,
+        "risk_severity": "moderate",
+        "grid_mw": 58
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.8893,
+              18.42868
+            ],
+            [
+              73.88984,
+              18.42
+            ],
+            [
+              73.85677,
+              18.42
+            ],
+            [
+              73.85186,
+              18.44129
+            ],
+            [
+              73.86968,
+              18.46676
+            ],
+            [
+              73.87582,
+              18.46351
+            ],
+            [
+              73.8893,
+              18.42868
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-119",
+        "name": "Katraj & Zoo Environs",
+        "zone": "South Basin",
+        "lst": 34.8,
+        "ndvi": 0.26,
+        "ndbi": 0.29,
+        "population": 92000,
+        "vulnerable_pop_pct": 25,
+        "anomaly": 1.8,
+        "risk_severity": "moderate",
+        "grid_mw": 50
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.82158,
+              18.4527
+            ],
+            [
+              73.83712,
+              18.45943
+            ],
+            [
+              73.85186,
+              18.44129
+            ],
+            [
+              73.85677,
+              18.42
+            ],
+            [
+              73.8125,
+              18.42
+            ],
+            [
+              73.82158,
+              18.4527
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-120",
+        "name": "Ambegaon",
+        "zone": "South Valley",
+        "lst": 33.5,
+        "ndvi": 0.33,
+        "ndbi": 0.25,
+        "population": 58000,
+        "vulnerable_pop_pct": 18,
+        "anomaly": 0.5,
+        "risk_severity": "nominal",
+        "grid_mw": 36
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.87467,
+              18.4975
+            ],
+            [
+              73.88333,
+              18.49823
+            ],
+            [
+              73.89369,
+              18.47406
+            ],
+            [
+              73.87582,
+              18.46351
+            ],
+            [
+              73.86966,
+              18.46678
+            ],
+            [
+              73.86671,
+              18.48771
+            ],
+            [
+              73.87467,
+              18.4975
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-121",
+        "name": "Kondhwa Khurd",
+        "zone": "Southeast Dense",
+        "lst": 36.5,
+        "ndvi": 0.12,
+        "ndbi": 0.37,
+        "population": 128000,
+        "vulnerable_pop_pct": 38,
+        "anomaly": 3.5,
+        "risk_severity": "high",
+        "grid_mw": 72
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.89369,
+              18.47406
+            ],
+            [
+              73.91296,
+              18.47338
+            ],
+            [
+              73.8893,
+              18.42868
+            ],
+            [
+              73.87582,
+              18.46351
+            ],
+            [
+              73.89369,
+              18.47406
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-122",
+        "name": "Kondhwa Budruk",
+        "zone": "Southeast Fringe",
+        "lst": 35.8,
+        "ndvi": 0.15,
+        "ndbi": 0.35,
+        "population": 96000,
+        "vulnerable_pop_pct": 32,
+        "anomaly": 2.8,
+        "risk_severity": "high",
+        "grid_mw": 56
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.91533,
+              18.4744
+            ],
+            [
+              73.92259,
+              18.47409
+            ],
+            [
+              73.95715,
+              18.42
+            ],
+            [
+              73.88984,
+              18.42
+            ],
+            [
+              73.8893,
+              18.42868
+            ],
+            [
+              73.91296,
+              18.47338
+            ],
+            [
+              73.91533,
+              18.4744
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-123",
+        "name": "Undri",
+        "zone": "Developing SE",
+        "lst": 35.2,
+        "ndvi": 0.19,
+        "ndbi": 0.33,
+        "population": 74000,
+        "vulnerable_pop_pct": 24,
+        "anomaly": 2.2,
+        "risk_severity": "moderate",
+        "grid_mw": 46
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.89716,
+              18.50711
+            ],
+            [
+              73.91533,
+              18.4744
+            ],
+            [
+              73.91296,
+              18.47338
+            ],
+            [
+              73.89369,
+              18.47406
+            ],
+            [
+              73.88333,
+              18.49823
+            ],
+            [
+              73.89716,
+              18.50711
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-124",
+        "name": "Wanowrie & Salunke Vihar",
+        "zone": "South Cantonment",
+        "lst": 34.9,
+        "ndvi": 0.22,
+        "ndbi": 0.31,
+        "population": 94000,
+        "vulnerable_pop_pct": 24,
+        "anomaly": 1.9,
+        "risk_severity": "moderate",
+        "grid_mw": 56
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.88717,
+              18.52455
+            ],
+            [
+              73.90114,
+              18.51574
+            ],
+            [
+              73.89716,
+              18.50711
+            ],
+            [
+              73.88333,
+              18.49823
+            ],
+            [
+              73.87467,
+              18.4975
+            ],
+            [
+              73.8661,
+              18.5121
+            ],
+            [
+              73.8674,
+              18.51787
+            ],
+            [
+              73.88717,
+              18.52455
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-125",
+        "name": "Camp (Pune Cantonment)",
+        "zone": "Heritage Grid",
+        "lst": 34.1,
+        "ndvi": 0.28,
+        "ndbi": 0.28,
+        "population": 88000,
+        "vulnerable_pop_pct": 20,
+        "anomaly": 1.1,
+        "risk_severity": "moderate",
+        "grid_mw": 55
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.86103,
+              18.53348
+            ],
+            [
+              73.87092,
+              18.53494
+            ],
+            [
+              73.88537,
+              18.52444
+            ],
+            [
+              73.8674,
+              18.51787
+            ],
+            [
+              73.86087,
+              18.53166
+            ],
+            [
+              73.86103,
+              18.53348
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-126",
+        "name": "Pune Railway Station Core",
+        "zone": "Transport Core",
+        "lst": 37.2,
+        "ndvi": 0.09,
+        "ndbi": 0.39,
+        "population": 112000,
+        "vulnerable_pop_pct": 40,
+        "anomaly": 4.2,
+        "risk_severity": "critical",
+        "grid_mw": 78
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.85498,
+              18.54677
+            ],
+            [
+              73.86447,
+              18.55911
+            ],
+            [
+              73.88129,
+              18.54271
+            ],
+            [
+              73.87092,
+              18.53494
+            ],
+            [
+              73.86103,
+              18.53348
+            ],
+            [
+              73.85498,
+              18.54677
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-127",
+        "name": "Sangamwadi & Bund Garden",
+        "zone": "River Confluence",
+        "lst": 35.2,
+        "ndvi": 0.2,
+        "ndbi": 0.32,
+        "population": 68000,
+        "vulnerable_pop_pct": 22,
+        "anomaly": 2.2,
+        "risk_severity": "moderate",
+        "grid_mw": 48
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.90038,
+              18.54197
+            ],
+            [
+              73.91036,
+              18.52838
+            ],
+            [
+              73.90427,
+              18.51744
+            ],
+            [
+              73.90114,
+              18.51574
+            ],
+            [
+              73.88717,
+              18.52455
+            ],
+            [
+              73.88466,
+              18.54196
+            ],
+            [
+              73.89017,
+              18.5459
+            ],
+            [
+              73.90038,
+              18.54197
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-128",
+        "name": "Koregaon Park",
+        "zone": "Low Density Green",
+        "lst": 33.8,
+        "ndvi": 0.34,
+        "ndbi": 0.24,
+        "population": 54000,
+        "vulnerable_pop_pct": 15,
+        "anomaly": 0.8,
+        "risk_severity": "nominal",
+        "grid_mw": 40
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.88129,
+              18.54271
+            ],
+            [
+              73.88466,
+              18.54196
+            ],
+            [
+              73.88717,
+              18.52455
+            ],
+            [
+              73.88537,
+              18.52444
+            ],
+            [
+              73.87092,
+              18.53494
+            ],
+            [
+              73.88129,
+              18.54271
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-129",
+        "name": "Boat Club Road",
+        "zone": "River Enclave",
+        "lst": 33.6,
+        "ndvi": 0.33,
+        "ndbi": 0.25,
+        "population": 42000,
+        "vulnerable_pop_pct": 14,
+        "anomaly": 0.6,
+        "risk_severity": "nominal",
+        "grid_mw": 34
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.89017,
+              18.5459
+            ],
+            [
+              73.88466,
+              18.54196
+            ],
+            [
+              73.88129,
+              18.54271
+            ],
+            [
+              73.865,
+              18.559
+            ],
+            [
+              73.89125,
+              18.56425
+            ],
+            [
+              73.89017,
+              18.5459
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-130",
+        "name": "Yerawada West",
+        "zone": "North Dense",
+        "lst": 36.9,
+        "ndvi": 0.11,
+        "ndbi": 0.38,
+        "population": 124000,
+        "vulnerable_pop_pct": 42,
+        "anomaly": 3.9,
+        "risk_severity": "high",
+        "grid_mw": 70
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.89437,
+              18.56737
+            ],
+            [
+              73.90005,
+              18.56755
+            ],
+            [
+              73.90723,
+              18.55739
+            ],
+            [
+              73.90038,
+              18.54197
+            ],
+            [
+              73.89017,
+              18.5459
+            ],
+            [
+              73.89125,
+              18.56425
+            ],
+            [
+              73.89437,
+              18.56737
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-131",
+        "name": "Yerawada East",
+        "zone": "Industrial Mixed",
+        "lst": 36.4,
+        "ndvi": 0.13,
+        "ndbi": 0.36,
+        "population": 98000,
+        "vulnerable_pop_pct": 34,
+        "anomaly": 3.4,
+        "risk_severity": "high",
+        "grid_mw": 62
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.9264,
+              18.5478
+            ],
+            [
+              73.9252,
+              18.54324
+            ],
+            [
+              73.91763,
+              18.53289
+            ],
+            [
+              73.91036,
+              18.52838
+            ],
+            [
+              73.90038,
+              18.54197
+            ],
+            [
+              73.90723,
+              18.55739
+            ],
+            [
+              73.9264,
+              18.5478
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-132",
+        "name": "Kalyani Nagar",
+        "zone": "Residential East",
+        "lst": 34.5,
+        "ndvi": 0.25,
+        "ndbi": 0.3,
+        "population": 68000,
+        "vulnerable_pop_pct": 18,
+        "anomaly": 1.5,
+        "risk_severity": "moderate",
+        "grid_mw": 48
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.90705,
+              18.57355
+            ],
+            [
+              73.93702,
+              18.57039
+            ],
+            [
+              73.92992,
+              18.55146
+            ],
+            [
+              73.9264,
+              18.5478
+            ],
+            [
+              73.90723,
+              18.55739
+            ],
+            [
+              73.90005,
+              18.56755
+            ],
+            [
+              73.90705,
+              18.57355
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-133",
+        "name": "Viman Nagar",
+        "zone": "IT & Commercial",
+        "lst": 36.1,
+        "ndvi": 0.16,
+        "ndbi": 0.35,
+        "population": 82000,
+        "vulnerable_pop_pct": 24,
+        "anomaly": 3.1,
+        "risk_severity": "high",
+        "grid_mw": 58
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.9107,
+              18.61
+            ],
+            [
+              73.94908,
+              18.61
+            ],
+            [
+              73.94494,
+              18.57806
+            ],
+            [
+              73.93702,
+              18.57039
+            ],
+            [
+              73.90705,
+              18.57355
+            ],
+            [
+              73.9107,
+              18.61
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-134",
+        "name": "Lohegaon & Airport",
+        "zone": "Airport Zone",
+        "lst": 36.0,
+        "ndvi": 0.15,
+        "ndbi": 0.35,
+        "population": 64000,
+        "vulnerable_pop_pct": 26,
+        "anomaly": 3.0,
+        "risk_severity": "high",
+        "grid_mw": 48
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.8688,
+              18.61
+            ],
+            [
+              73.9107,
+              18.61
+            ],
+            [
+              73.90705,
+              18.57355
+            ],
+            [
+              73.90005,
+              18.56755
+            ],
+            [
+              73.89437,
+              18.56737
+            ],
+            [
+              73.8688,
+              18.61
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-135",
+        "name": "Dhanori",
+        "zone": "North East",
+        "lst": 35.4,
+        "ndvi": 0.18,
+        "ndbi": 0.34,
+        "population": 72000,
+        "vulnerable_pop_pct": 26,
+        "anomaly": 2.4,
+        "risk_severity": "moderate",
+        "grid_mw": 50
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.865,
+              18.559
+            ],
+            [
+              73.85462,
+              18.59062
+            ],
+            [
+              73.85835,
+              18.61
+            ],
+            [
+              73.8688,
+              18.61
+            ],
+            [
+              73.89437,
+              18.56737
+            ],
+            [
+              73.89125,
+              18.56425
+            ],
+            [
+              73.865,
+              18.559
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-136",
+        "name": "Vishrantwadi",
+        "zone": "North Node",
+        "lst": 35.5,
+        "ndvi": 0.17,
+        "ndbi": 0.34,
+        "population": 85000,
+        "vulnerable_pop_pct": 28,
+        "anomaly": 2.5,
+        "risk_severity": "high",
+        "grid_mw": 54
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.851,
+              18.587
+            ],
+            [
+              73.85462,
+              18.59062
+            ],
+            [
+              73.86447,
+              18.55911
+            ],
+            [
+              73.85498,
+              18.54677
+            ],
+            [
+              73.83033,
+              18.54567
+            ],
+            [
+              73.851,
+              18.587
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-137",
+        "name": "Khadki Cantonment",
+        "zone": "Military Green",
+        "lst": 33.9,
+        "ndvi": 0.32,
+        "ndbi": 0.25,
+        "population": 62000,
+        "vulnerable_pop_pct": 16,
+        "anomaly": 0.9,
+        "risk_severity": "nominal",
+        "grid_mw": 42
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.81891,
+              18.56866
+            ],
+            [
+              73.851,
+              18.587
+            ],
+            [
+              73.83033,
+              18.54567
+            ],
+            [
+              73.82706,
+              18.54449
+            ],
+            [
+              73.81891,
+              18.56866
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-138",
+        "name": "Bopodi",
+        "zone": "North Corridor",
+        "lst": 35.8,
+        "ndvi": 0.16,
+        "ndbi": 0.35,
+        "population": 74000,
+        "vulnerable_pop_pct": 28,
+        "anomaly": 2.8,
+        "risk_severity": "high",
+        "grid_mw": 52
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.79546,
+              18.6006
+            ],
+            [
+              73.79634,
+              18.61
+            ],
+            [
+              73.85835,
+              18.61
+            ],
+            [
+              73.85462,
+              18.59062
+            ],
+            [
+              73.851,
+              18.587
+            ],
+            [
+              73.81891,
+              18.56866
+            ],
+            [
+              73.7984,
+              18.58534
+            ],
+            [
+              73.79546,
+              18.6006
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-139",
+        "name": "Dapodi & PCMC Border",
+        "zone": "Industrial North",
+        "lst": 37.0,
+        "ndvi": 0.1,
+        "ndbi": 0.38,
+        "population": 92000,
+        "vulnerable_pop_pct": 36,
+        "anomaly": 4.0,
+        "risk_severity": "critical",
+        "grid_mw": 68
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.95008,
+              18.5138
+            ],
+            [
+              73.94904,
+              18.4944
+            ],
+            [
+              73.92886,
+              18.48297
+            ],
+            [
+              73.92004,
+              18.50798
+            ],
+            [
+              73.93991,
+              18.51507
+            ],
+            [
+              73.95008,
+              18.5138
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-140",
+        "name": "Hadapsar Industrial MIDC",
+        "zone": "Manufacturing Core",
+        "lst": 38.4,
+        "ndvi": 0.07,
+        "ndbi": 0.4,
+        "population": 168000,
+        "vulnerable_pop_pct": 48,
+        "anomaly": 5.4,
+        "risk_severity": "critical",
+        "grid_mw": 96
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.91036,
+              18.52838
+            ],
+            [
+              73.91763,
+              18.53289
+            ],
+            [
+              73.93991,
+              18.51507
+            ],
+            [
+              73.92004,
+              18.50798
+            ],
+            [
+              73.90427,
+              18.51744
+            ],
+            [
+              73.91036,
+              18.52838
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-141",
+        "name": "Magarpatta City",
+        "zone": "Planned Township",
+        "lst": 35.2,
+        "ndvi": 0.24,
+        "ndbi": 0.3,
+        "population": 78000,
+        "vulnerable_pop_pct": 18,
+        "anomaly": 2.2,
+        "risk_severity": "moderate",
+        "grid_mw": 62
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.9252,
+              18.54324
+            ],
+            [
+              73.95461,
+              18.51972
+            ],
+            [
+              73.95008,
+              18.5138
+            ],
+            [
+              73.93991,
+              18.51507
+            ],
+            [
+              73.91763,
+              18.53289
+            ],
+            [
+              73.9252,
+              18.54324
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-142",
+        "name": "Mundhwa Industrial",
+        "zone": "Industrial Corridor",
+        "lst": 37.8,
+        "ndvi": 0.08,
+        "ndbi": 0.39,
+        "population": 114000,
+        "vulnerable_pop_pct": 44,
+        "anomaly": 4.8,
+        "risk_severity": "critical",
+        "grid_mw": 82
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.94494,
+              18.57806
+            ],
+            [
+              73.98534,
+              18.53766
+            ],
+            [
+              73.9718,
+              18.53213
+            ],
+            [
+              73.92992,
+              18.55146
+            ],
+            [
+              73.93702,
+              18.57039
+            ],
+            [
+              73.94494,
+              18.57806
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-143",
+        "name": "Kharadi IT Park (EON)",
+        "zone": "Tech SEZ Corridor",
+        "lst": 37.2,
+        "ndvi": 0.11,
+        "ndbi": 0.38,
+        "population": 112000,
+        "vulnerable_pop_pct": 26,
+        "anomaly": 4.2,
+        "risk_severity": "critical",
+        "grid_mw": 74
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.92992,
+              18.55146
+            ],
+            [
+              73.9718,
+              18.53213
+            ],
+            [
+              73.95461,
+              18.51972
+            ],
+            [
+              73.9252,
+              18.54324
+            ],
+            [
+              73.9264,
+              18.5478
+            ],
+            [
+              73.92992,
+              18.55146
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-144",
+        "name": "Kharadi South",
+        "zone": "Residential East",
+        "lst": 36.2,
+        "ndvi": 0.15,
+        "ndbi": 0.35,
+        "population": 84000,
+        "vulnerable_pop_pct": 24,
+        "anomaly": 3.2,
+        "risk_severity": "high",
+        "grid_mw": 56
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.98534,
+              18.53766
+            ],
+            [
+              73.94494,
+              18.57806
+            ],
+            [
+              73.94908,
+              18.61
+            ],
+            [
+              73.99,
+              18.61
+            ],
+            [
+              73.99,
+              18.5374
+            ],
+            [
+              73.98534,
+              18.53766
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-145",
+        "name": "Wagholi West",
+        "zone": "East Suburb",
+        "lst": 36.6,
+        "ndvi": 0.13,
+        "ndbi": 0.36,
+        "population": 76000,
+        "vulnerable_pop_pct": 30,
+        "anomaly": 3.6,
+        "risk_severity": "high",
+        "grid_mw": 52
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.92004,
+              18.50798
+            ],
+            [
+              73.92886,
+              18.48297
+            ],
+            [
+              73.92259,
+              18.47409
+            ],
+            [
+              73.91533,
+              18.4744
+            ],
+            [
+              73.89716,
+              18.50711
+            ],
+            [
+              73.90114,
+              18.51574
+            ],
+            [
+              73.90427,
+              18.51744
+            ],
+            [
+              73.92004,
+              18.50798
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-146",
+        "name": "Ramtekdi & Vaiduwadi",
+        "zone": "Dense Industrial",
+        "lst": 38.0,
+        "ndvi": 0.08,
+        "ndbi": 0.39,
+        "population": 102000,
+        "vulnerable_pop_pct": 46,
+        "anomaly": 5.0,
+        "risk_severity": "critical",
+        "grid_mw": 84
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.92259,
+              18.47409
+            ],
+            [
+              73.92886,
+              18.48297
+            ],
+            [
+              73.94904,
+              18.4944
+            ],
+            [
+              73.99,
+              18.46514
+            ],
+            [
+              73.99,
+              18.42
+            ],
+            [
+              73.95715,
+              18.42
+            ],
+            [
+              73.92259,
+              18.47409
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-147",
+        "name": "Fursungi & Bhekrai Nagar",
+        "zone": "Southeast Growth",
+        "lst": 36.4,
+        "ndvi": 0.14,
+        "ndbi": 0.36,
+        "population": 82000,
+        "vulnerable_pop_pct": 32,
+        "anomaly": 3.4,
+        "risk_severity": "high",
+        "grid_mw": 54
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.94904,
+              18.4944
+            ],
+            [
+              73.95008,
+              18.5138
+            ],
+            [
+              73.95461,
+              18.51972
+            ],
+            [
+              73.9718,
+              18.53213
+            ],
+            [
+              73.98534,
+              18.53766
+            ],
+            [
+              73.99,
+              18.5374
+            ],
+            [
+              73.99,
+              18.46514
+            ],
+            [
+              73.94904,
+              18.4944
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-148",
+        "name": "Manjri Green Belt",
+        "zone": "Agricultural East",
+        "lst": 34.6,
+        "ndvi": 0.28,
+        "ndbi": 0.28,
+        "population": 54000,
+        "vulnerable_pop_pct": 22,
+        "anomaly": 1.6,
+        "risk_severity": "moderate",
+        "grid_mw": 38
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.79546,
+              18.6006
+            ],
+            [
+              73.74,
+              18.559
+            ],
+            [
+              73.74,
+              18.61
+            ],
+            [
+              73.79634,
+              18.61
+            ],
+            [
+              73.79546,
+              18.6006
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "W-149",
+        "name": "Wakad & Hinjawadi Link",
+        "zone": "NW Tech Fringe",
+        "lst": 35.2,
+        "ndvi": 0.2,
+        "ndbi": 0.32,
+        "population": 88000,
+        "vulnerable_pop_pct": 20,
+        "anomaly": 2.2,
+        "risk_severity": "moderate",
+        "grid_mw": 55
+      }
+    }
+  ]
+}
