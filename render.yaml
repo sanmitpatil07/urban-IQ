@@ -10,23 +10,10 @@
     envVars:
       - key: ENVIRONMENT
         value: production
-      # We will use Render's dynamic service discovery for cross-origin URLs.
-      - key: ALLOWED_ORIGINS
-        fromService:
-          type: web
-          name: urban-heat-frontend
-          property: url
       - key: URBAN_HEAT_DATA_DIR
         value: /app/data
-    
-    # Note: If you have generated model artifacts/GeoJSON files that are ignored by Git
-    # and you need them in production, you have two options:
-    # 1. Modify Dockerfile to download them from S3/cloud storage at build time.
-    # 2. Use a Render Persistent Disk (requires a paid plan):
-    # disk:
-    #   name: urban-heat-data
-    #   mountPath: /app/data
-    #   sizeGB: 1
+      - key: ALLOWED_ORIGINS
+        value: "https://urban-heat-frontend.onrender.com"
 
   # ==========================================
   # FRONTEND SERVICE (React / Vite)
@@ -39,9 +26,6 @@
     plan: free
     envVars:
       - key: VITE_API_BASE_URL
-        fromService:
-          type: web
-          name: urban-heat-api
-          property: url
+        value: "https://urban-heat-api.onrender.com"
       - key: VITE_ENABLE_DEMO_MODE
-        value: "false"
+        value: "true"

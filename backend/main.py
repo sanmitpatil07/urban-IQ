@@ -27,8 +27,7 @@ app = FastAPI(
 env_origins = os.environ.get("ALLOWED_ORIGINS", "")
 ENVIRONMENT = os.environ.get("ENVIRONMENT", "development").lower()
 API_KEY = os.environ.get("URBAN_HEAT_API_KEY")
-if ENVIRONMENT == "production" and not env_origins:
-    raise RuntimeError("ALLOWED_ORIGINS must be set in production.")
+
 ALLOWED_ORIGINS = [
     origin.strip() for origin in env_origins.split(",") if origin.strip()
 ] if env_origins else [
@@ -40,13 +39,13 @@ ALLOWED_ORIGINS = [
     "http://127.0.0.1:8080",
 ]
 
+# Allow onrender.com domains and configured deployment hosts
+default_cors_regex = r"https?://.*\.onrender\.com|https?://.*\.vercel\.app|https?://.*\.netlify\.app|https?://.*\.railway\.app"
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
-    allow_origin_regex=os.environ.get("CORS_ORIGIN_REGEX") or (
-        None if ENVIRONMENT == "production"
-        else r"https?://.*\.vercel\.app|https?://.*\.netlify\.app|https?://.*\.onrender\.com|https?://.*\.railway\.app"
-    ),
+    allow_origin_regex=os.environ.get("CORS_ORIGIN_REGEX") or default_cors_regex,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
