@@ -231,6 +231,16 @@ export const Header = ({
           </div>
         </div>
 
+        {/* DSS Workbench Navigation */}
+        <button
+          onClick={() => navigate('/dss')}
+          className="flex items-center space-x-1.5 bg-[#972c06]/20 hover:bg-[#972c06]/35 border border-[#972c06]/50 text-[#ffb59f] px-3 py-1.5 rounded text-xs font-mono transition-colors"
+          title="Switch to Civic Cartographic Decision Support Workbench"
+        >
+          <SlidersHorizontal className="w-3.5 h-3.5 text-[#ffb59f]" />
+          <span>DSS Workbench</span>
+        </button>
+
         {/* Home Navigation */}
         <button
           onClick={() => navigate('/')}

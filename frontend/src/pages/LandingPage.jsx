@@ -7,7 +7,6 @@ import {
   Leaf, 
   Sun, 
   Satellite, 
-  ShieldCheck, 
   Layers, 
   ArrowRight,
   TrendingDown,
@@ -46,6 +45,14 @@ const LandingPage = () => {
           <a href="#story" className="text-xs font-mono text-[#8793A8] hover:text-[#EDF1F7] transition-colors hidden sm:inline-block">
             Scientific Framework
           </a>
+          <button
+            onClick={() => navigate('/dss')}
+            className="bg-[#b8431e] hover:bg-[#972c06] text-[#effcf9] font-display font-bold text-xs uppercase tracking-wider py-2 px-3.5 rounded flex items-center space-x-1.5 transition-all shadow-md"
+            title="Launch Civic Cartographic Decision Support Platform"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-[#ffdbd1] animate-ping" />
+            <span>DSS Workbench</span>
+          </button>
           <button
             onClick={() => navigate('/map')}
             className="bg-[#2FB8AC] hover:bg-[#269B91] text-[#0B1220] font-display font-bold text-xs uppercase tracking-wider py-2 px-4 rounded shadow-cyan-glow flex items-center space-x-1.5 transition-all"
@@ -93,6 +100,14 @@ const LandingPage = () => {
               transition={{ duration: 0.6, delay: 0.3 }}
             >
               <button 
+                className="bg-[#b8431e] hover:bg-[#972c06] text-[#effcf9] font-display font-bold text-xs uppercase tracking-wider py-3 px-6 rounded shadow-md flex items-center space-x-2 transition-all border border-[#ffdbd1]/30"
+                onClick={() => navigate('/dss')}
+              >
+                <Layers className="w-4 h-4 text-[#ffdbd1]" />
+                <span>Launch DSS Workbench</span>
+              </button>
+
+              <button 
                 className="bg-[#2FB8AC] hover:bg-[#269B91] text-[#0B1220] font-display font-bold text-xs uppercase tracking-wider py-3 px-6 rounded shadow-cyan-glow flex items-center space-x-2 transition-all"
                 onClick={() => navigate('/map')}
               >
@@ -102,7 +117,7 @@ const LandingPage = () => {
 
               <button 
                 className="bg-[#131B2E] hover:bg-[#1B2740] border border-[#263349] text-[#EDF1F7] font-display font-medium text-xs uppercase tracking-wider py-3 px-6 rounded flex items-center space-x-2 transition-all"
-                onClick={() => navigate('/map')}
+                onClick={() => navigate('/dss')}
               >
                 <Activity className="w-4 h-4 text-[#F2A93B]" />
                 <span>Run What-If Simulation</span>
@@ -118,8 +133,8 @@ const LandingPage = () => {
             transition={{ duration: 0.7, delay: 0.2 }}
           >
             <div 
-              onClick={() => navigate('/map')}
-              className="bg-[#131B2E] border border-[#263349] rounded-xl p-4 shadow-panel-raised hover:border-[#2FB8AC] transition-all cursor-pointer group relative overflow-hidden"
+              onClick={() => navigate('/dss')}
+              className="bg-[#131B2E] border border-[#263349] rounded-xl p-4 shadow-panel-raised hover:border-[#b8431e] transition-all cursor-pointer group relative overflow-hidden"
             >
               {/* Header preview bar */}
               <div className="flex items-center justify-between border-b border-[#263349] pb-3 mb-3">
@@ -127,8 +142,8 @@ const LandingPage = () => {
                   <span className="w-2.5 h-2.5 rounded-full bg-[#E8632B]" />
                   <span>PUNE MUNICIPAL HEAT MAP</span>
                 </div>
-                <span className="text-[10px] font-mono text-[#2FB8AC] bg-[#2FB8AC]/10 px-2 py-0.5 rounded border border-[#2FB8AC]/30">
-                  LANDSAT-9 THERMAL
+                <span className="text-[10px] font-mono text-[#ffb59f] bg-[#972c06]/20 px-2 py-0.5 rounded border border-[#972c06]/40">
+                  URBAN THERMAL DSS
                 </span>
               </div>
 
@@ -142,11 +157,11 @@ const LandingPage = () => {
                 <div className="absolute top-1/2 left-1/2 w-28 h-28 bg-[#2FB8AC]/20 rounded-full filter blur-xl" />
 
                 <div className="relative z-10 text-center flex flex-col items-center space-y-3">
-                  <div className="w-14 h-14 rounded-full bg-[#131B2E] border border-[#2FB8AC] flex items-center justify-center text-[#2FB8AC] shadow-cyan-glow group-hover:scale-110 transition-transform">
-                    <ThermometerSun className="w-7 h-7" />
+                  <div className="w-14 h-14 rounded-full bg-[#131B2E] border border-[#b8431e] flex items-center justify-center text-[#ffb59f] shadow-lg group-hover:scale-110 transition-transform">
+                    <ThermometerSun className="w-7 h-7 text-[#b8431e]" />
                   </div>
                   <div>
-                    <div className="font-display font-bold text-sm text-[#EDF1F7]">Launch Interactive Workspace</div>
+                    <div className="font-display font-bold text-sm text-[#EDF1F7]">Launch Interactive Decision Platform</div>
                     <div className="text-[11px] font-mono text-[#8793A8] mt-0.5">Click to simulate microclimates & interventions</div>
                   </div>
                 </div>
@@ -154,8 +169,8 @@ const LandingPage = () => {
 
               <div className="mt-3 flex items-center justify-between text-[11px] font-mono text-[#8793A8]">
                 <span>1,000+ Analyzed Micro-Zones</span>
-                <span className="text-[#2FB8AC] font-semibold flex items-center space-x-1">
-                  <span>Enter Ops Control</span>
+                <span className="text-[#ffb59f] font-semibold flex items-center space-x-1 group-hover:text-[#ffdbd1]">
+                  <span>Enter DSS Platform</span>
                   <span>→</span>
                 </span>
               </div>
