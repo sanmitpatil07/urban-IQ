@@ -6,17 +6,17 @@
     "ndbi",
     "dist_center_km"
   ],
-  "rmse": 2.3511965039102924,
-  "r2": -44.127551020407644,
+  "rmse": 1.2241912549656577,
+  "r2": 0.6193179512286924,
   "physics_loss_term": 0.0,
   "physics_consistency_score_pct": 100.0,
   "ndvi_monotonicity_violation_pct": 0.0,
   "ndbi_monotonicity_violation_pct": 0.0,
-  "train_samples": 4,
-  "test_samples": 2,
+  "train_samples": 24,
+  "test_samples": 7,
   "feature_importances": {
-    "ndvi": 0.0,
+    "ndvi": 0.9210272335865013,
     "ndbi": 0.0,
-    "dist_center_km": 0.0
+    "dist_center_km": 0.07897276641349872
   }
 }

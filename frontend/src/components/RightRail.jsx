@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { 
   Bell, 
   Trees, 
@@ -6,7 +6,8 @@ import {
   ShieldCheck, 
   ChevronRight, 
   Activity,
-  Info
+  Info,
+  X
 } from 'lucide-react';
 import { ResilienceGauge } from './ResilienceGauge';
 
@@ -16,7 +17,9 @@ export const RightRail = ({
   cityResilienceScore = 62,
   currentCity = 'Pune',
   wards = [],
-  scenarioParams = {}
+  scenarioParams = {},
+  isOpen = false,
+  onClose
 }) => {
   // Compute aggregated stats
   const meanNdvi = wards.length > 0
@@ -50,7 +53,32 @@ export const RightRail = ({
   };
 
   return (
-    <aside className="w-80 bg-[#131B2E] border-l border-[#263349] flex flex-col h-[calc(100vh-4rem)] z-20 shadow-panel select-none overflow-y-auto">
+    <>
+      {/* Mobile Drawer Backdrop when open */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-xs z-40 xl:hidden"
+          onClick={onClose}
+          aria-hidden="true"
+        />
+      )}
+      <aside className={`fixed inset-y-0 right-0 z-50 w-80 max-w-[85vw] xl:relative xl:inset-auto xl:z-20 bg-[#131B2E] border-l border-[#263349] flex flex-col h-[100dvh] xl:h-[calc(100dvh-4rem)] shadow-panel select-none overflow-y-auto transition-transform duration-200 ${
+        isOpen ? 'translate-x-0' : 'translate-x-full xl:translate-x-0 hidden xl:flex'
+      }`}>
+        {/* Mobile Header with Close Button */}
+        <div className="xl:hidden flex items-center justify-between p-3.5 border-b border-[#263349] bg-[#0B1220]">
+          <span className="font-mono text-xs font-bold text-[#2FB8AC] uppercase flex items-center space-x-1.5">
+            <Activity className="w-3.5 h-3.5" />
+            <span>Resilience Telemetry & Alerts</span>
+          </span>
+          <button 
+            onClick={onClose}
+            className="p-1.5 text-[#8793A8] hover:text-[#EDF1F7] hover:bg-[#1B2740] rounded border border-[#263349]"
+            aria-label="Close alerts panel"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
       {/* Top: City Resilience Gauge */}
       <div className="p-4 border-b border-[#263349]">
         <ResilienceGauge score={cityResilienceScore} city={currentCity} scenarioParams={scenarioParams} />
@@ -179,5 +207,6 @@ export const RightRail = ({
         </div>
       </div>
     </aside>
+    </>
   );
 };

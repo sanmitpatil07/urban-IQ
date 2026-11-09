@@ -44,15 +44,15 @@ export const TimelineScrubber = ({
   };
 
   return (
-    <div className="bg-[#131B2E] border-t border-[#263349] p-3 shadow-panel z-20 select-none relative">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
+    <div className="bg-[#131B2E] border-t border-[#263349] p-2 sm:p-3 shadow-panel z-20 select-none relative">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2 sm:gap-3">
         
         {/* Left: Telemetry & Controls */}
-        <div className="flex items-center space-x-3 w-full md:w-auto justify-between md:justify-start">
-          <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 sm:space-x-3 w-full md:w-auto justify-between md:justify-start">
+          <div className="flex items-center space-x-1.5 sm:space-x-2">
             <button
               onClick={() => setIsPlaying(!isPlaying)}
-              className={`p-2.5 rounded font-mono font-bold text-xs uppercase tracking-wider flex items-center space-x-1.5 transition-all ${
+              className={`p-1.5 sm:p-2.5 rounded font-mono font-bold text-xs uppercase tracking-wider flex items-center space-x-1.5 transition-all ${
                 isPlaying 
                   ? 'bg-[#E8632B] text-[#EDF1F7] shadow-lg' 
                   : 'bg-[#2FB8AC] hover:bg-[#269B91] text-[#0B1220] shadow-cyan-glow'
@@ -61,26 +61,26 @@ export const TimelineScrubber = ({
             >
               {isPlaying ? (
                 <>
-                  <Pause className="w-4 h-4 fill-current" />
+                  <Pause className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current" />
                   <span className="hidden sm:inline">Pause Orbit</span>
                 </>
               ) : (
                 <>
-                  <Play className="w-4 h-4 fill-current" />
+                  <Play className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current" />
                   <span className="hidden sm:inline">Play Orbit</span>
                 </>
               )}
             </button>
 
             {/* Stepper Buttons */}
-            <div className="flex items-center space-x-1 bg-[#0B1220] border border-[#263349] rounded p-1">
+            <div className="flex items-center space-x-0.5 sm:space-x-1 bg-[#0B1220] border border-[#263349] rounded p-0.5 sm:p-1">
               <button
                 onClick={() => onSelectPassIndex && onSelectPassIndex(Math.min(passes.length - 1, selectedPassIndex + 1))}
                 disabled={selectedPassIndex === passes.length - 1}
                 className="p-1 text-[#8793A8] hover:text-[#EDF1F7] disabled:opacity-30"
                 title="Previous older satellite pass"
               >
-                <ChevronLeft className="w-4 h-4" />
+                <ChevronLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               </button>
               <button
                 onClick={() => onSelectPassIndex && onSelectPassIndex(Math.max(0, selectedPassIndex - 1))}
@@ -88,9 +88,16 @@ export const TimelineScrubber = ({
                 className="p-1 text-[#8793A8] hover:text-[#EDF1F7] disabled:opacity-30"
                 title="Next newer satellite pass"
               >
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               </button>
             </div>
+          </div>
+
+          {/* Active Sensor Stamp on Mobile */}
+          <div className="flex md:hidden items-center space-x-1 text-[10px] font-mono text-[#8793A8]">
+            <span className="text-[#2FB8AC] font-semibold">{activePass.satellite}</span>
+            <span>•</span>
+            <span className="text-[#EDF1F7]">{activePass.meanCityLst}°C</span>
           </div>
 
           {/* Satellite Telemetry Tag */}
@@ -103,11 +110,12 @@ export const TimelineScrubber = ({
         </div>
 
         {/* Center: Horizontal Scrubber Bar */}
-        <div className="flex-1 w-full px-2">
-          <div className="relative flex items-center justify-between mb-1.5 text-[10px] font-mono text-[#8793A8]">
+        <div className="flex-1 w-full px-1 sm:px-2">
+          <div className="relative flex items-center justify-between mb-1 text-[9px] sm:text-[10px] font-mono text-[#8793A8]">
             <span className="flex items-center space-x-1">
               <Clock className="w-3 h-3 text-[#2FB8AC]" />
-              <span>SATELLITE REVISIT TIMELINE (ECOSTRESS / LANDSAT / SENTINEL)</span>
+              <span className="hidden sm:inline">SATELLITE REVISIT TIMELINE (ECOSTRESS / LANDSAT / SENTINEL)</span>
+              <span className="sm:hidden">SATELLITE ORBIT REVISITS</span>
             </span>
             <span className="text-[#2FB8AC] font-bold">
               {activePass.timestamp}

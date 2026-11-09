@@ -375,8 +375,9 @@ class UrbanHeatModel:
         df = gdf.dropna(subset=["lst", "ndvi", "ndbi"]).copy()
         
         # Calculate relative distance to city center in kilometers
-        centroids_x = df.geometry.centroid.x
-        centroids_y = df.geometry.centroid.y
+        proj_centroids = df.to_crs(epsg=3857).geometry.centroid.to_crs(epsg=4326)
+        centroids_x = proj_centroids.x
+        centroids_y = proj_centroids.y
         self.center_x = float(centroids_x.mean())
         self.center_y = float(centroids_y.mean())
         
@@ -535,7 +536,7 @@ class UrbanHeatModel:
                 n_samples = len(ndvi) if hasattr(ndvi, "__len__") else 1
                 data["dist_center_km"] = np.zeros(n_samples)
         
-        X = pd.DataFrame(data)[self.feature_names]
+        X = pd.DataFrame(data)[self.feature_names].values
         return self.model.predict(X)
 
     def simulate(

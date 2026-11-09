@@ -2733,7 +2733,7 @@ export const MOCK_ALERTS = [
 ];
 
 // Scenario Optimizer Calculation Engine
-export function runScenarioOptimizer(params, targetWardIds = null) {
+export function runScenarioOptimizer(params, targetWardIds = null, wardsList = null) {
   const { treeCanopyIncreasePct = 15, coolRoofCoveragePct = 35, reflectivePavementAreaPct = 20, budgetInrLakhs = 250 } = params;
 
   const rawCoolingDegC = 
@@ -2749,10 +2749,10 @@ export function runScenarioOptimizer(params, targetWardIds = null) {
   const vulnerablePop = Math.round(projectedTempReductionDegC * 18500);
   const powerSavedMw = Number((projectedTempReductionDegC * 6.4).toFixed(1));
 
-  let targetWards = MOCK_WARDS;
+  let targetWards = (wardsList && wardsList.length > 0) ? wardsList : MOCK_WARDS;
   if (targetWardIds && targetWardIds.length > 0) {
     const selectedSet = new Set(targetWardIds);
-    const matched = MOCK_WARDS.filter(w => selectedSet.has(w.id));
+    const matched = targetWards.filter(w => selectedSet.has(w.id));
     if (matched.length > 0) targetWards = matched;
   }
 
@@ -2792,7 +2792,7 @@ export function runScenarioOptimizer(params, targetWardIds = null) {
 export function getMockPuneGeoJSON() {
   return {
     type: "FeatureCollection",
-    features: MOCK_WARDS.map((ward, idx) => ({
+    features: MOCK_WARDS.map((ward) => ({
       type: "Feature",
       geometry: {
         type: "Polygon",

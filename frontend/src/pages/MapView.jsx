@@ -1,7 +1,7 @@
-﻿import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import Map, { Source, Layer, Popup } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { Sparkles, X, Compass, Layers, AlertTriangle, CheckCircle2, RefreshCw } from 'lucide-react';
+import { Sparkles, X, Compass, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import * as turf from '@turf/turf';
 import '../index.css';
 
@@ -91,18 +91,23 @@ const MAP_STYLES = {
 };
 
 const CITY_COORDINATES = {
-  'pune': { longitude: 73.8567, latitude: 18.5204, zoom: 11.5 },
-  'bengaluru': { longitude: 77.5946, latitude: 12.9716, zoom: 11.5 },
-  'ahmedabad': { longitude: 72.5714, latitude: 23.0225, zoom: 11.5 },
-  'delhi ncr': { longitude: 77.2090, latitude: 28.6139, zoom: 11.0 },
-  'mumbai': { longitude: 72.8777, latitude: 19.0760, zoom: 11.0 },
-  'hyderabad': { longitude: 78.4867, latitude: 17.3850, zoom: 11.5 }
+  'pune': { longitude: 73.85, latitude: 18.56, zoom: 10.3 },
+  'mumbai': { longitude: 72.96, latitude: 19.16, zoom: 10.0 },
+  'delhi ncr': { longitude: 77.21, latitude: 28.58, zoom: 9.8 },
+  'delhi': { longitude: 77.21, latitude: 28.58, zoom: 9.8 },
+  'bengaluru': { longitude: 77.62, latitude: 12.98, zoom: 10.2 },
+  'hyderabad': { longitude: 78.44, latitude: 17.42, zoom: 10.3 },
+  'ahmedabad': { longitude: 72.58, latitude: 23.10, zoom: 10.4 },
+  'chennai': { longitude: 80.18, latitude: 13.04, zoom: 10.4 },
+  'kolkata': { longitude: 88.38, latitude: 22.58, zoom: 10.5 },
+  'jaipur': { longitude: 75.80, latitude: 26.88, zoom: 10.6 },
+  'lucknow': { longitude: 80.96, latitude: 26.85, zoom: 10.6 }
 };
 
 export function MapView() {
   const [currentCity, setCurrentCity] = useState('Pune');
   const [geoData, setGeoData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
   const [hoverInfo, setHoverInfo] = useState(null);
   const [selectedZones, setSelectedZones] = useState(new Set());
   const [selectedWardForModal, setSelectedWardForModal] = useState(null);
@@ -110,8 +115,9 @@ export function MapView() {
   // Map tile style ('dark' | 'satellite')
   const [mapStyleType, setMapStyleType] = useState('dark');
 
-  // Left rail collapse
-  const [isLeftRailOpen, setIsLeftRailOpen] = useState(true);
+  // Rails state (responsive defaults: open on desktop, drawers on mobile)
+  const [isLeftRailOpen, setIsLeftRailOpen] = useState(() => (typeof window !== 'undefined' ? window.innerWidth >= 1024 : true));
+  const [isRightRailOpen, setIsRightRailOpen] = useState(false);
 
   // Satellite pass timeline
   const [selectedPassIndex, setSelectedPassIndex] = useState(0);
@@ -145,7 +151,7 @@ export function MapView() {
   });
 
   // Simulation states
-  const [isSimulating, setIsSimulating] = useState(false);
+  const [_isSimulating, setIsSimulating] = useState(false);
   const [simResults, setSimResults] = useState(null);
 
   // Optimizer states
@@ -157,22 +163,38 @@ export function MapView() {
   const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '');
   const demoModeEnabled = import.meta.env.VITE_ENABLE_DEMO_MODE === 'true';
 
-  // Fetch real Pune heatmap GeoJSON from FastAPI backend
+  // Fetch real city heatmap GeoJSON and NASA satellite telemetry from FastAPI backend
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const cityName = currentCity.toLowerCase();
-      const response = await fetch(`${API_BASE_URL}/heatmap/${cityName}`);
-      if (response.ok) {
-        const data = await response.json();
+      const cityName = currentCity.toLowerCase().replace(' ncr', '').replace(' ', '_');
+      const [heatmapRes, telemetryRes] = await Promise.allSettled([
+        fetch(`${API_BASE_URL}/heatmap/${cityName}`),
+        fetch(`${API_BASE_URL}/telemetry/live/${cityName}`)
+      ]);
+
+      if (heatmapRes.status === 'fulfilled' && heatmapRes.value.ok) {
+        const data = await heatmapRes.value.json();
         setGeoData(data);
         setIsUsingMockData(false);
+
+        let liveTelem = null;
+        if (telemetryRes.status === 'fulfilled' && telemetryRes.value.ok) {
+          try {
+            liveTelem = await telemetryRes.value.json();
+          } catch {
+            // Telemetry optional
+          }
+        }
+
         setDataFeedToast({
           type: 'live',
-          title: 'Live Backend Connected',
-          message: `Streaming real satellite telemetry & Physics-Informed ML inference for ${currentCity}.`,
+          title: `${currentCity}: Live Satellite & AI Synced`,
+          message: liveTelem
+            ? `NASA & Satellite Skin Radiometry: ${liveTelem.live_surface_temp_c}°C surface, ${liveTelem.air_temp_2m_c}°C air | ${liveTelem.thermal_anomaly_c > 0 ? '+' : ''}${liveTelem.thermal_anomaly_c}°C anomaly.`
+            : `Streaming real satellite telemetry & Physics-Informed ML inference for ${currentCity}.`,
         });
-        setTimeout(() => setDataFeedToast(null), 4000);
+        setTimeout(() => setDataFeedToast(null), 5000);
       } else if (demoModeEnabled) {
         setGeoData(getMockPuneGeoJSON());
         setIsUsingMockData(true);
@@ -184,16 +206,16 @@ export function MapView() {
       } else {
         setGeoData(null);
         setIsUsingMockData(false);
-        setDataFeedToast({ type: 'error', title: 'Live data unavailable', message: `The API could not load ${currentCity} (HTTP ${response.status}).` });
+        setDataFeedToast({ type: 'error', title: 'Live data unavailable', message: `The API could not load ${currentCity}.` });
       }
-    } catch (error) {
+    } catch {
       if (demoModeEnabled) {
         setGeoData(getMockPuneGeoJSON());
         setIsUsingMockData(true);
         setDataFeedToast({
           type: 'mock',
           title: 'Demo Mode: Sample Data Active',
-          message: `FastAPI server (${API_BASE_URL}) not responding. Switched to Pune sample baseline dataset.`,
+          message: `FastAPI server (${API_BASE_URL}) not responding. Switched to sample baseline dataset.`,
         });
       } else {
         setGeoData(null);
@@ -229,7 +251,7 @@ export function MapView() {
         try {
           const ptsWithin = turf.pointsWithinPolygon(treeFeatures, zone);
           z_ndvi += (ptsWithin.features.length * 0.03);
-        } catch(e){}
+        } catch {}
       }
       
       if (drawnPolygons.length > 0) {
@@ -240,7 +262,7 @@ export function MapView() {
               intersects = true;
               break;
             }
-          } catch(e){}
+          } catch {}
         }
         if (intersects) {
           z_ndvi += 0.15;
@@ -264,7 +286,7 @@ export function MapView() {
       setIsSimulating(true);
       try {
         const payload = {
-          city: "pune",
+          city: currentCity.toLowerCase().replace(' ncr', '').replace(' ', '_'),
           zone_ids: Array.from(selectedZones),
           delta_ndvi: scenarioParams.treeCanopyIncreasePct / 100,
           delta_ndbi: -((scenarioParams.coolRoofCoveragePct + scenarioParams.reflectivePavementAreaPct) / 200),
@@ -286,10 +308,10 @@ export function MapView() {
       } catch (error) {
         console.warn("Backend ML simulation query error:", error);
         // Local mock fallback when backend unreachable
-        if (geoData) {
+        if (geoData && Array.isArray(geoData.features)) {
           const mockResults = {};
           Array.from(selectedZones).forEach(zoneId => {
-            const feat = geoData.features.find(f => f.properties.zone_id === zoneId);
+            const feat = geoData.features.find(f => f.properties && f.properties.zone_id === zoneId);
             if (feat) {
               const baseLst = Number(feat.properties.lst) || 35;
               const delta = -(
@@ -316,7 +338,7 @@ export function MapView() {
 
     const timer = setTimeout(runSimulation, 400);
     return () => clearTimeout(timer);
-  }, [selectedZones, scenarioParams, zoneDeltas]);
+  }, [selectedZones, scenarioParams, zoneDeltas, currentCity, API_BASE_URL, geoData]);
 
   // Process features for display with robust numeric validation
   const mapData = useMemo(() => {
@@ -371,7 +393,7 @@ export function MapView() {
             features.push({ ...feat, geometry: center.geometry });
           }
         }
-      } catch (e) {
+      } catch {
         // Skip malformed geometry safely
       }
     });
@@ -420,7 +442,7 @@ export function MapView() {
     if (selectedFeatures.length === 0) return null;
     try {
       return turf.dissolve(turf.featureCollection(selectedFeatures));
-    } catch (e) { return null; }
+    } catch { return null; }
   }, [geoData, selectedZones]);
 
   // Export GeoJSON of drawn interventions
@@ -489,7 +511,7 @@ export function MapView() {
     }
   }, [interactionMode]);
 
-  const onPointerUp = useCallback(event => {
+  const onPointerUp = useCallback(() => {
     if (interactionMode === 'lasso' && isDrawingLasso) {
       setIsDrawingLasso(false);
       if (lassoPathLngLat.length > 2 && pointData) {
@@ -503,7 +525,7 @@ export function MapView() {
             }
           });
           setSelectedZones(newSelection);
-        } catch (err) {}
+        } catch {}
       }
       setLassoPath([]);
       setLassoPathLngLat([]);
@@ -517,7 +539,7 @@ export function MapView() {
         const coords = [...currentPolygonPath, currentPolygonPath[0]];
         const poly = turf.polygon([coords]);
         setDrawnPolygons(prev => [...prev, poly]);
-      } catch (err) { console.error("Invalid polygon"); }
+      } catch { console.error("Invalid polygon"); }
       setCurrentPolygonPath([]);
     }
   }, [interactionMode, currentPolygonPath]);
@@ -544,6 +566,9 @@ export function MapView() {
         }}
         currentPass={currentPass}
         onToggleLeftRail={() => setIsLeftRailOpen(!isLeftRailOpen)}
+        onToggleRightRail={() => setIsRightRailOpen(!isRightRailOpen)}
+        isLeftRailOpen={isLeftRailOpen}
+        isRightRailOpen={isRightRailOpen}
       />
 
       {/* Demo Mode / Sample Data Banner */}
@@ -554,6 +579,7 @@ export function MapView() {
         {/* Left Rail Collapsible Panel */}
         <LeftRail
           isOpen={isLeftRailOpen}
+          onClose={() => setIsLeftRailOpen(false)}
           activeLayers={activeLayers}
           onToggleLayer={(key) => setActiveLayers(prev => ({ ...prev, [key]: !prev[key] }))}
           scenarioParams={scenarioParams}
@@ -574,7 +600,7 @@ export function MapView() {
         />
 
         {/* Center Stage: Hero Map + Scrubber */}
-        <main className="flex-1 flex flex-col h-[calc(100vh-4rem)] relative overflow-hidden bg-ops-grid">
+        <main className="flex-1 flex flex-col h-[calc(100vh-4rem)] h-[calc(100dvh-4rem)] relative overflow-hidden bg-ops-grid">
           
           {/* Data Feed Connection State Toast */}
           {dataFeedToast && (
@@ -733,29 +759,29 @@ export function MapView() {
                               'interpolate',
                               ['linear'],
                               ['coalesce', ['get', 'display_lst'], 35.0],
-                              33.0, '#10B981',  // Deep Green: Nominal / Cool (< 33°C)
-                              34.2, '#84CC16',  // Lime Green: Mild / Pleasant (33 - 34.5°C)
-                              35.5, '#FACC15',  // Yellow: Moderate Heat (35.5°C)
-                              36.6, '#F97316',  // Orange: High Heat Warning (36.6°C)
-                              37.8, '#EF4444'   // Bright Crimson Red: Severe Heat Hotspot (>= 37.8°C)
+                              33.0, '#34D399',  // light emerald pastel
+                              34.2, '#A3E635',  // soft lime pastel
+                              35.5, '#FDE047',  // soft yellow pastel
+                              36.6, '#FB923C',  // soft orange pastel
+                              37.8, '#F87171'   // soft coral pastel
                             ]
                           : activeLayers.ndviVegetation
                             ? [
                                 'interpolate',
                                 ['linear'],
                                 ['coalesce', ['get', 'ndvi'], 0.22],
-                                0.08, '#78350F',
-                                0.16, '#B45309',
-                                0.26, '#84CC16',
-                                0.38, '#15803D'
+                                0.08, '#D97706',
+                                0.16, '#FBBF24',
+                                0.26, '#A3E635',
+                                0.38, '#34D399'
                               ]
                             : '#1B2740'
                       ],
                       'fill-opacity': [
                         'case',
                         ['==', ['get', 'is_selected'], 1],
-                        0.45,
-                        activeLayers.lstHeat || activeLayers.ndviVegetation ? 0.28 : 0.08
+                        0.32,
+                        activeLayers.lstHeat || activeLayers.ndviVegetation ? 0.16 : 0.05
                       ]
                     }} 
                   />
@@ -772,25 +798,25 @@ export function MapView() {
                               'interpolate',
                               ['linear'],
                               ['coalesce', ['get', 'display_lst'], 35.0],
-                              33.0, '#10B981',
-                              34.2, '#84CC16',
-                              35.5, '#FACC15',
-                              36.6, '#F97316',
-                              37.8, '#EF4444'
+                              33.0, '#34D399',
+                              34.2, '#A3E635',
+                              35.5, '#FDE047',
+                              36.6, '#FB923C',
+                              37.8, '#F87171'
                             ]
                           : '#263349'
                       ],
                       'line-width': [
                         'case',
                         ['==', ['get', 'is_selected'], 1],
-                        3.0,
-                        1.5
+                        2.5,
+                        1.0
                       ],
                       'line-opacity': [
                         'case',
                         ['==', ['get', 'is_selected'], 1],
-                        1.0,
-                        0.9
+                        0.9,
+                        0.65
                       ]
                     }}
                   />
@@ -913,11 +939,11 @@ export function MapView() {
                 <div className="bg-[#131B2E]/95 backdrop-blur-md border border-[#263349] px-3 py-1.5 rounded shadow-panel text-[10px] font-mono text-[#EDF1F7] flex items-center space-x-2.5">
                   <span className="text-[#8793A8] uppercase tracking-wider font-semibold">LST Heat Scale:</span>
                   <div className="flex items-center space-x-1.5">
-                    <span className="flex items-center space-x-1"><span className="w-2.5 h-2.5 rounded-full bg-[#10B981] inline-block"></span><span className="text-[#8793A8]">&lt;33°C (Cool)</span></span>
-                    <span className="flex items-center space-x-1"><span className="w-2.5 h-2.5 rounded-full bg-[#84CC16] inline-block"></span><span className="text-[#8793A8]">34°C (Lime)</span></span>
-                    <span className="flex items-center space-x-1"><span className="w-2.5 h-2.5 rounded-full bg-[#FACC15] inline-block"></span><span className="text-[#8793A8]">35.5°C</span></span>
-                    <span className="flex items-center space-x-1"><span className="w-2.5 h-2.5 rounded-full bg-[#F97316] inline-block"></span><span className="text-[#8793A8]">36.5°C</span></span>
-                    <span className="flex items-center space-x-1"><span className="w-2.5 h-2.5 rounded-full bg-[#EF4444] inline-block"></span><span className="text-[#EF4444] font-bold">&gt;37.8°C (Critical)</span></span>
+                    <span className="flex items-center space-x-1"><span className="w-2.5 h-2.5 rounded-full bg-[#34D399] inline-block"></span><span className="text-[#8793A8]">&lt;33°C (Cool)</span></span>
+                    <span className="flex items-center space-x-1"><span className="w-2.5 h-2.5 rounded-full bg-[#A3E635] inline-block"></span><span className="text-[#8793A8]">34°C (Lime)</span></span>
+                    <span className="flex items-center space-x-1"><span className="w-2.5 h-2.5 rounded-full bg-[#FDE047] inline-block"></span><span className="text-[#8793A8]">35.5°C</span></span>
+                    <span className="flex items-center space-x-1"><span className="w-2.5 h-2.5 rounded-full bg-[#FB923C] inline-block"></span><span className="text-[#8793A8]">36.5°C</span></span>
+                    <span className="flex items-center space-x-1"><span className="w-2.5 h-2.5 rounded-full bg-[#F87171] inline-block"></span><span className="text-[#F87171] font-bold">&gt;37.8°C (Critical)</span></span>
                   </div>
                 </div>
               )}
@@ -943,6 +969,8 @@ export function MapView() {
           currentCity={currentCity}
           wards={MOCK_WARDS}
           scenarioParams={scenarioParams}
+          isOpen={isRightRailOpen}
+          onClose={() => setIsRightRailOpen(false)}
         />
       </div>
 

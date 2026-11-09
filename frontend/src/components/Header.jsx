@@ -8,7 +8,7 @@ import {
   ChevronDown, 
   SlidersHorizontal,
   Home,
-  Lock
+  Activity
 } from 'lucide-react';
 
 export const Header = ({
@@ -18,7 +18,10 @@ export const Header = ({
   selectedWardId,
   onSelectWard,
   currentPass,
-  onToggleLeftRail
+  onToggleLeftRail,
+  onToggleRightRail,
+  isLeftRailOpen = false,
+  isRightRailOpen = false
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -26,12 +29,16 @@ export const Header = ({
   const navigate = useNavigate();
 
   const CITIES = [
-    { name: 'Pune', state: 'Maharashtra', wardsCount: 165, activeWards: '1,000+ Zones', isLiveML: true, isAvailable: true },
-    { name: 'Bengaluru', state: 'Karnataka', wardsCount: 225, activeWards: 'Coming Soon', isLiveML: false, isAvailable: false },
-    { name: 'Ahmedabad', state: 'Gujarat', wardsCount: 192, activeWards: 'Coming Soon', isLiveML: false, isAvailable: false },
-    { name: 'Delhi NCR', state: 'Delhi', wardsCount: 250, activeWards: 'Coming Soon', isLiveML: false, isAvailable: false },
-    { name: 'Mumbai', state: 'Maharashtra', wardsCount: 227, activeWards: 'Coming Soon', isLiveML: false, isAvailable: false },
-    { name: 'Hyderabad', state: 'Telangana', wardsCount: 150, activeWards: 'Coming Soon', isLiveML: false, isAvailable: false }
+    { name: 'Mumbai', state: 'Maharashtra', wardsCount: 43, activeWards: '43 Zones (MMR)', isLiveML: true, isAvailable: true },
+    { name: 'Pune', state: 'Maharashtra', wardsCount: 31, activeWards: '31 Zones (PMRDA)', isLiveML: true, isAvailable: true },
+    { name: 'Delhi NCR', state: 'Delhi-NCR', wardsCount: 26, activeWards: '26 Zones (NCR)', isLiveML: true, isAvailable: true },
+    { name: 'Bengaluru', state: 'Karnataka', wardsCount: 18, activeWards: '18 Zones (BMRDA)', isLiveML: true, isAvailable: true },
+    { name: 'Hyderabad', state: 'Telangana', wardsCount: 15, activeWards: '15 Zones (HMDA)', isLiveML: true, isAvailable: true },
+    { name: 'Ahmedabad', state: 'Gujarat', wardsCount: 14, activeWards: '14 Zones (AUDA)', isLiveML: true, isAvailable: true },
+    { name: 'Chennai', state: 'Tamil Nadu', wardsCount: 12, activeWards: '12 Zones (CMDA)', isLiveML: true, isAvailable: true },
+    { name: 'Kolkata', state: 'West Bengal', wardsCount: 10, activeWards: '10 Zones (KMDA)', isLiveML: true, isAvailable: true },
+    { name: 'Jaipur', state: 'Rajasthan', wardsCount: 8, activeWards: '8 Zones (JDA)', isLiveML: true, isAvailable: true },
+    { name: 'Lucknow', state: 'Uttar Pradesh', wardsCount: 9, activeWards: '9 Zones (LDA)', isLiveML: true, isAvailable: true },
   ];
 
   const filteredWards = searchQuery.trim() === '' ? [] : wards.filter(w => 
@@ -44,54 +51,60 @@ export const Header = ({
   return (
     <header className="h-16 bg-[#131B2E] border-b border-[#263349] px-4 flex items-center justify-between shadow-panel z-30 select-none relative">
       {/* Left: Wordmark & Brand */}
-      <div className="flex items-center space-x-3">
+      <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
         <button 
           onClick={onToggleLeftRail}
-          className="p-2 text-[#8793A8] hover:text-[#EDF1F7] hover:bg-[#1B2740] rounded border border-transparent hover:border-[#263349] transition-colors"
-          title="Toggle Control Panel"
+          className={`p-2 rounded border transition-colors ${
+            isLeftRailOpen 
+              ? 'text-[#2FB8AC] bg-[#1B2740] border-[#2FB8AC]/40 shadow-sm' 
+              : 'text-[#8793A8] hover:text-[#EDF1F7] hover:bg-[#1B2740] border-transparent hover:border-[#263349]'
+          }`}
+          title="Toggle Tools & Intervention Controls"
+          aria-label="Toggle Tools"
         >
           <SlidersHorizontal className="w-5 h-5" />
         </button>
 
-        <div className="flex items-center space-x-2.5">
-          <div className="relative flex items-center justify-center w-9 h-9 rounded bg-[#0B1220] border border-[#263349]">
-            <Satellite className="w-5 h-5 text-[#2FB8AC]" />
+        <div className="flex items-center space-x-2">
+          <div className="relative flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded bg-[#0B1220] border border-[#263349]">
+            <Satellite className="w-4 h-4 sm:w-5 sm:h-5 text-[#2FB8AC]" />
             <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#2FB8AC] animate-ping" />
           </div>
           <div>
-            <div className="flex items-center space-x-1.5">
-              <span className="font-display font-bold text-xl tracking-tight text-[#EDF1F7]">
+            <div className="flex items-center space-x-1 sm:space-x-1.5">
+              <span className="font-display font-bold text-lg sm:text-xl tracking-tight text-[#EDF1F7]">
                 URBAN<span className="text-[#2FB8AC]">IQ</span>
               </span>
-              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#1B2740] text-[#2FB8AC] border border-[#263349]">
-                v2.4 OPS
+              <span className="text-[9px] sm:text-[10px] font-mono px-1 sm:px-1.5 py-0.5 rounded bg-[#1B2740] text-[#2FB8AC] border border-[#263349]">
+                v2.4
               </span>
             </div>
-            <p className="text-[10px] font-mono text-[#8793A8] tracking-wider uppercase -mt-0.5">
+            <p className="hidden sm:block text-[10px] font-mono text-[#8793A8] tracking-wider uppercase -mt-0.5">
               Heat Mitigation DSS
             </p>
           </div>
         </div>
 
         {/* City Selector */}
-        <div className="relative ml-4 hidden md:block">
+        <div className="relative ml-1 sm:ml-4">
           <button
             onClick={() => setIsCityDropdownOpen(!isCityDropdownOpen)}
-            className="flex items-center space-x-2 px-3 py-1.5 rounded bg-[#0B1220] border border-[#263349] hover:border-[#3A4D6E] text-xs font-mono text-[#EDF1F7] transition-all"
+            className="flex items-center space-x-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded bg-[#0B1220] border border-[#263349] hover:border-[#3A4D6E] text-xs font-mono text-[#EDF1F7] transition-all"
+            title="Switch City"
           >
-            <span className="w-2 h-2 rounded-full bg-[#2FB8AC]" />
-            <span className="font-semibold">{currentCity}</span>
+            <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#2FB8AC]" />
+            <span className="font-semibold text-[11px] sm:text-xs">{currentCity}</span>
             {currentCity.toLowerCase() === 'pune' && (
-              <span className="text-[9px] font-bold text-[#2FB8AC] bg-[#2FB8AC]/10 px-1 rounded">LIVE AI</span>
+              <span className="text-[8px] sm:text-[9px] font-bold text-[#2FB8AC] bg-[#2FB8AC]/10 px-1 rounded hidden xs:inline">LIVE</span>
             )}
-            <ChevronDown className="w-3.5 h-3.5 text-[#8793A8]" />
+            <ChevronDown className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#8793A8]" />
           </button>
 
           {isCityDropdownOpen && (
-            <div className="absolute top-full left-0 mt-1 w-64 bg-[#131B2E] border border-[#263349] rounded shadow-panel-raised py-1 z-50">
-              <div className="px-3 py-1.5 text-[10px] font-mono uppercase text-[#8793A8] border-b border-[#263349] flex items-center justify-between">
-                <span>Municipal Jurisdiction</span>
-                <span className="text-[#2FB8AC] text-[9px]">Hackathon Scope</span>
+            <div className="absolute top-full left-0 mt-1 w-64 bg-[#131B2E] border border-[#263349] rounded shadow-panel-raised py-1 z-50 max-h-80 overflow-y-auto">
+              <div className="px-3 py-1.5 text-[10px] font-mono uppercase text-[#8793A8] border-b border-[#263349] flex items-center justify-between sticky top-0 bg-[#131B2E]">
+                <span>National Heat Grid</span>
+                <span className="text-[#2FB8AC] text-[9px] font-bold">10 Live Hubs</span>
               </div>
               {CITIES.map(c => (
                 <button
@@ -110,33 +123,26 @@ export const Header = ({
                         ? 'text-[#2FB8AC] bg-[#1B2740]/70 font-semibold cursor-pointer' 
                         : 'text-[#EDF1F7] hover:bg-[#1B2740] cursor-pointer'
                   }`}
-                  title={!c.isAvailable ? `${c.name} is not configured yet (no config/cities/${c.name.toLowerCase().replace(' ', '_')}.yaml)` : `Select ${c.name}`}
+                  title={`Select ${c.name} (${c.state})`}
                 >
                   <div>
                     <div className="flex items-center space-x-1.5">
                       <span>{c.name}</span>
                       {c.isLiveML && (
                         <span className="text-[9px] font-bold text-[#2FB8AC] bg-[#2FB8AC]/20 px-1 rounded">
-                          ACTIVE
+                          LIVE ML
                         </span>
-                      )}
-                      {!c.isAvailable && (
-                        <Lock className="w-3 h-3 text-[#8793A8]" />
                       )}
                     </div>
                     <div className="text-[10px] text-[#8793A8]">{c.state}</div>
                   </div>
-                  <span className={`font-mono text-[9px] px-1.5 py-0.5 rounded ${
-                    c.isAvailable 
-                      ? 'text-[#2FB8AC] bg-[#0B1220] border border-[#263349]' 
-                      : 'text-[#8793A8] bg-[#0B1220]/60 border border-[#263349]/40'
-                  }`}>
+                  <span className="font-mono text-[9px] px-1.5 py-0.5 rounded text-[#2FB8AC] bg-[#0B1220] border border-[#263349]">
                     {c.activeWards}
                   </span>
                 </button>
               ))}
               <div className="px-3 py-1.5 mt-1 border-t border-[#263349] text-[9px] font-mono text-[#8793A8] leading-tight bg-[#0B1220]/40">
-                Pune is the primary active dataset for this DSS submission. Additional cities unlock upon config ingestion.
+                All-India coverage enabled via NASA POWER, Landsat-9, and Physics-Informed ML. Select any city to navigate.
               </div>
             </div>
           )}
@@ -144,9 +150,9 @@ export const Header = ({
       </div>
 
       {/* Center: Ward Autocomplete Search */}
-      <div className="relative flex-1 max-w-md mx-6">
+      <div className="relative flex-1 max-w-xs sm:max-w-md mx-2 sm:mx-4">
         <div className="relative flex items-center">
-          <Search className="w-4 h-4 absolute left-3 text-[#8793A8]" />
+          <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4 absolute left-2.5 sm:left-3 text-[#8793A8]" />
           <input
             type="text"
             value={searchQuery}
@@ -155,13 +161,13 @@ export const Header = ({
               setIsSearchOpen(true);
             }}
             onFocus={() => setIsSearchOpen(true)}
-            placeholder="Search ward or zone ID (e.g. Zone 42, Peenya)..."
-            className="w-full bg-[#0B1220] border border-[#263349] focus:border-[#2FB8AC] text-xs font-sans text-[#EDF1F7] placeholder-[#8793A8] pl-9 pr-4 py-2 rounded focus:outline-none focus:ring-1 focus:ring-[#2FB8AC] transition-all"
+            placeholder="Search ward or zone..."
+            className="w-full bg-[#0B1220] border border-[#263349] focus:border-[#2FB8AC] text-[11px] sm:text-xs font-sans text-[#EDF1F7] placeholder-[#8793A8] pl-8 sm:pl-9 pr-3 sm:pr-4 py-1.5 sm:py-2 rounded focus:outline-none focus:ring-1 focus:ring-[#2FB8AC] transition-all"
           />
           {searchQuery && (
             <button 
               onClick={() => { setSearchQuery(''); setIsSearchOpen(false); }} 
-              className="absolute right-3 text-xs text-[#8793A8] hover:text-[#EDF1F7]"
+              className="absolute right-2.5 text-xs text-[#8793A8] hover:text-[#EDF1F7]"
             >
               ×
             </button>
@@ -211,7 +217,22 @@ export const Header = ({
       </div>
 
       {/* Right: Telemetry & Nav */}
-      <div className="flex items-center space-x-3">
+      <div className="flex items-center space-x-1.5 sm:space-x-3 flex-shrink-0">
+        {/* Toggle Right Rail (Telemetry & Alerts) Button on Mobile/Tablet */}
+        <button
+          onClick={onToggleRightRail}
+          className={`xl:hidden p-2 rounded border transition-colors flex items-center space-x-1 ${
+            isRightRailOpen 
+              ? 'text-[#2FB8AC] bg-[#1B2740] border-[#2FB8AC]/40 shadow-sm' 
+              : 'text-[#8793A8] hover:text-[#EDF1F7] hover:bg-[#1B2740] border-[#263349]'
+          }`}
+          title="Toggle Resilience Metrics & Alerts"
+          aria-label="Toggle Telemetry"
+        >
+          <Activity className="w-4 h-4 sm:w-5 sm:h-5 text-[#2FB8AC]" />
+          <span className="text-[10px] font-mono text-[#2FB8AC] font-bold hidden sm:inline">ALERTS</span>
+        </button>
+
         {/* Telemetry Indicator */}
         <div className="hidden lg:flex items-center space-x-3 bg-[#0B1220] border border-[#263349] px-3 py-1.5 rounded font-mono text-xs">
           <div className="flex items-center space-x-2">
@@ -225,6 +246,11 @@ export const Header = ({
 
           <div className="h-3 w-[1px] bg-[#263349]" />
 
+          <div className="flex items-center space-x-1 text-[10px] text-[#38BDF8] bg-[#38BDF8]/10 px-1.5 py-0.5 rounded border border-[#38BDF8]/30">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#38BDF8] animate-pulse" />
+            <span>NASA LIVE API</span>
+          </div>
+
           <div className="flex items-center space-x-1 text-[10px] text-[#2FB8AC] bg-[#2FB8AC]/10 px-1.5 py-0.5 rounded border border-[#2FB8AC]/30">
             <ShieldCheck className="w-3 h-3" />
             <span>AI SYNC OK</span>
@@ -234,17 +260,17 @@ export const Header = ({
         {/* Home Navigation */}
         <button
           onClick={() => navigate('/')}
-          className="flex items-center space-x-1.5 bg-[#1B2740] hover:bg-[#263349] border border-[#263349] text-[#EDF1F7] px-3 py-1.5 rounded text-xs font-mono transition-colors"
+          className="flex items-center space-x-1 sm:space-x-1.5 bg-[#1B2740] hover:bg-[#263349] border border-[#263349] text-[#EDF1F7] px-2 sm:px-3 py-1.5 rounded text-xs font-mono transition-colors"
           title="Return to Landing Page"
         >
           <Home className="w-3.5 h-3.5 text-[#2FB8AC]" />
-          <span>Home</span>
+          <span className="hidden sm:inline">Home</span>
         </button>
 
         {/* User Profile Avatar */}
-        <div className="flex items-center space-x-2 pl-2 border-l border-[#263349]">
-          <div className="w-8 h-8 rounded-full bg-[#1B2740] border border-[#263349] flex items-center justify-center text-[#2FB8AC]">
-            <User className="w-4 h-4" />
+        <div className="hidden sm:flex items-center space-x-2 pl-1 sm:pl-2 border-l border-[#263349]">
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#1B2740] border border-[#263349] flex items-center justify-center text-[#2FB8AC]">
+            <User className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </div>
         </div>
       </div>

@@ -7,8 +7,6 @@ import {
   Leaf, 
   Sun, 
   Satellite, 
-  ShieldCheck, 
-  Layers, 
   ArrowRight,
   TrendingDown,
   Cpu
@@ -21,36 +19,36 @@ const LandingPage = () => {
   return (
     <div className="min-h-screen bg-[#0B1220] text-[#EDF1F7] font-sans flex flex-col overflow-x-hidden bg-ops-grid">
       {/* Navbar */}
-      <nav className="h-16 bg-[#131B2E] border-b border-[#263349] px-6 lg:px-12 flex items-center justify-between shadow-panel z-30">
-        <div className="flex items-center space-x-3">
-          <div className="relative flex items-center justify-center w-9 h-9 rounded bg-[#0B1220] border border-[#263349]">
-            <Satellite className="w-5 h-5 text-[#2FB8AC]" />
+      <nav className="h-16 bg-[#131B2E] border-b border-[#263349] px-4 sm:px-6 lg:px-12 flex items-center justify-between shadow-panel z-30">
+        <div className="flex items-center space-x-2.5 sm:space-x-3">
+          <div className="relative flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded bg-[#0B1220] border border-[#263349]">
+            <Satellite className="w-4 h-4 sm:w-5 sm:h-5 text-[#2FB8AC]" />
             <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#2FB8AC] animate-ping" />
           </div>
           <div>
             <div className="flex items-center space-x-1.5">
-              <span className="font-display font-bold text-xl tracking-tight text-[#EDF1F7]">
+              <span className="font-display font-bold text-lg sm:text-xl tracking-tight text-[#EDF1F7]">
                 URBAN<span className="text-[#2FB8AC]">IQ</span>
               </span>
-              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#1B2740] text-[#2FB8AC] border border-[#263349]">
-                v2.4 OPS
+              <span className="text-[9px] sm:text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#1B2740] text-[#2FB8AC] border border-[#263349]">
+                v2.4
               </span>
             </div>
-            <p className="text-[10px] font-mono text-[#8793A8] tracking-wider uppercase -mt-0.5">
-              Urban Heat Decision Support System
+            <p className="hidden xs:block text-[9px] sm:text-[10px] font-mono text-[#8793A8] tracking-wider uppercase -mt-0.5">
+              Urban Heat DSS
             </p>
           </div>
         </div>
 
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-2 sm:space-x-4">
           <a href="#story" className="text-xs font-mono text-[#8793A8] hover:text-[#EDF1F7] transition-colors hidden sm:inline-block">
             Scientific Framework
           </a>
           <button
             onClick={() => navigate('/map')}
-            className="bg-[#2FB8AC] hover:bg-[#269B91] text-[#0B1220] font-display font-bold text-xs uppercase tracking-wider py-2 px-4 rounded shadow-cyan-glow flex items-center space-x-1.5 transition-all"
+            className="bg-[#2FB8AC] hover:bg-[#269B91] text-[#0B1220] font-display font-bold text-xs uppercase tracking-wider py-1.5 sm:py-2 px-3 sm:px-4 rounded shadow-cyan-glow flex items-center space-x-1.5 transition-all"
           >
-            <span>Launch Mission Map</span>
+            <span>Launch Map</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>

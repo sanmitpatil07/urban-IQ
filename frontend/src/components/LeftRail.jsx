@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { 
   Layers, 
   ThermometerSun, 
@@ -16,11 +16,14 @@ import {
   TreePine,
   Square,
   Download,
-  Trash2
+  Trash2,
+  X,
+  SlidersHorizontal
 } from 'lucide-react';
 
 export const LeftRail = ({
   isOpen = true,
+  onClose,
   activeLayers = {
     lstHeat: true,
     ndviVegetation: true,
@@ -79,7 +82,28 @@ export const LeftRail = ({
   };
 
   return (
-    <aside className="w-80 bg-[#131B2E] border-r border-[#263349] flex flex-col h-[calc(100vh-4rem)] z-20 shadow-panel select-none overflow-y-auto">
+    <>
+      {/* Mobile Drawer Backdrop */}
+      <div 
+        className="fixed inset-0 bg-black/60 backdrop-blur-xs z-40 lg:hidden"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+      <aside className="fixed inset-y-0 left-0 z-50 w-80 max-w-[85vw] lg:relative lg:inset-auto lg:z-20 bg-[#131B2E] border-r border-[#263349] flex flex-col h-[100dvh] lg:h-[calc(100dvh-4rem)] shadow-panel select-none overflow-y-auto animate-in slide-in-from-left duration-200">
+        {/* Mobile Header with Close Button */}
+        <div className="lg:hidden flex items-center justify-between p-3.5 border-b border-[#263349] bg-[#0B1220]">
+          <span className="font-mono text-xs font-bold text-[#2FB8AC] uppercase flex items-center space-x-1.5">
+            <SlidersHorizontal className="w-3.5 h-3.5" />
+            <span>Interactive Tools & Simulation</span>
+          </span>
+          <button 
+            onClick={onClose}
+            className="p-1.5 text-[#8793A8] hover:text-[#EDF1F7] hover:bg-[#1B2740] rounded border border-[#263349]"
+            aria-label="Close tools panel"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
       {/* Section 1: Spatial Tools & Intervention Brush */}
       <div className="p-4 border-b border-[#263349]">
         <div className="flex items-center justify-between mb-2.5">
@@ -428,5 +452,6 @@ export const LeftRail = ({
         </button>
       </div>
     </aside>
+    </>
   );
 };

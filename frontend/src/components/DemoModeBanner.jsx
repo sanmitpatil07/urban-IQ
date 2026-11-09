@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AlertTriangle, Database, Info, X, CheckCircle2, Server, RefreshCw } from 'lucide-react';
+import { AlertTriangle, X, CheckCircle2, Server, RefreshCw } from 'lucide-react';
 
 export const DemoModeBanner = ({ isMock = true, city = 'Pune', onRetry = null }) => {
   const [isDismissed, setIsDismissed] = useState(false);
