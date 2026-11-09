@@ -20,40 +20,74 @@ import {
   getMockPuneGeoJSON
 } from '../services/mockApi';
 
-const MAP_STYLES = {
-  dark: "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
-  satellite: {
-    version: 8,
-    sources: {
-      esri: {
-        type: "raster",
-        tiles: ["https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"],
-        tileSize: 256,
-        attribution: "Esri, Maxar, Earthstar Geographics"
-      },
-      labels: {
-        type: "raster",
-        tiles: ["https://server.arcgisonline.com/arcgis/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"],
-        tileSize: 256
+// Satellite style: Esri World Imagery (crisp aerial) + OpenStreetMap road labels overlay (Google Maps hybrid style)
+const SATELLITE_STYLE = {
+  version: 8,
+  glyphs: "https://fonts.openmaptiles.org/{fontstack}/{range}.pbf",
+  sprite: "https://openmaptiles.github.io/osm-bright-gl-style/sprite",
+  sources: {
+    "esri-imagery": {
+      type: "raster",
+      tiles: [
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+      ],
+      tileSize: 256,
+      maxzoom: 19,
+      attribution: "© Esri, Maxar, Earthstar Geographics, and the GIS User Community"
+    },
+    "esri-reference": {
+      type: "raster",
+      tiles: [
+        "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}"
+      ],
+      tileSize: 256,
+      maxzoom: 19
+    },
+    "esri-labels": {
+      type: "raster",
+      tiles: [
+        "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"
+      ],
+      tileSize: 256,
+      maxzoom: 19
+    }
+  },
+  layers: [
+    {
+      id: "satellite-imagery",
+      type: "raster",
+      source: "esri-imagery",
+      minzoom: 0,
+      maxzoom: 22,
+      paint: {
+        "raster-saturation": 0.1,
+        "raster-contrast": 0.05,
+        "raster-brightness-min": 0.0,
+        "raster-brightness-max": 1.0
       }
     },
-    layers: [
-      {
-        id: "esri-satellite",
-        type: "raster",
-        source: "esri",
-        minzoom: 0,
-        maxzoom: 22
-      },
-      {
-        id: "esri-labels",
-        type: "raster",
-        source: "labels",
-        minzoom: 0,
-        maxzoom: 22
-      }
-    ]
-  }
+    {
+      id: "satellite-roads",
+      type: "raster",
+      source: "esri-reference",
+      minzoom: 8,
+      maxzoom: 22,
+      paint: { "raster-opacity": 0.9 }
+    },
+    {
+      id: "satellite-labels",
+      type: "raster",
+      source: "esri-labels",
+      minzoom: 5,
+      maxzoom: 22,
+      paint: { "raster-opacity": 1.0 }
+    }
+  ]
+};
+
+const MAP_STYLES = {
+  dark: "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+  satellite: SATELLITE_STYLE
 };
 
 const CITY_COORDINATES = {
@@ -632,7 +666,7 @@ export function MapView() {
                   mapStyleType === 'satellite' ? 'bg-[#1B2740] text-[#2FB8AC] font-semibold border border-[#2FB8AC]/40' : 'text-[#8793A8] hover:text-[#EDF1F7]'
                 }`}
               >
-                True Satellite
+                🛰️ Satellite
               </button>
             </div>
           </div>
