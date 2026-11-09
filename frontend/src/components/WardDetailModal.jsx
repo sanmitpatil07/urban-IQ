@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { 
   X, 
   Cpu, 
@@ -31,7 +31,7 @@ export const WardDetailModal = ({ ward, onClose }) => {
   const handleExportReport = () => {
     setIsExporting(true);
     const reportContent = [
-      'URBAN HEAT DSS — MUNICIPAL ACTION BRIEF',
+      'URBAN-IQ — MUNICIPAL ACTION DOSSIER',
       `Report ID: URB-DSS-${wardId}-2026`,
       `Generated: ${new Date().toISOString()}`,
       '========================================',
@@ -71,225 +71,208 @@ export const WardDetailModal = ({ ward, onClose }) => {
 
   const getSeverityBadgeColor = (sev) => {
     switch (sev) {
-      case 'critical': return 'bg-[#C81E3A] text-[#EDF1F7]';
-      case 'high': return 'bg-[#E8632B] text-[#EDF1F7]';
-      case 'moderate': return 'bg-[#F2A93B] text-[#0B1220]';
-      default: return 'bg-[#2FB8AC] text-[#0B1220]';
+      case 'critical': return 'bg-rose-100 text-rose-800 border border-rose-300';
+      case 'high': return 'bg-amber-100 text-amber-900 border border-amber-300';
+      case 'moderate': return 'bg-amber-50 text-amber-800 border border-amber-200';
+      default: return 'bg-emerald-100 text-emerald-800 border border-emerald-300';
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-sm transition-opacity duration-300">
-      <div className="w-full max-w-2xl bg-[#131B2E] border-l border-[#263349] h-full flex flex-col shadow-panel-raised overflow-hidden animate-in slide-in-from-right duration-300">
+    <div className="fixed inset-0 z-50 flex justify-end bg-slate-900/50 backdrop-blur-xs transition-opacity duration-200 text-slate-800">
+      <div className="w-full max-w-2xl bg-white border-l border-slate-300 h-full flex flex-col shadow-2xl overflow-hidden animate-in slide-in-from-right duration-250">
         
         {/* Header */}
-        <div className="p-5 border-b border-[#263349] bg-[#0B1220] flex items-center justify-between">
+        <div className="p-4 sm:p-5 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
           <div>
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center gap-2">
               <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded uppercase ${getSeverityBadgeColor(riskSeverity)}`}>
                 {riskSeverity} RISK
               </span>
-              <span className="font-mono text-xs text-[#8793A8]">ZONE ID: {wardId}</span>
-              <span className="font-mono text-xs text-[#2FB8AC]">{zoneName}</span>
+              <span className="font-mono text-xs text-slate-500">ZONE: {wardId}</span>
+              <span className="font-mono text-xs text-emerald-700 font-semibold">{zoneName}</span>
             </div>
-            <h2 className="font-display font-bold text-2xl text-[#EDF1F7] mt-1">
+            <h2 className="font-sans font-bold text-xl sm:text-2xl text-slate-900 mt-1">
               {wardName}
             </h2>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2 text-[#8793A8] hover:text-[#EDF1F7] hover:bg-[#1B2740] rounded border border-transparent hover:border-[#263349] transition-colors"
+            className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200 rounded border border-transparent transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Content Body */}
-        <div className="p-6 flex-1 overflow-y-auto space-y-6">
+        <div className="p-4 sm:p-6 flex-1 overflow-y-auto space-y-5 bg-white">
           
           {/* Telemetry Header Cards */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="bg-[#0B1220] border border-[#263349] p-3 rounded">
-              <div className="text-[10px] font-mono text-[#8793A8] uppercase">LST Anomaly</div>
-              <div className="font-mono text-xl font-bold text-[#E8632B] mt-0.5">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+            <div className="bg-slate-50 border border-slate-200 p-3 rounded">
+              <div className="text-[10px] font-mono text-slate-500 uppercase">LST Anomaly</div>
+              <div className="font-mono text-lg sm:text-xl font-bold text-rose-600 mt-0.5">
                 +{anomaly}°C
               </div>
-              <div className="text-[9px] font-mono text-[#8793A8]">above baseline</div>
+              <div className="text-[9px] font-mono text-slate-400">above baseline</div>
             </div>
 
-            <div className="bg-[#0B1220] border border-[#263349] p-3 rounded">
-              <div className="text-[10px] font-mono text-[#8793A8] uppercase">Surface Temp</div>
-              <div className="font-mono text-xl font-bold text-[#EDF1F7] mt-0.5">
+            <div className="bg-slate-50 border border-slate-200 p-3 rounded">
+              <div className="text-[10px] font-mono text-slate-500 uppercase">Surface Temp</div>
+              <div className="font-mono text-lg sm:text-xl font-bold text-slate-900 mt-0.5">
                 {surfaceTemp}°C
               </div>
-              <div className="text-[9px] font-mono text-[#8793A8]">Thermal Infrared</div>
+              <div className="text-[9px] font-mono text-slate-400">Thermal Infrared</div>
             </div>
 
-            <div className="bg-[#0B1220] border border-[#263349] p-3 rounded">
-              <div className="text-[10px] font-mono text-[#8793A8] uppercase">Canopy Index</div>
-              <div className="font-mono text-xl font-bold text-[#2FB8AC] mt-0.5">
+            <div className="bg-slate-50 border border-slate-200 p-3 rounded">
+              <div className="text-[10px] font-mono text-slate-500 uppercase">Canopy Index</div>
+              <div className="font-mono text-lg sm:text-xl font-bold text-emerald-700 mt-0.5">
                 {ndvi}
               </div>
-              <div className="text-[9px] font-mono text-[#8793A8]">NDVI score</div>
+              <div className="text-[9px] font-mono text-slate-400">NDVI score</div>
             </div>
 
-            <div className="bg-[#0B1220] border border-[#263349] p-3 rounded">
-              <div className="text-[10px] font-mono text-[#8793A8] uppercase">Vulnerable Pop</div>
-              <div className="font-mono text-xl font-bold text-[#EDF1F7] mt-0.5">
+            <div className="bg-slate-50 border border-slate-200 p-3 rounded">
+              <div className="text-[10px] font-mono text-slate-500 uppercase">Vulnerable Pop</div>
+              <div className="font-mono text-lg sm:text-xl font-bold text-slate-900 mt-0.5">
                 {vulnerablePopPct}%
               </div>
-              <div className="text-[9px] font-mono text-[#8793A8]">{population.toLocaleString()} total</div>
+              <div className="text-[9px] font-mono text-slate-400">{population.toLocaleString()} total</div>
             </div>
           </div>
 
           {/* Physics-Informed Heat Driver Attribution Breakdown */}
-          <div className="bg-[#0B1220] border border-[#263349] rounded p-4">
-            <div className="flex items-center justify-between mb-3 border-b border-[#263349] pb-2">
-              <div className="flex items-center space-x-2">
-                <Cpu className="w-4 h-4 text-[#F2A93B]" />
-                <h3 className="font-display font-semibold text-sm text-[#EDF1F7] uppercase tracking-wide">
-                  Physics-Informed Driver Attribution
+          <div className="bg-slate-50 border border-slate-200 rounded p-4">
+            <div className="flex items-center justify-between mb-3 border-b border-slate-200 pb-2">
+              <div className="flex items-center gap-2">
+                <Cpu className="w-4 h-4 text-emerald-700" />
+                <h3 className="font-sans font-bold text-sm text-slate-900 uppercase tracking-wide">
+                  Physics Driver Attribution
                 </h3>
               </div>
-              <span className="text-[10px] font-mono text-[#2FB8AC] bg-[#2FB8AC]/10 px-2 py-0.5 rounded border border-[#2FB8AC]/30">
-                94% MODEL CONFIDENCE
+              <span className="text-[10px] font-mono text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded font-bold">
+                94% CONFIDENCE
               </span>
             </div>
 
-            <p className="text-xs text-[#8793A8] mb-4">
+            <p className="text-xs text-slate-600 mb-4">
               Physics breakdown decomposing surface thermal anomaly into sensible heat flux, radiative albedo deficit, and anthropogenic discharges.
             </p>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
               {attributions.map((attr) => (
-                <div key={attr.id} className="bg-[#131B2E] border border-[#263349] p-3 rounded">
+                <div key={attr.id} className="bg-white border border-slate-200 p-3 rounded shadow-xs">
                   <div className="flex items-center justify-between text-xs mb-1">
-                    <span className="font-semibold text-[#EDF1F7] flex items-center space-x-2">
+                    <span className="font-semibold text-slate-800 flex items-center gap-2">
                       <span>{attr.driverName}</span>
                     </span>
-                    <span className="font-mono text-xs font-bold text-[#F2A93B]">
-                      {attr.contributionPct}% <span className="text-[10px] font-normal text-[#8793A8]">contribution</span>
+                    <span className="font-mono text-xs font-bold text-rose-600">
+                      {attr.contributionPct}% <span className="text-[10px] font-normal text-slate-400">contribution</span>
                     </span>
                   </div>
 
-                  <div className="relative w-full bg-[#0B1220] h-3 rounded-full overflow-hidden border border-[#263349] my-2">
+                  <div className="relative w-full bg-slate-200 h-2.5 rounded-full overflow-hidden my-2">
                     <div 
-                      className="bg-gradient-to-r from-[#F2A93B] to-[#E8632B] h-full rounded-full transition-all duration-700" 
+                      className="bg-rose-500 h-full rounded-full transition-all duration-700" 
                       style={{ width: `${attr.contributionPct}%` }}
-                    />
-                    <div 
-                      className="absolute top-0 bottom-0 border-l-2 border-r-2 border-[#EDF1F7] bg-[#EDF1F7]/10"
-                      style={{
-                        left: `${attr.confidenceBand[0]}%`,
-                        width: `${attr.confidenceBand[1] - attr.confidenceBand[0]}%`
-                      }}
-                      title={`Confidence interval: ${attr.confidenceBand[0]}% - ${attr.confidenceBand[1]}%`}
                     />
                   </div>
 
-                  <div className="flex justify-between items-center text-[10px] font-mono text-[#8793A8] mt-1">
-                    <span>{attr.description}</span>
-                    <span className="text-[#2FB8AC] bg-[#0B1220] px-1.5 py-0.5 rounded border border-[#263349]">{attr.physicsEq}</span>
-                  </div>
+                  <p className="text-[11px] text-slate-500 leading-relaxed">
+                    {attr.description}
+                  </p>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Ranked Cooling Interventions */}
-          <div className="bg-[#0B1220] border border-[#263349] rounded p-4">
-            <div className="flex items-center justify-between mb-3 border-b border-[#263349] pb-2">
-              <div className="flex items-center space-x-2">
-                <Award className="w-4 h-4 text-[#2FB8AC]" />
-                <h3 className="font-display font-semibold text-sm text-[#EDF1F7] uppercase tracking-wide">
-                  Ranked Cooling Interventions (Impact per ₹)
+          <div className="bg-slate-50 border border-slate-200 rounded p-4">
+            <div className="flex items-center justify-between mb-3 border-b border-slate-200 pb-2">
+              <div className="flex items-center gap-2">
+                <Award className="w-4 h-4 text-emerald-700" />
+                <h3 className="font-sans font-bold text-sm text-slate-900 uppercase tracking-wide">
+                  Ranked Mitigation Interventions
                 </h3>
               </div>
-              <span className="text-[10px] font-mono text-[#8793A8]">RANKED BY ROI</span>
+              <span className="text-[10px] font-mono text-slate-500 uppercase">
+                Optimized by ROI
+              </span>
             </div>
 
             <div className="space-y-3">
-              {interventions.map((int) => (
+              {interventions.map((item) => (
                 <div 
-                  key={int.id} 
-                  className={`p-3.5 rounded border transition-all ${
-                    int.roiRank === 1 
-                      ? 'bg-[#131B2E] border-[#2FB8AC] shadow-cyan-glow' 
-                      : 'bg-[#131B2E] border-[#263349]'
-                  }`}
+                  key={item.id}
+                  className="bg-white border border-slate-200 p-3.5 rounded shadow-xs hover:border-emerald-500 transition-colors"
                 >
                   <div className="flex items-start justify-between">
-                    <div className="flex items-center space-x-2.5">
-                      <span className={`w-6 h-6 rounded-full font-mono text-xs font-bold flex items-center justify-center ${
-                        int.roiRank === 1 ? 'bg-[#2FB8AC] text-[#0B1220]' : 'bg-[#1B2740] text-[#EDF1F7] border border-[#263349]'
-                      }`}>
-                        #{int.roiRank}
+                    <div className="flex items-center gap-2">
+                      <span className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 font-mono text-xs font-bold flex items-center justify-center">
+                        #{item.roiRank}
                       </span>
                       <div>
-                        <h4 className="font-semibold text-xs text-[#EDF1F7]">{int.name}</h4>
-                        <div className="text-[10px] font-mono text-[#8793A8] mt-0.5">
-                          Est. Cooling: <span className="text-[#2FB8AC] font-bold">-{int.estCoolingImpactDegC}°C</span> | Est. Cost: <span className="text-[#EDF1F7]">₹ {int.costInrLakhs} Lakhs</span>
-                        </div>
+                        <h4 className="font-sans font-bold text-xs text-slate-900">
+                          {item.name}
+                        </h4>
+                        <span className="text-[10px] font-mono text-slate-500">
+                          Capex: ₹{item.costInrLakhs}L • Impact: -{item.estCoolingImpactDegC}°C
+                        </span>
                       </div>
                     </div>
 
-                    <div className="text-right font-mono">
-                      <div className="text-xs font-bold text-[#2FB8AC]">
-                        ₹ {int.costPerDegreeAvertedLakhs} L
-                      </div>
-                      <div className="text-[9px] text-[#8793A8]">per °C averted</div>
-                    </div>
+                    <span className="font-mono text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">
+                      ₹{item.costPerDegreeAvertedLakhs}L / °C
+                    </span>
                   </div>
 
-                  <div className="mt-2.5 pt-2 border-t border-[#263349]/60 flex flex-wrap gap-1.5">
-                    {int.coBenefits.map((cb, i) => (
-                      <span key={i} className="text-[10px] font-mono bg-[#0B1220] text-[#8793A8] px-2 py-0.5 rounded border border-[#263349]">
-                        + {cb}
-                      </span>
-                    ))}
+                  <p className="text-xs text-slate-600 mt-2 leading-relaxed">
+                    {item.description}
+                  </p>
+
+                  <div className="flex items-center justify-between mt-3 pt-2 border-t border-slate-100 text-[10px] font-mono text-slate-400">
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-3 h-3 text-emerald-700" />
+                      <span>Execution: {item.timeframe}</span>
+                    </span>
+                    <span>Co-benefits: {item.coBenefits.slice(0, 2).join(', ')}</span>
                   </div>
                 </div>
               ))}
             </div>
           </div>
-
         </div>
 
         {/* Footer Actions */}
-        <div className="p-4 border-t border-[#263349] bg-[#0B1220] flex items-center justify-between">
-          <div className="text-xs font-mono text-[#8793A8]">
-            Report ID: <span className="text-[#EDF1F7]">URB-DSS-{wardId}-2026</span>
-          </div>
-
-          <div className="flex items-center space-x-3">
+        <div className="p-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
+          <div className="flex items-center gap-2">
             {exportSuccess && (
-              <span className="text-xs font-mono text-[#2FB8AC] flex items-center space-x-1 animate-fade-in">
+              <span className="flex items-center gap-1 text-xs text-emerald-700 font-mono font-bold animate-in fade-in">
                 <CheckCircle2 className="w-4 h-4" />
-                <span>PDF Action Brief Generated!</span>
+                <span>Dossier Exported!</span>
               </span>
             )}
+          </div>
 
+          <div className="flex items-center gap-2">
+            <button
+              onClick={onClose}
+              className="px-3.5 py-1.5 bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 rounded text-xs font-mono font-semibold transition-colors shadow-xs"
+            >
+              Close
+            </button>
             <button
               onClick={handleExportReport}
               disabled={isExporting}
-              className="bg-[#2FB8AC] hover:bg-[#269B91] text-[#0B1220] font-display font-bold text-xs uppercase tracking-wider py-2.5 px-4 rounded shadow-cyan-glow flex items-center space-x-2 transition-all disabled:opacity-50"
+              className="px-4 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded text-xs font-mono font-bold shadow-sm flex items-center gap-1.5 transition-all disabled:opacity-60"
             >
-              {isExporting ? (
-                <>
-                  <Clock className="w-4 h-4 animate-spin text-[#0B1220]" />
-                  <span>Compiling PDF Report...</span>
-                </>
-              ) : (
-                <>
-                  <Download className="w-4 h-4" />
-                  <span>Export Municipal Report</span>
-                </>
-              )}
+              <Download className="w-3.5 h-3.5" />
+              <span>{isExporting ? 'Generating Brief...' : 'Export Municipal Dossier'}</span>
             </button>
           </div>
         </div>
-
       </div>
     </div>
   );

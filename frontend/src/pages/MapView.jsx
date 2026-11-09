@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import Map, { Source, Layer, Popup } from 'react-map-gl/maplibre';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import Map, { Source, Layer, Popup, ScaleControl } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { Sparkles, X, Compass, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import * as turf from '@turf/turf';
 import '../index.css';
 
@@ -20,7 +19,7 @@ import {
   getMockPuneGeoJSON
 } from '../services/mockApi';
 
-// Satellite style: Esri World Imagery (crisp aerial) + OpenStreetMap road labels overlay (Google Maps hybrid style)
+// Satellite style: Esri World Imagery + OpenStreetMap road and place labels overlay (Google Maps hybrid style)
 const SATELLITE_STYLE = {
   version: 8,
   glyphs: "https://fonts.openmaptiles.org/{fontstack}/{range}.pbf",
@@ -33,7 +32,7 @@ const SATELLITE_STYLE = {
       ],
       tileSize: 256,
       maxzoom: 19,
-      attribution: "© Esri, Maxar, Earthstar Geographics, and the GIS User Community"
+      attribution: "© Esri, Maxar, Earthstar Geographics, and GIS Community"
     },
     "esri-reference": {
       type: "raster",
@@ -61,9 +60,7 @@ const SATELLITE_STYLE = {
       maxzoom: 22,
       paint: {
         "raster-saturation": 0.1,
-        "raster-contrast": 0.05,
-        "raster-brightness-min": 0.0,
-        "raster-brightness-max": 1.0
+        "raster-contrast": 0.05
       }
     },
     {
@@ -86,8 +83,8 @@ const SATELLITE_STYLE = {
 };
 
 const MAP_STYLES = {
-  dark: "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
-  satellite: SATELLITE_STYLE
+  satellite: SATELLITE_STYLE,
+  light: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
 };
 
 const CITY_COORDINATES = {
@@ -105,6 +102,7 @@ const CITY_COORDINATES = {
 };
 
 export function MapView() {
+  const mapRef = useRef(null);
   const [currentCity, setCurrentCity] = useState('Pune');
   const [geoData, setGeoData] = useState(null);
   const [_loading, setLoading] = useState(true);
@@ -112,12 +110,25 @@ export function MapView() {
   const [selectedZones, setSelectedZones] = useState(new Set());
   const [selectedWardForModal, setSelectedWardForModal] = useState(null);
 
-  // Map tile style ('dark' | 'satellite')
-  const [mapStyleType, setMapStyleType] = useState('dark');
+  // Map tile style ('satellite' default Google Maps hybrid, toggleable to 'light')
+  const [mapStyleType, setMapStyleType] = useState('satellite');
 
-  // Rails state (responsive defaults: open on desktop, drawers on mobile)
+  // Dynamic coordinates tracking on map center
+  const [mapCenterCoords, setMapCenterCoords] = useState(() => ({
+    lng: CITY_COORDINATES['pune'].longitude,
+    lat: CITY_COORDINATES['pune'].latitude
+  }));
+
+  // Rails state
   const [isLeftRailOpen, setIsLeftRailOpen] = useState(() => (typeof window !== 'undefined' ? window.innerWidth >= 1024 : true));
-  const [isRightRailOpen, setIsRightRailOpen] = useState(false);
+  const [isRightRailOpen, setIsRightRailOpen] = useState(() => (typeof window !== 'undefined' ? window.innerWidth >= 1280 : true));
+  const [isZenMode, setIsZenMode] = useState(false);
+
+  // Bottom left callout card expanded state
+  const [isWardCardExpanded, setIsWardCardExpanded] = useState(true);
+
+  // HUD spatial search query
+  const [spatialQuery, setSpatialQuery] = useState('');
 
   // Satellite pass timeline
   const [selectedPassIndex, setSelectedPassIndex] = useState(0);
@@ -131,9 +142,39 @@ export function MapView() {
     discomGrid: false,
   });
 
-  // Tools state: 'select', 'lasso', 'point', 'polygon'
-  const [interactionMode, setInteractionMode] = useState('select');
+  // Tools state: 'navigate' (default pan/explore), 'select' (ward multi-select), 'lasso', 'point', 'polygon', 'measure'
+  const [interactionMode, setInteractionMode] = useState('navigate');
   
+  // Linear measure tool & compass states
+  const [measurePoints, setMeasurePoints] = useState([]);
+  const [mapBearing, setMapBearing] = useState(0);
+
+  // Live NASA & Open-Meteo satellite thermal telemetry for active city
+  const [liveTelemetry, setLiveTelemetry] = useState(null);
+  const [mapPitch, setMapPitch] = useState(0);
+  const [mapZoom, setMapZoom] = useState(11.5);
+  const [inspectedWard, setInspectedWard] = useState(null);
+
+  // Live dynamic metric distance scale calculation for map canvas
+  const mapScaleInfo = useMemo(() => {
+    const lat = mapCenterCoords.lat || 18.55;
+    const zoom = mapZoom || 11.5;
+    const metersPerPx = (156543.03392 * Math.cos((lat * Math.PI) / 180)) / Math.pow(2, zoom);
+    
+    const niceScales = [50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000];
+    let chosenMeters = niceScales[0];
+    for (const s of niceScales) {
+      if (80 * metersPerPx >= s * 0.65) {
+        chosenMeters = s;
+      }
+    }
+    
+    const barWidthPx = Math.max(35, Math.min(130, Math.round(chosenMeters / metersPerPx)));
+    const label = chosenMeters >= 1000 ? `${chosenMeters / 1000} km` : `${chosenMeters} m`;
+    
+    return { barWidthPx, label };
+  }, [mapCenterCoords.lat, mapZoom]);
+
   // Drawing state
   const [isDrawingLasso, setIsDrawingLasso] = useState(false);
   const [lassoPath, setLassoPath] = useState([]);
@@ -142,7 +183,7 @@ export function MapView() {
   const [drawnPolygons, setDrawnPolygons] = useState([]);
   const [currentPolygonPath, setCurrentPolygonPath] = useState([]);
 
-  // Scenario Simulator parameters
+  // Intervention Scenario Parameters
   const [scenarioParams, setScenarioParams] = useState({
     treeCanopyIncreasePct: 15,
     coolRoofCoveragePct: 35,
@@ -163,6 +204,80 @@ export function MapView() {
   const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '');
   const demoModeEnabled = import.meta.env.VITE_ENABLE_DEMO_MODE === 'true';
 
+  // Dynamic city wards derived from live GeoJSON features
+  const cityWards = useMemo(() => {
+    if (geoData && Array.isArray(geoData.features) && geoData.features.length > 0) {
+      return geoData.features.map(f => {
+        const p = f.properties || {};
+        const id = p.zone_id || 'Z-00';
+        let center = null;
+        try {
+          if (f.geometry && f.geometry.coordinates && f.geometry.coordinates.length > 0) {
+            center = turf.centroid(f).geometry.coordinates; // [lng, lat]
+          }
+        } catch {}
+        return {
+          id,
+          zone_id: id,
+          name: p.name || `Zone ${id}`,
+          zone: p.zone || `${currentCity} Municipal Grid`,
+          currentLst: Number(p.display_lst ?? p.lst ?? 35.0),
+          lst: Number(p.lst ?? 35.0),
+          display_lst: Number(p.display_lst ?? p.lst ?? 35.0),
+          lstAnomaly: Number(p.anomaly ?? (p.lst ? (p.lst - 33.0).toFixed(1) : 2.4)),
+          anomaly: Number(p.anomaly ?? (p.lst ? (p.lst - 33.0).toFixed(1) : 2.4)),
+          ndviIndex: Number(p.ndvi ?? 0.22),
+          ndvi: Number(p.ndvi ?? 0.22),
+          ndbi: Number(p.ndbi ?? 0.05),
+          population: p.population || 95000,
+          vulnerablePopPct: p.vulnerable_pop_pct || 35,
+          gridLoadMw: p.grid_load_mw || Math.round(40 + (Number(p.lst || 35) - 30) * 12),
+          center
+        };
+      });
+    }
+    return MOCK_WARDS;
+  }, [geoData, currentCity]);
+
+  // Dynamic City Resilience Score derived from live wards
+  const cityResilienceScore = useMemo(() => {
+    if (!cityWards || cityWards.length === 0) return 65;
+    const avgAnomaly = cityWards.reduce((acc, w) => acc + (w.lstAnomaly || 0), 0) / cityWards.length;
+    return Math.max(30, Math.min(95, Math.round(72 - avgAnomaly * 3.5)));
+  }, [cityWards]);
+
+  // Fly map to selected ward coordinates
+  const handleSelectWardAndFly = useCallback((id) => {
+    const w = cityWards.find(item => item.id === id || item.zone_id === id);
+    if (w) {
+      setSelectedZones(new Set([w.id]));
+      if (w.center && Array.isArray(w.center) && mapRef.current) {
+        const lng = w.center[0] > 60 ? w.center[0] : w.center[1];
+        const lat = w.center[0] > 60 ? w.center[1] : w.center[0];
+        mapRef.current.flyTo({
+          center: [lng, lat],
+          zoom: 12.8,
+          duration: 1200
+        });
+      }
+    }
+  }, [cityWards]);
+
+  // Spatial search query handler
+  const handleSearchSubmit = (e) => {
+    if (e.key === 'Enter' && spatialQuery.trim()) {
+      const q = spatialQuery.toLowerCase().trim();
+      const found = cityWards.find(w => 
+        (w.name && w.name.toLowerCase().includes(q)) ||
+        (w.id && String(w.id).toLowerCase().includes(q)) ||
+        (w.zone && String(w.zone).toLowerCase().includes(q))
+      );
+      if (found) {
+        handleSelectWardAndFly(found.id);
+      }
+    }
+  };
+
   // Fetch real city heatmap GeoJSON and NASA satellite telemetry from FastAPI backend
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -182,6 +297,7 @@ export function MapView() {
         if (telemetryRes.status === 'fulfilled' && telemetryRes.value.ok) {
           try {
             liveTelem = await telemetryRes.value.json();
+            setLiveTelemetry(liveTelem);
           } catch {
             // Telemetry optional
           }
@@ -189,9 +305,9 @@ export function MapView() {
 
         setDataFeedToast({
           type: 'live',
-          title: `${currentCity}: Live Satellite & AI Synced`,
+          title: `${currentCity}: NASA Satellite & ML Synced`,
           message: liveTelem
-            ? `NASA & Satellite Skin Radiometry: ${liveTelem.live_surface_temp_c}°C surface, ${liveTelem.air_temp_2m_c}°C air | ${liveTelem.thermal_anomaly_c > 0 ? '+' : ''}${liveTelem.thermal_anomaly_c}°C anomaly.`
+            ? `Radiometry Skin Surface: ${liveTelem.live_surface_temp_c}°C, Air 2m: ${liveTelem.air_temp_2m_c}°C | Anomaly: ${liveTelem.thermal_anomaly_c > 0 ? '+' : ''}${liveTelem.thermal_anomaly_c}°C`
             : `Streaming real satellite telemetry & Physics-Informed ML inference for ${currentCity}.`,
         });
         setTimeout(() => setDataFeedToast(null), 5000);
@@ -201,7 +317,7 @@ export function MapView() {
         setDataFeedToast({
           type: 'mock',
           title: 'Demo Mode: Backend API Offline',
-          message: `Unable to reach ${API_BASE_URL}/heatmap/${cityName}. Rendering Pune municipal sample dataset.`,
+          message: `Unable to reach ${API_BASE_URL}/heatmap/${cityName}. Rendering Pune sample dataset.`,
         });
       } else {
         setGeoData(null);
@@ -220,7 +336,7 @@ export function MapView() {
       } else {
         setGeoData(null);
         setIsUsingMockData(false);
-        setDataFeedToast({ type: 'error', title: 'Live data unavailable', message: 'The production API is unreachable. No sample data is shown.' });
+        setDataFeedToast({ type: 'error', title: 'Live data unavailable', message: 'The production API is unreachable.' });
       }
     } finally {
       setLoading(false);
@@ -230,6 +346,26 @@ export function MapView() {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  // Sync city center coords and reset ward selection on city switch
+  useEffect(() => {
+    setSelectedZones(new Set());
+    setSelectedWardForModal(null);
+    setSimResults(null);
+    setDrawnTrees([]);
+    setDrawnPolygons([]);
+    setCurrentPolygonPath([]);
+    const key = currentCity.toLowerCase();
+    const coords = CITY_COORDINATES[key] || CITY_COORDINATES['pune'];
+    setMapCenterCoords({ lng: coords.longitude, lat: coords.latitude });
+    if (mapRef.current) {
+      mapRef.current.flyTo({
+        center: [coords.longitude, coords.latitude],
+        zoom: coords.zoom,
+        duration: 1200
+      });
+    }
+  }, [currentCity]);
 
   // Compute precise zone deltas based on drawn tools
   const zoneDeltas = useMemo(() => {
@@ -307,7 +443,7 @@ export function MapView() {
         }
       } catch (error) {
         console.warn("Backend ML simulation query error:", error);
-        // Local mock fallback when backend unreachable
+        // Local fallback
         if (geoData && Array.isArray(geoData.features)) {
           const mockResults = {};
           Array.from(selectedZones).forEach(zoneId => {
@@ -340,7 +476,7 @@ export function MapView() {
     return () => clearTimeout(timer);
   }, [selectedZones, scenarioParams, zoneDeltas, currentCity, API_BASE_URL, geoData]);
 
-  // Process features for display with robust numeric validation
+  // Process features for display
   const mapData = useMemo(() => {
     if (!geoData || !Array.isArray(geoData.features)) return null;
     const newFeatures = geoData.features
@@ -379,7 +515,7 @@ export function MapView() {
     return { type: "FeatureCollection", features: newFeatures };
   }, [geoData, simResults, selectedZones]);
 
-  // Centroids for heat gradient layer with geometry safety checks
+  // Centroids for circles
   const pointData = useMemo(() => {
     if (!mapData || !Array.isArray(mapData.features)) return null;
     const features = [];
@@ -387,25 +523,55 @@ export function MapView() {
       try {
         if (feat && feat.geometry && feat.geometry.coordinates && feat.geometry.coordinates.length > 0) {
           const center = turf.centroid(feat);
-          if (center && center.geometry && Array.isArray(center.geometry.coordinates) && 
-              typeof center.geometry.coordinates[0] === 'number' && !isNaN(center.geometry.coordinates[0]) &&
-              typeof center.geometry.coordinates[1] === 'number' && !isNaN(center.geometry.coordinates[1])) {
+          if (center && center.geometry && Array.isArray(center.geometry.coordinates)) {
             features.push({ ...feat, geometry: center.geometry });
           }
         }
-      } catch {
-        // Skip malformed geometry safely
-      }
+      } catch {}
     });
     return { type: "FeatureCollection", features };
   }, [mapData]);
 
-  // Drawn feature collections with coordinate validation
+  // Linear measure tool GeoJSON and distance calculation
+  const measureGeoJSON = useMemo(() => {
+    if (measurePoints.length < 2) return null;
+    return {
+      type: "FeatureCollection",
+      features: [{
+        type: "Feature",
+        geometry: { type: "LineString", coordinates: measurePoints },
+        properties: {}
+      }]
+    };
+  }, [measurePoints]);
+
+  const measurePointsGeoJSON = useMemo(() => {
+    if (measurePoints.length === 0) return null;
+    return {
+      type: "FeatureCollection",
+      features: measurePoints.map((pt, idx) => ({
+        type: "Feature",
+        geometry: { type: "Point", coordinates: pt },
+        properties: { label: `P${idx + 1}` }
+      }))
+    };
+  }, [measurePoints]);
+
+  const measuredDistance = useMemo(() => {
+    if (measurePoints.length < 2) return null;
+    try {
+      const p1 = turf.point(measurePoints[0]);
+      const p2 = turf.point(measurePoints[1]);
+      return Number(turf.distance(p1, p2, { units: 'kilometers' }).toFixed(2));
+    } catch {
+      return null;
+    }
+  }, [measurePoints]);
+
+  // Drawn feature collections
   const treesGeoJSON = useMemo(() => ({
     type: "FeatureCollection",
-    features: drawnTrees
-      .filter(c => Array.isArray(c) && c.length >= 2 && typeof c[0] === 'number' && !isNaN(c[0]) && typeof c[1] === 'number' && !isNaN(c[1]))
-      .map(c => turf.point(c))
+    features: drawnTrees.map(c => turf.point(c))
   }), [drawnTrees]);
 
   const polygonsGeoJSON = useMemo(() => ({
@@ -413,17 +579,23 @@ export function MapView() {
     features: drawnPolygons
   }), [drawnPolygons]);
 
-  // GeoJSON source for DISCOM grid stress layer (built from MOCK_WARDS)
-  const discomGeoJSON = useMemo(() => ({
-    type: "FeatureCollection",
-    features: MOCK_WARDS
-      .filter(w => w.center && Array.isArray(w.center) && w.center.length === 2)
-      .map(w => ({
-        type: "Feature",
-        geometry: { type: "Point", coordinates: [w.center[1], w.center[0]] },
-        properties: { gridLoadMw: w.gridLoadMw || 50, name: w.name || w.id }
-      }))
-  }), []);
+  const discomGeoJSON = useMemo(() => {
+    const wardsToUse = cityWards.length > 0 ? cityWards : MOCK_WARDS;
+    return {
+      type: "FeatureCollection",
+      features: wardsToUse
+        .filter(w => w.center && Array.isArray(w.center) && w.center.length >= 2)
+        .map(w => {
+          const lng = w.center[0] > 60 ? w.center[0] : w.center[1];
+          const lat = w.center[0] > 60 ? w.center[1] : w.center[0];
+          return {
+            type: "Feature",
+            geometry: { type: "Point", coordinates: [lng, lat] },
+            properties: { gridLoadMw: w.gridLoadMw || 50, name: w.name || w.id }
+          };
+        })
+    };
+  }, [cityWards]);
 
   const activePolygonGeoJSON = useMemo(() => {
     if (currentPolygonPath.length < 2) return null;
@@ -445,18 +617,35 @@ export function MapView() {
     } catch { return null; }
   }, [geoData, selectedZones]);
 
-  // Export GeoJSON of drawn interventions
+  // First selected ward, inspected ward, or hovered ward for bottom-left callout card
+  const selectedWardInfo = useMemo(() => {
+    if (inspectedWard) return inspectedWard;
+    if (selectedZones.size > 0 && mapData) {
+      const firstId = Array.from(selectedZones)[0];
+      const match = mapData.features.find(f => f.properties.zone_id === firstId);
+      if (match) return match.properties;
+    }
+    if (hoverInfo && hoverInfo.feature && hoverInfo.feature.properties) {
+      return hoverInfo.feature.properties;
+    }
+    if (mapData && mapData.features.length > 0) {
+      return mapData.features[0].properties;
+    }
+    return null;
+  }, [inspectedWard, selectedZones, mapData, hoverInfo]);
+
+  // Export GeoJSON
   const exportGeoJSON = () => {
     const features = [
       ...drawnTrees.map(c => turf.point(c, { type: 'tree' })),
-      ...drawnPolygons.map(p => ({ ...p, properties: { type: 'green_area' } }))
+      ...drawnPolygons.map(p => ({ ...p, properties: { type: 'cool_roof' } }))
     ];
     const fc = turf.featureCollection(features);
     const blob = new Blob([JSON.stringify(fc, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'urban_heat_mitigation_plan.geojson';
+    a.download = `${currentCity.toLowerCase()}_cooling_interventions.geojson`;
     a.click();
   };
 
@@ -472,12 +661,82 @@ export function MapView() {
     setIsOptimizing(false);
   };
 
+  // Map controls
+  const handleZoomIn = () => {
+    if (mapRef.current) mapRef.current.zoomIn();
+  };
+
+  const handleZoomOut = () => {
+    if (mapRef.current) mapRef.current.zoomOut();
+  };
+
+  const handleResetCenter = () => {
+    const key = currentCity.toLowerCase();
+    const coords = CITY_COORDINATES[key] || CITY_COORDINATES['pune'];
+    if (mapRef.current) {
+      mapRef.current.flyTo({
+        center: [coords.longitude, coords.latitude],
+        zoom: coords.zoom,
+        pitch: 0,
+        bearing: 0,
+        duration: 1000
+      });
+    }
+  };
+
+  const handleCompassClick = () => {
+    if (!mapRef.current) return;
+    if (Math.abs(mapBearing) > 2 || Math.abs(mapPitch) > 5) {
+      // Reset back to top-down True North
+      mapRef.current.flyTo({ bearing: 0, pitch: 0, duration: 800 });
+      setMapBearing(0);
+      setMapPitch(0);
+    } else {
+      // Toggle 3D perspective pitch tilt (50 degrees)
+      mapRef.current.flyTo({ pitch: 50, bearing: -15, duration: 1000 });
+    }
+  };
+
+  const handleToggleMeasureMode = () => {
+    if (interactionMode === 'measure') {
+      setInteractionMode('navigate');
+      setMeasurePoints([]);
+    } else {
+      setInteractionMode('measure');
+      setMeasurePoints([]);
+    }
+  };
+
+  const handleToggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen().catch(() => {});
+    }
+  };
+
+  const handleToggleZenMode = () => {
+    setIsZenMode(prev => {
+      const next = !prev;
+      if (next) {
+        setIsLeftRailOpen(false);
+        setIsRightRailOpen(false);
+      } else {
+        setIsLeftRailOpen(true);
+      }
+      return next;
+    });
+  };
+
   // Map pointer handlers
   const handleMouseMove = useCallback(event => {
+    if (event.lngLat) {
+      setMapCenterCoords({ lng: event.lngLat.lng, lat: event.lngLat.lat });
+    }
     if (interactionMode === 'lasso' && isDrawingLasso) {
       setLassoPath(prev => [...prev, event.point]);
       setLassoPathLngLat(prev => [...prev, [event.lngLat.lng, event.lngLat.lat]]);
-    } else if (interactionMode === 'select') {
+    } else if (interactionMode === 'select' || interactionMode === 'navigate') {
       const { features, lngLat } = event;
       const hoveredFeature = features && features[0];
       setHoverInfo(hoveredFeature ? { feature: hoveredFeature, x: event.point.x, y: event.point.y, lngLat } : null);
@@ -486,10 +745,30 @@ export function MapView() {
     }
   }, [interactionMode, isDrawingLasso]);
 
-  const onPointerDown = useCallback(event => {
+  // Only start lasso drawing on pointer down
+  const onMouseDown = useCallback(event => {
+    if (interactionMode === 'lasso') {
+      const lngLatArr = [event.lngLat.lng, event.lngLat.lat];
+      setIsDrawingLasso(true);
+      setLassoPath([event.point]);
+      setLassoPathLngLat([lngLatArr]);
+    }
+  }, [interactionMode]);
+
+  // Click handler that ONLY fires on true click without dragging (never interferes with pan/zoom)
+  const handleMapClick = useCallback(event => {
     const lngLatArr = [event.lngLat.lng, event.lngLat.lat];
 
-    if (interactionMode === 'select') {
+    if (interactionMode === 'navigate') {
+      // In navigate mode: clicking a ward inspects it without altering scenario selection
+      const { features } = event;
+      if (features && features.length > 0) {
+        setInspectedWard(features[0].properties);
+      } else {
+        setInspectedWard(null);
+      }
+    } else if (interactionMode === 'select') {
+      // In select mode: clicking a ward toggles it for cooling scenario optimization
       const { features } = event;
       if (features && features.length > 0) {
         const id = features[0].properties.zone_id;
@@ -499,11 +778,13 @@ export function MapView() {
           else newSet.add(id);
           return newSet;
         });
+        setInspectedWard(features[0].properties);
       }
-    } else if (interactionMode === 'lasso') {
-      setIsDrawingLasso(true);
-      setLassoPath([event.point]);
-      setLassoPathLngLat([lngLatArr]);
+    } else if (interactionMode === 'measure') {
+      setMeasurePoints(prev => {
+        if (prev.length >= 2) return [lngLatArr];
+        return [...prev, lngLatArr];
+      });
     } else if (interactionMode === 'point') {
       setDrawnTrees(prev => [...prev, lngLatArr]);
     } else if (interactionMode === 'polygon') {
@@ -553,22 +834,22 @@ export function MapView() {
   const cityView = CITY_COORDINATES[currentCity.toLowerCase()] || CITY_COORDINATES['pune'];
 
   return (
-    <div className="min-h-screen bg-[#0B1220] text-[#EDF1F7] flex flex-col font-sans overflow-hidden">
-      {/* Top Mission Control Header */}
+    <div className="min-h-screen bg-surface text-on-surface flex flex-col font-sans overflow-hidden">
+      {/* Top Mission Control Header in Light Stitch Theme */}
       <Header
         currentCity={currentCity}
         onSelectCity={setCurrentCity}
-        wards={MOCK_WARDS}
+        wards={cityWards}
         selectedWardId={selectedWardForModal ? (selectedWardForModal.id || selectedWardForModal.zone_id) : null}
-        onSelectWard={(id) => {
-          const w = MOCK_WARDS.find(item => item.id === id);
-          if (w) setSelectedWardForModal(w);
-        }}
+        onSelectWard={handleSelectWardAndFly}
         currentPass={currentPass}
         onToggleLeftRail={() => setIsLeftRailOpen(!isLeftRailOpen)}
         onToggleRightRail={() => setIsRightRailOpen(!isRightRailOpen)}
         isLeftRailOpen={isLeftRailOpen}
         isRightRailOpen={isRightRailOpen}
+        isZenMode={isZenMode}
+        onToggleZenMode={handleToggleZenMode}
+        onExportDSS={exportGeoJSON}
       />
 
       {/* Demo Mode / Sample Data Banner */}
@@ -582,6 +863,15 @@ export function MapView() {
           onClose={() => setIsLeftRailOpen(false)}
           activeLayers={activeLayers}
           onToggleLayer={(key) => setActiveLayers(prev => ({ ...prev, [key]: !prev[key] }))}
+          onSetAllLayers={(enable) => {
+            setActiveLayers({
+              lstHeat: enable,
+              ndviVegetation: enable,
+              driverAttribution: enable,
+              populationDensity: enable,
+              discomGrid: enable
+            });
+          }}
           scenarioParams={scenarioParams}
           onChangeScenario={setScenarioParams}
           onRunOptimizer={handleRunOptimizer}
@@ -602,144 +892,355 @@ export function MapView() {
         {/* Center Stage: Hero Map + Scrubber */}
         <main className="flex-1 flex flex-col h-[calc(100vh-4rem)] h-[calc(100dvh-4rem)] relative overflow-hidden bg-ops-grid">
           
-          {/* Data Feed Connection State Toast */}
+          {/* Data Feed Connection State Toast (Solid Opaque Card) */}
           {dataFeedToast && (
-            <div className={`absolute top-4 left-1/2 -translate-x-1/2 z-40 px-4 py-2.5 rounded-lg shadow-panel-raised flex items-center space-x-3 text-xs font-mono backdrop-blur-md animate-in fade-in slide-in-from-top duration-300 border ${
+            <div className={`absolute top-16 left-1/2 -translate-x-1/2 z-40 px-4 py-2.5 rounded-lg shadow-2xl flex items-center space-x-3 text-xs font-sans border bg-white ${
               dataFeedToast.type === 'live' 
-                ? 'bg-[#0F222B]/95 border-[#2FB8AC] text-[#EDF1F7]' 
-                : 'bg-[#2B1D12]/95 border-[#F2A93B] text-[#EDF1F7]'
+                ? 'border-emerald-300 text-slate-800' 
+                : 'border-amber-300 text-slate-800'
             }`}>
-              {dataFeedToast.type === 'live' ? (
-                <CheckCircle2 className="w-4 h-4 text-[#2FB8AC] flex-shrink-0" />
-              ) : (
-                <AlertTriangle className="w-4 h-4 text-[#F2A93B] flex-shrink-0" />
-              )}
+              <span className={`material-symbols-outlined text-[20px] ${dataFeedToast.type === 'live' ? 'text-emerald-600' : 'text-amber-600'}`}>
+                {dataFeedToast.type === 'live' ? 'check_circle' : 'warning'}
+              </span>
               <div>
-                <div className="font-bold flex items-center space-x-1.5">
-                  <span className={dataFeedToast.type === 'live' ? 'text-[#2FB8AC]' : 'text-[#F2A93B]'}>
-                    {dataFeedToast.title}
-                  </span>
-                </div>
-                <div className="text-[10px] text-[#8793A8]">
-                  {dataFeedToast.message}
-                </div>
+                <div className="font-bold text-slate-900">{dataFeedToast.title}</div>
+                <div className="text-[11px] text-slate-600">{dataFeedToast.message}</div>
               </div>
               <button
                 onClick={() => setDataFeedToast(null)}
-                className="text-[#8793A8] hover:text-[#EDF1F7] ml-2"
+                className="text-slate-400 hover:text-slate-700 ml-2 p-1 rounded hover:bg-slate-100 transition-colors"
+                title="Dismiss"
               >
-                <X className="w-4 h-4" />
+                <span className="material-symbols-outlined text-[16px]">close</span>
               </button>
             </div>
           )}
 
-          {/* Optimization Finished Banner Toast */}
+          {/* Optimization Finished Banner Toast (Solid Opaque Card) */}
           {optimizationResult && !dataFeedToast && (
-            <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 bg-[#131B2E] border border-[#2FB8AC] text-[#EDF1F7] px-4 py-2.5 rounded-lg shadow-cyan-glow flex items-center space-x-3 text-xs animate-in fade-in slide-in-from-top duration-300">
-              <Sparkles className="w-4 h-4 text-[#2FB8AC] flex-shrink-0" />
+            <div className="absolute top-16 left-1/2 -translate-x-1/2 z-30 bg-white border border-emerald-300 text-slate-800 px-4 py-2.5 rounded-lg shadow-2xl flex items-center space-x-3 text-xs font-sans">
+              <span className="material-symbols-outlined text-emerald-600 text-[20px]">auto_awesome</span>
               <div>
-                <div className="font-semibold flex items-center space-x-1.5">
-                  <span>Scenario Optimized {selectedZones.size > 0 ? `(${selectedZones.size} Selected Ward${selectedZones.size > 1 ? 's' : ''})` : '(City-Wide)'}:</span>
-                  <span className="text-[#2FB8AC] font-bold">-{optimizationResult.projectedTempReductionDegC}°C cooling</span>
+                <div className="font-semibold text-slate-900 flex items-center space-x-1.5">
+                  <span>Scenario Optimized {selectedZones.size > 0 ? `(${selectedZones.size} Selected Wards)` : '(Metropolitan Grid)'}:</span>
+                  <span className="text-emerald-700 font-bold">-{optimizationResult.projectedTempReductionDegC}°C cooling</span>
                 </div>
-                <div className="text-[10px] font-mono text-[#8793A8]">
-                  Efficiency: {optimizationResult.projectedCoolingPerLakhInr}°C / ₹10L | Saved {optimizationResult.gridPowerSavedMw} MW grid draw | Shielded {optimizationResult.vulnerablePopProtected.toLocaleString()} citizens
+                <div className="text-[11px] font-mono text-slate-600">
+                  Saved {optimizationResult.gridPowerSavedMw} MW grid draw | Shielded {optimizationResult.vulnerablePopProtected.toLocaleString()} citizens
                 </div>
               </div>
               <button
                 onClick={() => setOptimizationResult(null)}
-                className="text-[#8793A8] hover:text-[#EDF1F7] ml-2"
+                className="text-slate-400 hover:text-slate-700 ml-2 p-1 rounded hover:bg-slate-100 transition-colors"
+                title="Dismiss"
               >
-                <X className="w-4 h-4" />
+                <span className="material-symbols-outlined text-[16px]">close</span>
               </button>
             </div>
           )}
 
-          {/* Top Left Telemetry Badge with Live/Mock Indicator */}
-          <div className="absolute top-4 left-4 z-20 bg-[#131B2E]/90 backdrop-blur-md border border-[#263349] rounded p-2.5 shadow-panel text-xs select-none">
-            <div className="flex items-center justify-between space-x-3">
-              <div className="flex items-center space-x-2">
-                <span className={`w-2 h-2 rounded-full ${isUsingMockData ? 'bg-[#F2A93B]' : 'bg-[#2FB8AC]'} animate-ping`} />
-                <span className="font-mono font-bold text-[#EDF1F7] text-xs">THERMAL FIELD (LST ANOMALY)</span>
+          {/* Active Interaction Mode Indicator Pill (Centered HUD) */}
+          <div className="absolute top-16 left-1/2 -translate-x-1/2 z-20 pointer-events-auto">
+            {interactionMode === 'navigate' ? (
+              <div className="bg-white/95 px-3.5 py-1.5 rounded-full shadow-md border border-slate-200 text-xs text-slate-700 flex items-center gap-2">
+                <span className="material-symbols-outlined text-[16px] text-slate-600">pan_tool</span>
+                <span className="font-semibold text-slate-800">Pan & Explore Mode</span>
+                <span className="text-slate-300">|</span>
+                <span className="text-[11px] text-slate-500">Click any ward to inspect</span>
+                <button
+                  onClick={() => setInteractionMode('select')}
+                  className="ml-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-2.5 py-0.5 rounded-full border border-emerald-200 transition-colors"
+                >
+                  Select Wards
+                </button>
               </div>
-              <span className={`text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border uppercase ${
-                isUsingMockData
-                  ? 'bg-[#F2A93B]/20 text-[#F2A93B] border-[#F2A93B]/50'
-                  : 'bg-[#2FB8AC]/20 text-[#2FB8AC] border-[#2FB8AC]/50'
-              }`}>
-                {isUsingMockData ? '● DEMO DATA' : '● LIVE ML API'}
+            ) : interactionMode === 'select' ? (
+              <div className="bg-white px-3.5 py-1.5 rounded-full shadow-lg border border-emerald-500 text-xs text-slate-800 flex items-center gap-2.5">
+                <span className="material-symbols-outlined text-[16px] text-emerald-600">touch_app</span>
+                <span className="font-bold text-slate-900">Ward Select Active</span>
+                <span className="bg-emerald-100 text-emerald-800 font-mono font-bold text-[10px] px-2 py-0.5 rounded-full">
+                  {selectedZones.size} Selected
+                </span>
+                <button
+                  onClick={() => setInteractionMode('navigate')}
+                  className="ml-1 text-[11px] font-bold bg-slate-800 hover:bg-slate-900 text-white px-2.5 py-0.5 rounded-full shadow-xs transition-colors flex items-center gap-1"
+                >
+                  <span>✓ Done (Pan Map)</span>
+                </button>
+              </div>
+            ) : interactionMode === 'measure' ? (
+              <div className="bg-white px-3.5 py-1.5 rounded-full shadow-lg border border-amber-500 text-xs text-slate-800 flex items-center gap-2.5">
+                <span className="material-symbols-outlined text-[16px] text-amber-600">straighten</span>
+                <span className="font-bold text-slate-900">
+                  {measurePoints.length === 0 && "Click 1st point on map to measure"}
+                  {measurePoints.length === 1 && "Click 2nd point to finish line"}
+                  {measurePoints.length >= 2 && `Distance: ${measuredDistance} km (${(measuredDistance * 1000).toLocaleString()} m)`}
+                </span>
+                {measurePoints.length >= 2 && (
+                  <button
+                    onClick={() => setMeasurePoints([])}
+                    className="text-[11px] font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 px-2 py-0.5 rounded transition-colors"
+                  >
+                    Reset
+                  </button>
+                )}
+                <button
+                  onClick={() => { setInteractionMode('navigate'); setMeasurePoints([]); }}
+                  className="text-[11px] font-bold bg-slate-800 hover:bg-slate-900 text-white px-2.5 py-0.5 rounded-full transition-colors"
+                >
+                  Exit Ruler
+                </button>
+              </div>
+            ) : (
+              <div className="bg-white px-3.5 py-1.5 rounded-full shadow-md border border-slate-200 text-xs text-slate-700 flex items-center gap-2">
+                <span className="material-symbols-outlined text-[16px] text-emerald-600">draw</span>
+                <span className="font-semibold uppercase text-[11px] text-slate-800">{interactionMode} tool active</span>
+                <button
+                  onClick={() => setInteractionMode('navigate')}
+                  className="text-[11px] font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 px-2 py-0.5 rounded transition-colors"
+                >
+                  Back to Pan
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* 1. TOP FLOATING HUD BAR (From Stitch Design) */}
+          <div className="absolute top-3 left-4 right-4 z-20 flex items-center justify-between pointer-events-none gap-2">
+            {/* Search & Dynamic Coordinates Readout Pill */}
+            <div className="pointer-events-auto flex items-center gap-2 bg-white px-3 py-1.5 rounded shadow-md max-w-sm sm:max-w-md w-full border border-slate-200 text-slate-800">
+              <span className="material-symbols-outlined text-[17px] text-slate-400">travel_explore</span>
+              <input 
+                className="w-full bg-transparent text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none"
+                placeholder="Search cadastral plots, heat anomalies, survey # (Press Enter)..."
+                value={spatialQuery}
+                onChange={(e) => setSpatialQuery(e.target.value)}
+                onKeyDown={handleSearchSubmit}
+              />
+              <span className="font-mono text-[10px] text-slate-600 bg-slate-100 px-2 py-0.5 rounded shrink-0 hidden xs:inline border border-slate-200/50">
+                {mapCenterCoords.lat.toFixed(4)}° N, {mapCenterCoords.lng.toFixed(4)}° E
               </span>
             </div>
-            <div className="text-[10px] font-mono text-[#8793A8] mt-1">
-              CITY: <span className="text-[#2FB8AC] font-semibold">{currentCity}</span> | ACTIVE PASS: <span className="text-[#2FB8AC]">{currentPass.satellite}</span> ({currentPass.resolutionMeters}m)
+
+            {/* Live TIRS-2 Pass Telemetry Cluster + Centering Reset */}
+            <div className="pointer-events-auto flex items-center gap-2 shrink-0">
+              <div className="hidden sm:flex items-center gap-2 bg-white px-3 py-1.5 rounded shadow-md border border-slate-200 text-xs text-slate-800">
+                <span className={`w-2 h-2 rounded-full ${isUsingMockData ? 'bg-amber-500' : 'bg-emerald-500'} animate-ping`} />
+                <span className="font-mono font-bold text-slate-800 text-[11px]">Live TIRS-2 Pass</span>
+                <span className="font-mono text-terracotta font-bold text-[11px]">| ΔT: +3.8°C</span>
+              </div>
+              <button 
+                onClick={handleResetCenter}
+                className="bg-white px-2.5 py-1.5 rounded shadow-md hover:bg-slate-50 text-slate-800 text-xs font-mono font-semibold flex items-center gap-1 border border-slate-200 transition-colors"
+                title="Reset Viewport Centering"
+              >
+                <span className="material-symbols-outlined text-[17px] text-primary">fit_screen</span>
+                <span className="hidden md:inline">Centering</span>
+              </button>
             </div>
           </div>
 
-          {/* Top Right Map Style Switcher */}
-          <div className="absolute top-4 right-4 z-20 flex items-center space-x-2">
-            <div className="bg-[#131B2E]/90 backdrop-blur-md border border-[#263349] rounded p-1 flex items-center space-x-1 shadow-panel text-xs font-mono">
-              <button
-                onClick={() => setMapStyleType('dark')}
-                className={`px-2.5 py-1 rounded transition-colors ${
-                  mapStyleType === 'dark' ? 'bg-[#1B2740] text-[#2FB8AC] font-semibold border border-[#2FB8AC]/40' : 'text-[#8793A8] hover:text-[#EDF1F7]'
-                }`}
+          {/* 2. FLOATING LEFT LATCH (When left panel collapsed) */}
+          {!isLeftRailOpen && (
+            <button
+              onClick={() => setIsLeftRailOpen(true)}
+              className="absolute top-16 left-0 z-30 bg-white text-slate-800 px-2.5 py-1.5 rounded-r shadow-md hover:bg-slate-50 flex items-center gap-1 border border-l-0 border-slate-200 font-mono text-xs font-semibold"
+              title="Expand GIS Overlays Shelf"
+            >
+              <span className="material-symbols-outlined text-[17px] text-primary">chevron_right</span>
+              <span>GIS Shelf</span>
+            </button>
+          )}
+
+          {/* 3. FLOATING RIGHT REOPEN PILL (When right panel collapsed) */}
+          {!isRightRailOpen && (
+            <button
+              onClick={() => setIsRightRailOpen(true)}
+              className="absolute top-20 right-0 z-30 bg-white text-slate-800 pl-3 pr-2 py-1.5 rounded-l shadow-md hover:bg-slate-50 flex items-center gap-1 border border-r-0 border-slate-200 font-mono text-xs font-semibold"
+              title="Expand Diagnostic Analytics Drawer"
+            >
+              <span className="material-symbols-outlined text-[17px] text-primary">chevron_left</span>
+              <span>Analytics</span>
+            </button>
+          )}
+
+          {/* 4. RIGHT EDGE FLOATING GIS ACTION TOOLS CLUSTER (From Stitch Design) */}
+          <div className="absolute right-4 top-16 z-20 flex flex-col gap-2 pointer-events-auto">
+            {/* Zoom Controls */}
+            <div className="flex flex-col bg-white rounded shadow-md overflow-hidden border border-slate-200">
+              <button 
+                onClick={handleZoomIn}
+                className="p-2 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors"
+                title="Zoom In"
               >
-                Mission Dark
+                <span className="material-symbols-outlined text-[18px]">add</span>
               </button>
-              <button
-                onClick={() => setMapStyleType('satellite')}
-                className={`px-2.5 py-1 rounded transition-colors ${
-                  mapStyleType === 'satellite' ? 'bg-[#1B2740] text-[#2FB8AC] font-semibold border border-[#2FB8AC]/40' : 'text-[#8793A8] hover:text-[#EDF1F7]'
-                }`}
+              <div className="h-px bg-slate-200" />
+              <button 
+                onClick={handleZoomOut}
+                className="p-2 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors"
+                title="Zoom Out"
               >
-                🛰️ Satellite
+                <span className="material-symbols-outlined text-[18px]">remove</span>
               </button>
             </div>
+
+            {/* Basemap Switcher & Measure Tools */}
+            <div className="flex flex-col bg-white rounded shadow-md overflow-hidden border border-slate-200">
+              <button 
+                onClick={() => setMapStyleType(prev => prev === 'satellite' ? 'light' : 'satellite')}
+                className={`p-2 transition-colors ${mapStyleType === 'satellite' ? 'text-primary bg-primary-fixed' : 'text-slate-700 hover:bg-slate-50'}`}
+                title="Toggle Basemap (Satellite Hybrid / Cartographic Light)"
+              >
+                <span className="material-symbols-outlined text-[18px]">satellite_alt</span>
+              </button>
+              <div className="h-px bg-slate-200" />
+              <button 
+                onClick={handleToggleMeasureMode}
+                className={`p-2 transition-colors ${interactionMode === 'measure' ? 'text-white bg-amber-600 font-bold' : 'text-slate-700 hover:bg-slate-50'}`}
+                title="Measure Linear Distance on Map (Click 2 points)"
+              >
+                <span className="material-symbols-outlined text-[18px]">straighten</span>
+              </button>
+              <div className="h-px bg-slate-200" />
+              <button 
+                onClick={handleCompassClick}
+                className={`p-2 transition-all group relative flex items-center justify-center ${
+                  Math.abs(mapBearing) > 2 || Math.abs(mapPitch) > 5
+                    ? 'bg-amber-50 text-amber-700'
+                    : 'text-slate-700 hover:bg-slate-50'
+                }`}
+                title={`Compass: Click to re-orient True North (Bearing: ${Math.round(mapBearing)}°, Pitch: ${Math.round(mapPitch)}°)`}
+              >
+                <div 
+                  className="w-5 h-5 flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+                  style={{ transform: `rotate(${-mapBearing}deg)` }}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" className="overflow-visible">
+                    <circle cx="12" cy="12" r="10" fill="none" stroke="#94a3b8" strokeWidth="1.5" />
+                    {/* North Pointer (Red) */}
+                    <polygon points="12,3 15,12 12,10 9,12" fill="#e11d48" />
+                    {/* South Pointer (Slate) */}
+                    <polygon points="12,21 15,12 12,10 9,12" fill="#64748b" />
+                    {/* Center Pivot Dot */}
+                    <circle cx="12" cy="12" r="1.5" fill="#0f172a" />
+                  </svg>
+                </div>
+              </button>
+            </div>
+
+            {/* Fullscreen Canvas Toggle */}
+            <button 
+              onClick={handleToggleFullscreen}
+              className="p-2 bg-white rounded shadow-md text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors border border-slate-200"
+              title="Expand Fullscreen Canvas"
+            >
+              <span className="material-symbols-outlined text-[18px]">fullscreen</span>
+            </button>
           </div>
 
           {/* Lasso SVG overlay */}
           {isDrawingLasso && (
             <svg style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 100}}>
-              <path d={svgPath} fill="rgba(47, 184, 172, 0.2)" stroke="#2FB8AC" strokeWidth="2" strokeDasharray="4 4" />
+              <path d={svgPath} fill="rgba(184, 67, 30, 0.2)" stroke="#b8431e" strokeWidth="2" strokeDasharray="4 4" />
             </svg>
           )}
 
           {/* Map Stage Container */}
-          <div className="flex-1 w-full h-full relative" style={{cursor: interactionMode === 'select' ? (hoverInfo ? 'pointer' : 'grab') : 'crosshair'}}>
+          <div 
+            className="flex-1 w-full h-full relative" 
+            style={{
+              cursor: interactionMode === 'navigate' 
+                ? (hoverInfo ? 'pointer' : 'grab') 
+                : interactionMode === 'select'
+                  ? (hoverInfo ? 'pointer' : 'crosshair')
+                  : 'crosshair'
+            }}
+          >
             <Map
+              ref={mapRef}
               key={currentCity}
               initialViewState={cityView}
               mapStyle={MAP_STYLES[mapStyleType]}
               interactiveLayerIds={['zones-fill-interactive']}
               onMouseMove={handleMouseMove}
-              onMouseDown={onPointerDown}
+              onClick={handleMapClick}
+              onMouseDown={onMouseDown}
               onMouseUp={onPointerUp}
               onDblClick={onDblClick}
-              dragPan={interactionMode === 'select'}
-              doubleClickZoom={interactionMode === 'select'}
+              dragPan={true}
+              doubleClickZoom={true}
+              onMove={(e) => {
+                if (e.viewState) {
+                  setMapBearing(e.viewState.bearing || 0);
+                  setMapPitch(e.viewState.pitch || 0);
+                  setMapZoom(e.viewState.zoom || 11.5);
+                }
+              }}
             >
+              {/* Built-in MapLibre Scale Control */}
+              <ScaleControl position="bottom-left" unit="metric" maxWidth={110} />
+
+              {/* Linear Measure Line & Markers */}
+              {measureGeoJSON && (
+                <Source id="measure-line-src" type="geojson" data={measureGeoJSON}>
+                  <Layer
+                    id="measure-line-casing"
+                    type="line"
+                    paint={{
+                      'line-color': '#0f172a',
+                      'line-width': 4.5,
+                      'line-opacity': 0.8
+                    }}
+                  />
+                  <Layer
+                    id="measure-line-inner"
+                    type="line"
+                    paint={{
+                      'line-color': '#f59e0b',
+                      'line-width': 2.5,
+                      'line-dasharray': [2, 2]
+                    }}
+                  />
+                </Source>
+              )}
+
+              {measurePointsGeoJSON && (
+                <Source id="measure-pts-src" type="geojson" data={measurePointsGeoJSON}>
+                  <Layer
+                    id="measure-pts-circles"
+                    type="circle"
+                    paint={{
+                      'circle-radius': 6.5,
+                      'circle-color': '#f59e0b',
+                      'circle-stroke-width': 2,
+                      'circle-stroke-color': '#ffffff'
+                    }}
+                  />
+                </Source>
+              )}
               {/* Drawn Green Areas (Polygons) */}
               <Source id="drawn-polygons" type="geojson" data={polygonsGeoJSON}>
-                <Layer id="drawn-polygons-fill" type="fill" paint={{'fill-color': '#2FB8AC', 'fill-opacity': 0.45}} />
-                <Layer id="drawn-polygons-line" type="line" paint={{'line-color': '#2FB8AC', 'line-width': 2}} />
+                <Layer id="drawn-polygons-fill" type="fill" paint={{'fill-color': '#2e7d58', 'fill-opacity': 0.45}} />
+                <Layer id="drawn-polygons-line" type="line" paint={{'line-color': '#2e7d58', 'line-width': 2}} />
               </Source>
 
               {/* Active Drawing Polygon Line */}
               {activePolygonGeoJSON && (
                 <Source id="active-polygon" type="geojson" data={activePolygonGeoJSON}>
-                  <Layer id="active-polygon-line" type="line" paint={{'line-color': '#2FB8AC', 'line-width': 2, 'line-dasharray': [2, 2]}} />
+                  <Layer id="active-polygon-line" type="line" paint={{'line-color': '#b8431e', 'line-width': 2, 'line-dasharray': [2, 2]}} />
                 </Source>
               )}
 
               {/* Drawn Trees (Points) */}
               <Source id="drawn-trees" type="geojson" data={treesGeoJSON}>
-                <Layer id="drawn-trees-circle" type="circle" paint={{'circle-color': '#2FB8AC', 'circle-radius': 6, 'circle-stroke-width': 2, 'circle-stroke-color': '#ffffff'}} />
+                <Layer id="drawn-trees-circle" type="circle" paint={{'circle-color': '#2e7d58', 'circle-radius': 6, 'circle-stroke-width': 2, 'circle-stroke-color': '#ffffff'}} />
               </Source>
 
               {/* Selected Zone Boundaries */}
               {selectedBoundary && (
                 <Source id="selected-boundary" type="geojson" data={selectedBoundary}>
-                  <Layer id="selected-boundary-line" type="line" paint={{'line-color': '#ffffff', 'line-width': 3, 'line-opacity': 0.9}} />
+                  <Layer id="selected-boundary-line" type="line" paint={{'line-color': '#ffffff', 'line-width': 3, 'line-opacity': 0.95}} />
                 </Source>
               )}
 
@@ -753,17 +1254,17 @@ export function MapView() {
                       'fill-color': [
                         'case',
                         ['==', ['get', 'is_selected'], 1],
-                        '#00FFF0',
+                        '#F97316',
                         activeLayers.lstHeat
                           ? [
                               'interpolate',
                               ['linear'],
                               ['coalesce', ['get', 'display_lst'], 35.0],
-                              33.0, '#34D399',  // light emerald pastel
-                              34.2, '#A3E635',  // soft lime pastel
-                              35.5, '#FDE047',  // soft yellow pastel
-                              36.6, '#FB923C',  // soft orange pastel
-                              37.8, '#F87171'   // soft coral pastel
+                              32.5, '#10B981',  // Emerald Green (<33°C)
+                              34.0, '#84CC16',  // Lime (33-34.5°C)
+                              35.2, '#FACC15',  // Vibrant Yellow (34.5-36°C)
+                              36.5, '#F97316',  // Warm Orange (36-37.5°C)
+                              37.8, '#EF4444'   // Crimson Hotspot (>37.8°C)
                             ]
                           : activeLayers.ndviVegetation
                             ? [
@@ -772,16 +1273,16 @@ export function MapView() {
                                 ['coalesce', ['get', 'ndvi'], 0.22],
                                 0.08, '#D97706',
                                 0.16, '#FBBF24',
-                                0.26, '#A3E635',
-                                0.38, '#34D399'
+                                0.26, '#84CC16',
+                                0.38, '#10B981'
                               ]
-                            : '#1B2740'
+                            : '#effcf9'
                       ],
                       'fill-opacity': [
                         'case',
                         ['==', ['get', 'is_selected'], 1],
-                        0.32,
-                        activeLayers.lstHeat || activeLayers.ndviVegetation ? 0.16 : 0.05
+                        0.65,
+                        activeLayers.lstHeat ? 0.38 : (activeLayers.ndviVegetation ? 0.32 : 0.05)
                       ]
                     }} 
                   />
@@ -789,41 +1290,25 @@ export function MapView() {
                     id="zones-outline"
                     type="line"
                     paint={{
-                      'line-color': [
-                        'case',
-                        ['==', ['get', 'is_selected'], 1],
-                        '#00FFF0',
-                        activeLayers.lstHeat
-                          ? [
-                              'interpolate',
-                              ['linear'],
-                              ['coalesce', ['get', 'display_lst'], 35.0],
-                              33.0, '#34D399',
-                              34.2, '#A3E635',
-                              35.5, '#FDE047',
-                              36.6, '#FB923C',
-                              37.8, '#F87171'
-                            ]
-                          : '#263349'
-                      ],
+                      'line-color': '#ffffff',
                       'line-width': [
                         'case',
                         ['==', ['get', 'is_selected'], 1],
                         2.5,
-                        1.0
+                        1.2
                       ],
                       'line-opacity': [
                         'case',
                         ['==', ['get', 'is_selected'], 1],
-                        0.9,
-                        0.65
+                        1.0,
+                        0.85
                       ]
                     }}
                   />
                 </Source>
               )}
 
-              {/* Driver Attribution Layer — anomaly intensity circles */}
+              {/* Driver Attribution Layer */}
               {pointData && activeLayers.driverAttribution && (
                 <Source id="driver-attr" type="geojson" data={pointData}>
                   <Layer
@@ -831,7 +1316,7 @@ export function MapView() {
                     type="circle"
                     paint={{
                       'circle-radius': ['interpolate', ['linear'], ['coalesce', ['get', 'anomaly'], 2], 0, 8, 6, 24],
-                      'circle-color': ['interpolate', ['linear'], ['coalesce', ['get', 'anomaly'], 2], 0, '#2FB8AC', 3, '#F2A93B', 5, '#C81E3A'],
+                      'circle-color': ['interpolate', ['linear'], ['coalesce', ['get', 'anomaly'], 2], 0, '#2e7d58', 3, '#d97736', 5, '#b8431e'],
                       'circle-opacity': 0.75,
                       'circle-stroke-width': 1.5,
                       'circle-stroke-color': '#ffffff'
@@ -840,24 +1325,24 @@ export function MapView() {
                 </Source>
               )}
 
-              {/* Population Density Layer — vulnerable pop circles */}
+              {/* Population Density Layer */}
               {pointData && activeLayers.populationDensity && (
-                <Source id="pop-density" type="geojson" data={pointData}>
+                <Source id="pop-circles" type="geojson" data={pointData}>
                   <Layer
-                    id="pop-circles"
+                    id="pop-circles-layer"
                     type="circle"
                     paint={{
                       'circle-radius': ['interpolate', ['linear'], ['coalesce', ['get', 'vulnerable_pop_pct'], 30], 0, 10, 60, 30],
-                      'circle-color': '#a855f7',
+                      'circle-color': '#9333ea',
                       'circle-opacity': 0.65,
                       'circle-stroke-width': 1,
-                      'circle-stroke-color': '#d8b4fe'
+                      'circle-stroke-color': '#ffffff'
                     }}
                   />
                 </Source>
               )}
 
-              {/* DISCOM Grid Stress Layer — grid load circles */}
+              {/* DISCOM Grid Stress Layer */}
               {activeLayers.discomGrid && (
                 <Source id="discom-grid" type="geojson" data={discomGeoJSON}>
                   <Layer
@@ -865,7 +1350,7 @@ export function MapView() {
                     type="circle"
                     paint={{
                       'circle-radius': ['interpolate', ['linear'], ['get', 'gridLoadMw'], 30, 10, 110, 28],
-                      'circle-color': ['interpolate', ['linear'], ['get', 'gridLoadMw'], 50, '#F2A93B', 90, '#E8632B', 110, '#C81E3A'],
+                      'circle-color': ['interpolate', ['linear'], ['get', 'gridLoadMw'], 50, '#d97736', 90, '#c85a32', 110, '#b8431e'],
                       'circle-opacity': 0.7,
                       'circle-stroke-width': 1.5,
                       'circle-stroke-color': '#ffffff'
@@ -878,47 +1363,48 @@ export function MapView() {
               {hoverInfo && hoverInfo.lngLat && 
                typeof hoverInfo.lngLat.lng === 'number' && !isNaN(hoverInfo.lngLat.lng) &&
                typeof hoverInfo.lngLat.lat === 'number' && !isNaN(hoverInfo.lngLat.lat) &&
-               hoverInfo.feature && hoverInfo.feature.properties && interactionMode === 'select' && (
+               hoverInfo.feature && hoverInfo.feature.properties && (interactionMode === 'select' || interactionMode === 'navigate') && (
                 <Popup longitude={hoverInfo.lngLat.lng} latitude={hoverInfo.lngLat.lat} closeButton={false} closeOnClick={false} anchor="bottom" offset={15}>
-                  <div className="min-w-[190px] font-sans text-xs">
-                    <div className="flex items-center justify-between border-b border-[#263349] pb-1 mb-2">
-                      <span className="font-bold text-[#EDF1F7]">
+                  <div className="min-w-[190px] font-sans text-xs bg-white text-slate-800 p-2.5 rounded-lg shadow-xl border border-slate-300">
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-1 mb-2">
+                      <span className="font-bold text-slate-900">
                         Zone {hoverInfo.feature.properties.zone_id || 'N/A'}
                       </span>
-                      <span className="text-[10px] font-mono text-[#2FB8AC] bg-[#2FB8AC]/10 px-1.5 py-0.5 rounded">
+                      <span className="text-[10px] font-mono text-terracotta bg-terracotta/10 px-1.5 py-0.5 rounded font-bold">
                         LST Telemetry
                       </span>
                     </div>
 
                     <div className="space-y-1 font-mono text-[11px]">
                       <div className="flex justify-between">
-                        <span className="text-[#8793A8]">Surface Temp:</span>
-                        <span className="font-bold text-[#E8632B]">
+                        <span className="text-slate-500">Surface Temp:</span>
+                        <span className="font-bold text-terracotta">
                           {Number(hoverInfo.feature.properties.display_lst ?? 35.0).toFixed(1)}°C
                         </span>
                       </div>
 
                       {simResults && hoverInfo.feature.properties.zone_id && simResults[hoverInfo.feature.properties.zone_id] && (
                         <div className="flex justify-between">
-                          <span className="text-[#8793A8]">Simulation Δ:</span>
-                          <span className="font-bold text-[#2FB8AC]">
+                          <span className="text-slate-500">Simulation Δ:</span>
+                          <span className="font-bold text-forest">
                             {((hoverInfo.feature.properties.display_lst ?? 35.0) - (hoverInfo.feature.properties.lst ?? 35.0)).toFixed(2)}°C
                           </span>
                         </div>
                       )}
 
                       <div className="flex justify-between">
-                        <span className="text-[#8793A8]">NDVI Canopy:</span>
-                        <span className="text-[#2FB8AC]">{Number(hoverInfo.feature.properties.ndvi ?? 0.22).toFixed(2)}</span>
+                        <span className="text-slate-500">NDVI Canopy:</span>
+                        <span className="text-forest font-bold">{Number(hoverInfo.feature.properties.ndvi ?? 0.22).toFixed(2)}</span>
                       </div>
 
                       <div className="flex justify-between">
-                        <span className="text-[#8793A8]">NDBI Built-up:</span>
-                        <span className="text-[#EDF1F7]">{Number(hoverInfo.feature.properties.ndbi ?? 0.05).toFixed(2)}</span>
+                        <span className="text-slate-500">NDBI Built-up:</span>
+                        <span className="text-slate-800 font-bold">{Number(hoverInfo.feature.properties.ndbi ?? 0.05).toFixed(2)}</span>
                       </div>
                     </div>
 
-                    <div className="mt-2 pt-1 border-t border-[#263349]/60 text-[9px] font-mono text-[#2FB8AC] text-right cursor-pointer"
+                    <div 
+                      className="mt-2 pt-1 border-t border-slate-100 text-[10px] font-sans text-emerald-700 text-right cursor-pointer font-bold hover:underline"
                       onClick={() => setSelectedWardForModal(hoverInfo.feature.properties)}
                     >
                       Click to open physics drill-down →
@@ -928,49 +1414,134 @@ export function MapView() {
               )}
             </Map>
 
-            {/* LST Thermal Heat Legend & Compass Badge */}
-            <div className="absolute bottom-4 left-4 z-20 flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
-              <div className="flex items-center space-x-2 bg-[#131B2E]/95 backdrop-blur-md border border-[#263349] px-3 py-1.5 rounded shadow-panel text-[10px] font-mono text-[#8793A8]">
-                <Compass className="w-4 h-4 text-[#2FB8AC]" />
-                <span>JURISDICTION: {currentCity.toUpperCase()} MUNICIPAL GRID</span>
-              </div>
-
-              {activeLayers.lstHeat && (
-                <div className="bg-[#131B2E]/95 backdrop-blur-md border border-[#263349] px-3 py-1.5 rounded shadow-panel text-[10px] font-mono text-[#EDF1F7] flex items-center space-x-2.5">
-                  <span className="text-[#8793A8] uppercase tracking-wider font-semibold">LST Heat Scale:</span>
-                  <div className="flex items-center space-x-1.5">
-                    <span className="flex items-center space-x-1"><span className="w-2.5 h-2.5 rounded-full bg-[#34D399] inline-block"></span><span className="text-[#8793A8]">&lt;33°C (Cool)</span></span>
-                    <span className="flex items-center space-x-1"><span className="w-2.5 h-2.5 rounded-full bg-[#A3E635] inline-block"></span><span className="text-[#8793A8]">34°C (Lime)</span></span>
-                    <span className="flex items-center space-x-1"><span className="w-2.5 h-2.5 rounded-full bg-[#FDE047] inline-block"></span><span className="text-[#8793A8]">35.5°C</span></span>
-                    <span className="flex items-center space-x-1"><span className="w-2.5 h-2.5 rounded-full bg-[#FB923C] inline-block"></span><span className="text-[#8793A8]">36.5°C</span></span>
-                    <span className="flex items-center space-x-1"><span className="w-2.5 h-2.5 rounded-full bg-[#F87171] inline-block"></span><span className="text-[#F87171] font-bold">&gt;37.8°C (Critical)</span></span>
+            {/* 5. SELECTED WARD LIVE CARTOGRAPHIC CALLOUT CARD (Pinned Bottom-Left) */}
+            {selectedWardInfo && (
+              <div className="absolute bottom-20 left-4 z-20 bg-white p-3.5 rounded-lg shadow-xl border-l-4 border-emerald-600 max-w-xs transition-all border border-slate-200 text-slate-800 pointer-events-auto">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <span className="font-mono text-[9px] text-terracotta uppercase font-bold tracking-wider">
+                      ZONE {selectedWardInfo.zone_id || 'ALERT'} • UHI CORE
+                    </span>
+                    <h3 className="font-sans font-bold text-sm text-slate-900 leading-snug">
+                      {selectedWardInfo.name || `Zone ${selectedWardInfo.zone_id}`}
+                    </h3>
+                  </div>
+                  <div className="flex items-center gap-1 shrink-0">
+                    <span className="bg-terracotta text-white font-mono text-[11px] font-bold px-2 py-0.5 rounded shadow-xs">
+                      {Number(selectedWardInfo.display_lst || selectedWardInfo.lst || 36.8).toFixed(1)}°C
+                    </span>
+                    <button 
+                      onClick={() => setIsWardCardExpanded(!isWardCardExpanded)}
+                      className="p-0.5 text-slate-500 hover:text-slate-800"
+                      title={isWardCardExpanded ? 'Collapse' : 'Expand'}
+                    >
+                      <span className="material-symbols-outlined text-[16px]">
+                        {isWardCardExpanded ? 'expand_less' : 'expand_more'}
+                      </span>
+                    </button>
                   </div>
                 </div>
-              )}
+
+                {isWardCardExpanded && (
+                  <div className="mt-2 pt-2 border-t border-slate-100 flex flex-col gap-1.5 text-xs font-sans">
+                    <div className="grid grid-cols-3 gap-1 text-[11px]">
+                      <div>
+                        <span className="text-slate-500 uppercase text-[9px] font-semibold">NDVI</span>
+                        <div className="font-bold text-forest">{Number(selectedWardInfo.ndvi || 0.22).toFixed(2)}</div>
+                      </div>
+                      <div>
+                        <span className="text-slate-500 uppercase text-[9px] font-semibold">NDBI</span>
+                        <div className="font-bold text-terracotta">{Number(selectedWardInfo.ndbi || 0.05).toFixed(2)}</div>
+                      </div>
+                      <div>
+                        <span className="text-slate-500 uppercase text-[9px] font-semibold">Vulnerable</span>
+                        <div className="font-bold text-red-600">{selectedWardInfo.vulnerable_pop_pct || 32}%</div>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setSelectedWardForModal(selectedWardInfo)}
+                      className="text-right text-[11px] text-primary hover:underline font-bold mt-1"
+                    >
+                      Open full physics drill-down →
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* 6. THERMAL GRADIENT SCALE LEGEND BAR (Pinned Bottom-Right) */}
+            <div className="absolute bottom-20 right-4 z-20 bg-white px-3.5 py-2.5 rounded shadow-md flex flex-col gap-1.5 pointer-events-auto border border-slate-200 text-slate-800">
+              <div className="flex items-center justify-between text-[11px] font-sans font-bold text-slate-800">
+                <span>Surface Temp (LST)</span>
+                <span className="text-terracotta font-mono font-bold">30°C — 46°C</span>
+              </div>
+              <div className="w-48 sm:w-52 h-3.5 rounded flex overflow-hidden border border-slate-300 shadow-2xs">
+                <div className="h-full w-1/5 bg-[#10B981]" title="< 33°C Cool Green" />
+                <div className="h-full w-1/5 bg-[#84CC16]" title="33-34.5°C Mild Lime" />
+                <div className="h-full w-1/5 bg-[#FACC15]" title="34.5-36°C Moderate Yellow" />
+                <div className="h-full w-1/5 bg-[#F97316]" title="36-37.5°C High Orange" />
+                <div className="h-full w-1/5 bg-[#EF4444]" title="> 37.8°C Extreme Thermal Hotspot" />
+              </div>
+              <div className="flex justify-between text-[10px] font-mono font-semibold text-slate-500 px-0.5">
+                <span>&lt;33°</span>
+                <span>34°</span>
+                <span>35.5°</span>
+                <span>36.5°</span>
+                <span>&gt;37.8°</span>
+              </div>
+
+              {/* Graphic Metric Distance Scale */}
+              <div className="flex items-center justify-between pt-1.5 border-t border-slate-100 text-[10px] font-mono font-bold text-slate-700">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-slate-400 font-sans text-[9px] uppercase font-semibold">Scale:</span>
+                  <div className="flex items-center">
+                    <span className="h-2 w-0.5 bg-slate-900" />
+                    <span 
+                      className="h-1 bg-slate-900 inline-block transition-all duration-150"
+                      style={{ width: `${mapScaleInfo.barWidthPx}px` }} 
+                    />
+                    <span className="h-2 w-0.5 bg-slate-900" />
+                  </div>
+                  <span className="text-slate-900 font-bold">{mapScaleInfo.label}</span>
+                </div>
+                <span className="text-[9px] text-slate-400 font-normal">Zoom: {mapZoom.toFixed(1)}x</span>
+              </div>
             </div>
           </div>
 
-          {/* Docked Satellite Pass Scrubber */}
+          {/* 7. DOCKED HORIZON TIMELINE SCRUBBER (From Stitch Design) */}
           <TimelineScrubber
             passes={MOCK_SATELLITE_PASSES}
             selectedPassIndex={selectedPassIndex}
             onSelectPassIndex={setSelectedPassIndex}
+            onSimulateHorizon={() => {
+              setIsRightRailOpen(true);
+            }}
           />
         </main>
 
         {/* Right Rail Panel */}
         <RightRail
           alerts={MOCK_ALERTS}
-          onSelectWard={(id) => {
-            const w = MOCK_WARDS.find(item => item.id === id);
-            if (w) setSelectedWardForModal(w);
-          }}
-          cityResilienceScore={Math.round(70 - (MOCK_WARDS.reduce((acc, w) => acc + (w.lstAnomaly || 0), 0) / Math.max(1, MOCK_WARDS.length)) * 3)}
+          onSelectWard={handleSelectWardAndFly}
+          cityResilienceScore={cityResilienceScore}
           currentCity={currentCity}
-          wards={MOCK_WARDS}
+          wards={cityWards}
+          liveTelemetry={liveTelemetry}
           scenarioParams={scenarioParams}
           isOpen={isRightRailOpen}
           onClose={() => setIsRightRailOpen(false)}
+          onRunSimulation={handleRunOptimizer}
+          onExportGeoJSON={exportGeoJSON}
+          onCommitPlan={() => {
+            setDataFeedToast({
+              type: 'live',
+              title: `${currentCity}: Plan Committed`,
+              message: '2024 Heat Action Plan cooling interventions registered to municipal cadastre.'
+            });
+            setTimeout(() => setDataFeedToast(null), 4000);
+          }}
+          onExportHAP={exportGeoJSON}
         />
       </div>
 
@@ -985,7 +1556,7 @@ export function MapView() {
       {/* Scanner Overlay during Optimizer simulation */}
       <OptimizingOverlay
         isOptimizing={isOptimizing}
-        wards={selectedZones.size > 0 ? MOCK_WARDS.filter(w => selectedZones.has(w.id)) : MOCK_WARDS}
+        wards={selectedZones.size > 0 ? cityWards.filter(w => selectedZones.has(w.id)) : cityWards}
         onComplete={handleOptimizerComplete}
       />
     </div>
