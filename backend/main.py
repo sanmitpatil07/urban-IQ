@@ -365,7 +365,7 @@ def simulate(request: SimulationRequest):
 
     # Format results
     results = []
-    for (idx, row), (_, sim_row) in zip(target_zones.iterrows(), sim_results.iterrows()):
+    for (_, row), (_, sim_row) in zip(target_zones.iterrows(), sim_results.iterrows()):
         results.append(SimulationResult(
             zone_id=row["zone_id"],
             original_lst=sim_row["original_lst_pred"],
