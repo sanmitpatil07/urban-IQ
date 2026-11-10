@@ -7,7 +7,6 @@ import '../index.css';
 import { Header } from '../components/Header';
 import { LeftRail } from '../components/LeftRail';
 import { RightRail } from '../components/RightRail';
-import { TimelineScrubber } from '../components/TimelineScrubber';
 import { WardDetailModal } from '../components/WardDetailModal';
 import { OptimizingOverlay } from '../components/OptimizingOverlay';
 import { DemoModeBanner } from '../components/DemoModeBanner';
@@ -1530,16 +1529,6 @@ export function MapView() {
               </div>
             </div>
           </div>
-
-          {/* 7. DOCKED HORIZON TIMELINE SCRUBBER (From Stitch Design) */}
-          <TimelineScrubber
-            passes={MOCK_SATELLITE_PASSES}
-            selectedPassIndex={selectedPassIndex}
-            onSelectPassIndex={setSelectedPassIndex}
-            onSimulateHorizon={() => {
-              setIsRightRailOpen(true);
-            }}
-          />
         </main>
 
         {/* Right Rail Panel */}
