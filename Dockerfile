@@ -1,4 +1,4 @@
-﻿FROM python:3.12-slim
+FROM python:3.12-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PYTHONPATH=/app
 WORKDIR /app
@@ -8,6 +8,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY backend ./backend
 COPY src ./src
 COPY data ./data
+COPY config ./config
 
 RUN useradd --create-home appuser && chown -R appuser:appuser /app
 USER appuser
