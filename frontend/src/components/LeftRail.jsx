@@ -69,9 +69,9 @@ export const LeftRail = ({
         aria-hidden="true"
       />
 
-      <aside className="fixed inset-y-0 left-0 z-50 w-[380px] max-w-[90vw] lg:relative lg:inset-auto lg:z-20 flex h-[100dvh] lg:h-[calc(100dvh-4rem)] bg-white shadow-lg border-r border-slate-200 select-none transition-all duration-300 shrink-0 text-slate-800 font-sans">
+      <aside className="fixed inset-y-0 left-0 z-50 w-[380px] max-w-[90vw] lg:relative lg:inset-auto lg:z-20 flex h-full min-h-0 bg-[#FAF9F6] shadow-lg border-r border-[#EAE6DF] select-none transition-all duration-300 shrink-0 text-slate-800 font-sans">
         {/* Micro Icon Rail (56px) */}
-        <div className="w-14 bg-slate-50 flex flex-col items-center justify-between py-3 border-r border-slate-200 shrink-0">
+        <div className="w-14 bg-[#F7F5F0] flex flex-col items-center justify-between py-3 border-r border-[#EAE6DF] shrink-0">
           <div className="flex flex-col items-center gap-2 w-full">
             <button
               onClick={() => setActiveRailTab('layers')}
@@ -471,22 +471,14 @@ export const LeftRail = ({
                     </button>
                   </div>
 
-                  <div className="flex gap-2 pt-1 border-t border-slate-100">
-                    <button
-                      onClick={onExportGeoJSON}
-                      className="flex-1 py-1.5 bg-white hover:bg-slate-50 text-slate-700 rounded text-xs font-bold transition-colors flex items-center justify-center gap-1 border border-slate-300 shadow-xs"
-                      title="Export current spatial drawing interventions as GeoJSON"
-                    >
-                      <span className="material-symbols-outlined text-[15px] text-emerald-700">download</span>
-                      <span>Export Plan</span>
-                    </button>
+                  <div className="pt-1 border-t border-slate-100">
                     <button
                       onClick={onClearAll}
-                      className="py-1.5 px-2.5 bg-rose-50 text-rose-700 hover:bg-rose-100 rounded text-xs font-bold transition-colors flex items-center justify-center border border-rose-200"
+                      className="w-full py-1.5 px-2.5 bg-rose-50 text-rose-700 hover:bg-rose-100 rounded text-xs font-bold transition-colors flex items-center justify-center border border-rose-200"
                       title="Clear all selections and drawn interventions"
                     >
                       <span className="material-symbols-outlined text-[15px]">delete</span>
-                      <span className="ml-1">Clear</span>
+                      <span className="ml-1">Clear Canvas & Selections</span>
                     </button>
                   </div>
                 </div>
@@ -605,10 +597,18 @@ export const LeftRail = ({
                   <button
                     onClick={onRunOptimizer}
                     disabled={isOptimizing}
-                    className="w-full py-2 bg-emerald-700 text-white font-bold text-xs rounded hover:bg-emerald-800 transition-colors shadow-xs flex items-center justify-center gap-1.5 disabled:opacity-60"
+                    className="w-full py-2 bg-emerald-800 text-white font-bold text-xs rounded-lg hover:bg-emerald-900 transition-colors shadow-xs flex items-center justify-center gap-1.5 disabled:opacity-60"
                   >
                     <span className="material-symbols-outlined text-[16px]">play_arrow</span>
-                    <span>{isOptimizing ? 'Optimizing Interventions...' : 'Run Genetic Optimizer'}</span>
+                    <span>
+                      {isOptimizing 
+                        ? 'Optimizing Physics...' 
+                        : selectedZonesCount === 1 
+                          ? 'Run Optimizer for Selected Ward' 
+                          : selectedZonesCount > 1 
+                            ? `Run Optimizer for ${selectedZonesCount} Wards` 
+                            : 'Run Cooling Optimizer (Whole City)'}
+                    </span>
                   </button>
                 </div>
               )}

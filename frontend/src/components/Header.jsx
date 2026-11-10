@@ -14,7 +14,15 @@ export const Header = ({
   isRightRailOpen = false,
   isZenMode = false,
   onToggleZenMode,
-  onExportDSS
+  onExportDSS,
+  onExportHAP,
+  currentPersona = {
+    name: 'Dr. V. Rao, IAS',
+    role: 'Taskforce Chief & Municipal Commissioner',
+    badgeId: 'IAS-MH-9402',
+    color: 'emerald'
+  },
+  onOpenLoginModal
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -42,15 +50,15 @@ export const Header = ({
   );
 
   return (
-    <header className="h-16 bg-white border-b border-slate-200 px-3 sm:px-4 flex items-center justify-between shadow-xs z-30 select-none relative text-slate-900 font-sans">
+    <header className="h-16 bg-[#FAF9F6] border-b border-[#EAE6DF] px-3 sm:px-4 flex items-center justify-between shadow-xs z-30 select-none relative text-slate-900 font-sans">
       {/* Left: Brand & City Selector */}
       <div className="flex items-center gap-2 sm:gap-3 shrink-0">
         <button 
           onClick={onToggleLeftRail}
-          className={`p-1.5 sm:p-2 rounded border transition-colors flex items-center justify-center ${
+          className={`p-1.5 sm:p-2 rounded-lg border transition-colors flex items-center justify-center ${
             isLeftRailOpen 
-              ? 'text-emerald-700 bg-emerald-50 border-emerald-300' 
-              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 border-slate-200'
+              ? 'text-emerald-800 bg-emerald-50 border-emerald-300' 
+              : 'text-slate-700 hover:text-slate-900 hover:bg-white border-[#EAE6DF]'
           }`}
           title="Toggle Tools & Overlays Rail"
           aria-label="Toggle Tools"
@@ -59,7 +67,7 @@ export const Header = ({
         </button>
 
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded bg-emerald-700 flex items-center justify-center text-white shadow-xs shrink-0">
+          <div className="w-8 h-8 rounded-lg bg-emerald-800 flex items-center justify-center text-white shadow-xs shrink-0">
             <span className="material-symbols-outlined text-[20px]">layers</span>
           </div>
           <div className="flex flex-col text-left">
@@ -67,12 +75,12 @@ export const Header = ({
               <span className="font-sans font-extrabold text-sm sm:text-base tracking-tight text-slate-900">
                 URBAN-<span className="text-emerald-700">IQ</span>
               </span>
-              <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-100 border border-slate-300 text-slate-700">
+              <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-white border border-[#EAE6DF] text-slate-700">
                 v2.4
               </span>
             </div>
             <span className="hidden sm:inline text-[9px] font-sans text-slate-500 uppercase tracking-wider font-semibold -mt-0.5">
-              Geo-Spatial Decision Support
+              Heat Resilience DSS
             </span>
           </div>
         </div>
@@ -81,8 +89,8 @@ export const Header = ({
         <div className="relative ml-1 sm:ml-2">
           <button
             onClick={() => setIsCityDropdownOpen(!isCityDropdownOpen)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-slate-50 border border-slate-300 hover:bg-slate-100 text-xs font-sans text-slate-800 transition-all shadow-xs"
-            title="Switch City"
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-white border border-[#EAE6DF] hover:bg-slate-50 text-xs font-sans text-slate-800 transition-all shadow-xs"
+            title="Switch Metro Region"
           >
             <span className="material-symbols-outlined text-emerald-700 text-[16px]">location_city</span>
             <span className="font-bold text-xs">{currentCity}</span>
@@ -97,8 +105,8 @@ export const Header = ({
           )}
 
           {isCityDropdownOpen && (
-            <div className="absolute left-0 mt-1 w-64 bg-white border border-slate-300 rounded-lg shadow-2xl z-50 py-1 max-h-80 overflow-y-auto">
-              <div className="px-3 py-1.5 border-b border-slate-100 text-[10px] font-sans text-slate-500 uppercase tracking-wider font-bold bg-slate-50">
+            <div className="absolute left-0 mt-1 w-64 bg-white border border-[#EAE6DF] rounded-xl shadow-2xl z-50 py-1 max-h-80 overflow-y-auto">
+              <div className="px-3 py-1.5 border-b border-[#EAE6DF] text-[10px] font-sans text-slate-500 uppercase tracking-wider font-bold bg-[#FAF9F6]">
                 Select Indian Metro Region:
               </div>
               {CITIES.map((c) => (
@@ -111,7 +119,7 @@ export const Header = ({
                   className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between transition-colors border-l-2 ${
                     currentCity.toLowerCase() === c.name.toLowerCase()
                       ? 'bg-emerald-50 border-emerald-600 text-emerald-900 font-bold'
-                      : 'border-transparent text-slate-700 hover:bg-slate-50'
+                      : 'border-transparent text-slate-700 hover:bg-[#FAF9F6]'
                   }`}
                 >
                   <div>
@@ -139,14 +147,14 @@ export const Header = ({
           </span>
           <input
             type="text"
-            placeholder={`Search ${currentCity} cadastral wards, plots, anomalies...`}
+            className="w-full bg-white border border-[#EAE6DF] rounded-lg pl-9 pr-8 py-1.5 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-emerald-600 focus:border-emerald-600 shadow-xs"
+            placeholder={`Search ${currentCity} zones, wards, hotspots...`}
             value={searchQuery}
             onChange={(e) => {
               setSearchQuery(e.target.value);
               setIsSearchOpen(true);
             }}
             onFocus={() => setIsSearchOpen(true)}
-            className="w-full bg-slate-50 pl-9 pr-3 py-1.5 rounded font-sans text-xs text-slate-800 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-1 focus:ring-emerald-600 border border-slate-300 shadow-xs"
           />
           {searchQuery && (
             <button
@@ -154,135 +162,122 @@ export const Header = ({
                 setSearchQuery('');
                 setIsSearchOpen(false);
               }}
-              className="absolute right-2.5 text-slate-400 hover:text-slate-700"
+              className="absolute right-2.5 text-slate-400 hover:text-slate-600"
             >
               <span className="material-symbols-outlined text-[16px]">close</span>
             </button>
           )}
         </div>
 
-        {isSearchOpen && searchQuery.trim() !== '' && (
-          <div 
-            className="fixed inset-0 z-40" 
-            onClick={() => setIsSearchOpen(false)}
-          />
-        )}
-
-        {isSearchOpen && searchQuery.trim() !== '' && (
-          <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-300 rounded-lg shadow-2xl z-50 max-h-64 overflow-y-auto">
-            {filteredWards.length === 0 ? (
-              <div className="p-3 text-xs text-slate-500 text-center">
-                No matching wards found in {currentCity}.
-              </div>
-            ) : (
-              filteredWards.map(ward => {
-                const wardId = ward.id || ward.zone_id;
-                const anomaly = ward.lstAnomaly ? Number(ward.lstAnomaly).toFixed(1) : (ward.anomaly ? Number(ward.anomaly).toFixed(1) : '2.4');
-                return (
-                  <button
-                    key={wardId}
-                    onClick={() => {
-                      if (onSelectWard) onSelectWard(wardId);
-                      setIsSearchOpen(false);
-                      setSearchQuery('');
-                    }}
-                    className="w-full px-3 py-2 text-left hover:bg-slate-50 border-b border-slate-100 last:border-0 flex items-center justify-between text-xs"
-                  >
-                    <div>
-                      <div className="font-semibold text-slate-900 flex items-center gap-1.5">
-                        <span>{ward.name || `Zone ${wardId}`}</span>
-                        <span className="text-[10px] text-slate-500">({wardId})</span>
-                      </div>
-                      <div className="text-[10px] text-slate-500">{ward.zone || `${currentCity} Municipal Grid`}</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="font-mono font-bold text-xs text-rose-600">
-                        +{anomaly}°C LST
-                      </div>
-                      <div className="text-[10px] font-mono text-slate-500">
-                        NDVI {ward.ndviIndex || (ward.ndvi ? ward.ndvi.toFixed(2) : '0.24')}
-                      </div>
-                    </div>
-                  </button>
-                );
-              })
-            )}
+        {isSearchOpen && filteredWards.length > 0 && (
+          <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-[#EAE6DF] rounded-xl shadow-xl z-50 max-h-60 overflow-y-auto py-1">
+            <div className="px-3 py-1 text-[10px] uppercase font-bold text-slate-400 tracking-wider bg-[#FAF9F6]">
+              Matching Zones ({filteredWards.length})
+            </div>
+            {filteredWards.map(w => (
+              <button
+                key={w.id || w.zone_id}
+                onClick={() => {
+                  if (onSelectWard) onSelectWard(w.id || w.zone_id);
+                  setSearchQuery('');
+                  setIsSearchOpen(false);
+                }}
+                className="w-full px-3 py-2 text-left hover:bg-emerald-50/70 flex items-center justify-between text-xs border-b border-slate-50 last:border-b-0"
+              >
+                <div>
+                  <span className="font-bold text-slate-900">{w.name || `Zone ${w.id}`}</span>
+                  <span className="text-[10px] text-slate-500 ml-2">{w.zone || 'Ward'}</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="font-mono text-xs font-bold text-rose-600">
+                    {Number(w.currentLst || w.lst || 36.5).toFixed(1)}°C
+                  </span>
+                  <span className="text-[9px] font-mono px-1 rounded bg-slate-100 text-slate-600">
+                    +{Number(w.lstAnomaly || 2.4).toFixed(1)}°
+                  </span>
+                </div>
+              </button>
+            ))}
           </div>
         )}
       </div>
 
-      {/* Right: Actions, Focus Mode, Telemetry & Profile */}
-      <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+      {/* Right: Actions, Exports, Focus, Profile */}
+      <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
         {/* Focus / Zen Mode Toggle */}
         <button
           onClick={onToggleZenMode}
-          className={`flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded text-xs font-semibold transition-all border ${
+          className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all border ${
             isZenMode 
-              ? 'bg-emerald-700 text-white border-emerald-700 shadow-xs' 
-              : 'bg-white text-slate-700 hover:bg-slate-50 border-slate-300'
+              ? 'bg-emerald-800 text-white border-emerald-800 shadow-xs' 
+              : 'bg-white text-slate-700 hover:bg-slate-50 border-[#EAE6DF]'
           }`}
-          title="Toggle Focus / Full Map Viewport"
+          title="Toggle Focus Mode"
         >
           <span className="material-symbols-outlined text-[16px]">center_focus_strong</span>
-          <span className="hidden sm:inline">{isZenMode ? 'Exit Focus' : 'Focus Mode'}</span>
+          <span className="hidden sm:inline">{isZenMode ? 'Exit Focus' : 'Focus'}</span>
         </button>
 
-        {/* Export DSS Button */}
+        {/* Export DSS Button - Downloads Complete City Intervention Plan PDF on click */}
         <button
-          onClick={onExportDSS}
-          className="flex items-center gap-1 px-2.5 py-1.5 bg-white rounded text-slate-700 hover:bg-slate-50 transition-colors text-xs font-semibold border border-slate-300 shadow-xs"
-          title="Export GeoJSON / DSS Dossier"
+          onClick={() => {
+            if (onExportHAP) onExportHAP();
+            else if (onExportDSS) onExportDSS();
+          }}
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-800 hover:bg-emerald-900 text-white rounded-lg transition-colors text-xs font-semibold shadow-xs"
+          title="Download Complete City Intervention Plan (PDF)"
         >
-          <span className="material-symbols-outlined text-[16px] text-emerald-700">download</span>
-          <span className="hidden md:inline">Export DSS</span>
+          <span className="material-symbols-outlined text-[16px] text-white">picture_as_pdf</span>
+          <span className="font-bold">Export DSS (PDF)</span>
         </button>
 
         {/* Toggle Right Rail Button */}
         <button
           onClick={onToggleRightRail}
-          className={`p-1.5 sm:p-2 rounded border transition-colors flex items-center gap-1 ${
+          className={`p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg border transition-colors flex items-center gap-1 ${
             isRightRailOpen 
-              ? 'text-emerald-700 bg-emerald-50 border-emerald-300' 
-              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 border-slate-200'
+              ? 'text-emerald-800 bg-emerald-50 border-emerald-300 font-bold' 
+              : 'text-slate-700 hover:text-slate-900 bg-white hover:bg-slate-50 border-[#EAE6DF]'
           }`}
-          title="Toggle Analytics Drawer"
+          title="Toggle Analytics & Optimization Panel"
           aria-label="Toggle Analytics"
         >
-          <span className="material-symbols-outlined text-[18px]">analytics</span>
-          <span className="text-[10px] font-sans font-bold hidden sm:inline">ANALYTICS</span>
+          <span className="material-symbols-outlined text-[18px] text-emerald-700">analytics</span>
+          <span className="text-[11px] font-sans font-bold hidden sm:inline">ANALYTICS</span>
         </button>
-
-        {/* NASA Live Telemetry Badge */}
-        <div className="hidden lg:flex items-center gap-2 bg-slate-50 border border-slate-200 px-2.5 py-1 rounded text-xs">
-          <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
-            <span className="text-[10px] text-slate-500 uppercase font-semibold">Sensor:</span>
-            <span className="font-bold text-slate-800 text-[11px]">{currentPass ? currentPass.satellite : 'Landsat 9 TIRS-2'}</span>
-          </div>
-          <div className="h-3 w-px bg-slate-200" />
-          <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800">
-            NASA OK
-          </span>
-        </div>
 
         {/* Return to Home Landing Page */}
         <button
           onClick={() => navigate('/')}
-          className="p-1.5 sm:px-2.5 sm:py-1.5 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 rounded text-xs font-sans font-semibold transition-colors flex items-center gap-1 shadow-xs"
+          className="p-1.5 sm:px-2.5 sm:py-1.5 bg-white hover:bg-slate-50 border border-[#EAE6DF] text-slate-700 rounded-lg text-xs font-sans font-semibold transition-colors flex items-center gap-1 shadow-xs"
           title="Return to Landing Overview"
         >
           <span className="material-symbols-outlined text-[16px] text-slate-600">home</span>
           <span className="hidden sm:inline">Home</span>
         </button>
 
-        {/* Chief Planner Profile Badge */}
-        <div className="flex items-center gap-2 pl-1 border-l border-slate-200">
-          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-emerald-700 flex items-center justify-center text-white font-bold text-xs shadow-xs">
-            <span className="material-symbols-outlined text-[18px]">person</span>
+        {/* Interactive Persona / Login Switcher Badge */}
+        <div 
+          onClick={onOpenLoginModal}
+          className="flex items-center gap-2 pl-1.5 sm:pl-2 border-l border-[#EAE6DF] cursor-pointer hover:opacity-90 transition-opacity"
+          title="Click to Switch Institutional Role / Login"
+        >
+          <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-white font-bold text-xs shadow-xs ${
+            currentPersona?.id === 'commissioner' ? 'bg-emerald-800' :
+            currentPersona?.id === 'planner' ? 'bg-sky-800' :
+            currentPersona?.id === 'health' ? 'bg-rose-800' :
+            currentPersona?.id === 'discom' ? 'bg-amber-700' :
+            'bg-teal-800'
+          }`}>
+            <span className="material-symbols-outlined text-[18px]">badge</span>
           </div>
           <div className="hidden xl:flex flex-col text-left">
-            <span className="font-sans font-bold text-[11px] text-slate-800 leading-tight">Dr. V. Rao, IAS</span>
-            <span className="text-[9px] text-slate-500">Taskforce Chief</span>
+            <span className="font-sans font-bold text-[11px] text-slate-900 leading-tight">
+              {currentPersona?.name || 'Dr. V. Rao, IAS'}
+            </span>
+            <span className="text-[9px] text-emerald-800 font-semibold truncate max-w-[120px]">
+              {currentPersona?.role?.split('&')[0]?.trim() || 'Taskforce Chief'}
+            </span>
           </div>
         </div>
       </div>

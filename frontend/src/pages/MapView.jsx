@@ -11,6 +11,8 @@ import { TimelineScrubber } from '../components/TimelineScrubber';
 import { WardDetailModal } from '../components/WardDetailModal';
 import { OptimizingOverlay } from '../components/OptimizingOverlay';
 import { DemoModeBanner } from '../components/DemoModeBanner';
+import { LoginModal, INSTITUTIONAL_PERSONAS } from '../components/LoginModal';
+import { generateCityHAPPDF } from '../utils/pdfReportGenerator';
 import { 
   MOCK_WARDS, 
   MOCK_SATELLITE_PASSES, 
@@ -130,6 +132,10 @@ export function MapView() {
   // HUD spatial search query
   const [spatialQuery, setSpatialQuery] = useState('');
 
+  // Institutional Multi-Role Authentication Persona & Modal
+  const [currentPersona, setCurrentPersona] = useState(INSTITUTIONAL_PERSONAS[0]);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
   // Satellite pass timeline
   const [selectedPassIndex, setSelectedPassIndex] = useState(0);
 
@@ -201,8 +207,8 @@ export function MapView() {
   const [isUsingMockData, setIsUsingMockData] = useState(false);
   const [dataFeedToast, setDataFeedToast] = useState(null);
 
-  const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '');
-  const demoModeEnabled = import.meta.env.VITE_ENABLE_DEMO_MODE === 'true';
+  const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || (typeof window !== 'undefined' && window.location.hostname === '127.0.0.1' ? 'http://127.0.0.1:8000' : 'http://localhost:8000')).replace(/\/$/, '');
+  const demoModeEnabled = import.meta.env.VITE_ENABLE_DEMO_MODE !== 'false';
 
   // Dynamic city wards derived from live GeoJSON features
   const cityWards = useMemo(() => {
@@ -656,7 +662,7 @@ export function MapView() {
 
   const handleOptimizerComplete = () => {
     const selectedIds = Array.from(selectedZones);
-    const result = runScenarioOptimizer(scenarioParams, selectedIds.length > 0 ? selectedIds : null);
+    const result = runScenarioOptimizer(scenarioParams, selectedIds.length > 0 ? selectedIds : null, cityWards);
     setOptimizationResult(result);
     setIsOptimizing(false);
   };
@@ -834,7 +840,7 @@ export function MapView() {
   const cityView = CITY_COORDINATES[currentCity.toLowerCase()] || CITY_COORDINATES['pune'];
 
   return (
-    <div className="min-h-screen bg-surface text-on-surface flex flex-col font-sans overflow-hidden">
+    <div className="h-screen h-[100dvh] max-h-[100dvh] bg-[#FAF9F6] text-slate-800 flex flex-col font-sans overflow-hidden">
       {/* Top Mission Control Header in Light Stitch Theme */}
       <Header
         currentCity={currentCity}
@@ -849,14 +855,18 @@ export function MapView() {
         isRightRailOpen={isRightRailOpen}
         isZenMode={isZenMode}
         onToggleZenMode={handleToggleZenMode}
-        onExportDSS={exportGeoJSON}
+        onExportDSS={() => generateCityHAPPDF(currentCity, cityWards, scenarioParams, liveTelemetry, optimizationResult)}
+        onExportHAP={() => generateCityHAPPDF(currentCity, cityWards, scenarioParams, liveTelemetry, optimizationResult)}
+        onExportGeoJSON={exportGeoJSON}
+        currentPersona={currentPersona}
+        onOpenLoginModal={() => setIsLoginModalOpen(true)}
       />
 
       {/* Demo Mode / Sample Data Banner */}
       <DemoModeBanner isMock={isUsingMockData} city={currentCity} onRetry={fetchData} />
 
       {/* Main Workspace Body */}
-      <div className="flex-1 flex overflow-hidden relative">
+      <div className="flex-1 flex overflow-hidden relative min-h-0 w-full">
         {/* Left Rail Collapsible Panel */}
         <LeftRail
           isOpen={isLeftRailOpen}
@@ -884,13 +894,12 @@ export function MapView() {
             setDrawnPolygons([]);
             setCurrentPolygonPath([]);
           }}
-          onExportGeoJSON={exportGeoJSON}
           hasDrawnElements={drawnTrees.length > 0 || drawnPolygons.length > 0}
           selectedZonesCount={selectedZones.size}
         />
 
         {/* Center Stage: Hero Map + Scrubber */}
-        <main className="flex-1 flex flex-col h-[calc(100vh-4rem)] h-[calc(100dvh-4rem)] relative overflow-hidden bg-ops-grid">
+        <main className="flex-1 h-full min-h-0 flex flex-col relative overflow-hidden bg-ops-grid">
           
           {/* Data Feed Connection State Toast (Solid Opaque Card) */}
           {dataFeedToast && (
@@ -918,20 +927,34 @@ export function MapView() {
 
           {/* Optimization Finished Banner Toast (Solid Opaque Card) */}
           {optimizationResult && !dataFeedToast && (
-            <div className="absolute top-16 left-1/2 -translate-x-1/2 z-30 bg-white border border-emerald-300 text-slate-800 px-4 py-2.5 rounded-lg shadow-2xl flex items-center space-x-3 text-xs font-sans">
-              <span className="material-symbols-outlined text-emerald-600 text-[20px]">auto_awesome</span>
+            <div className="absolute top-16 left-1/2 -translate-x-1/2 z-30 bg-[#FAF9F6] border border-emerald-500 text-slate-800 px-4 py-2.5 rounded-xl shadow-2xl flex items-center space-x-3 text-xs font-sans">
+              <span className="material-symbols-outlined text-emerald-700 text-[22px]">auto_awesome</span>
               <div>
-                <div className="font-semibold text-slate-900 flex items-center space-x-1.5">
-                  <span>Scenario Optimized {selectedZones.size > 0 ? `(${selectedZones.size} Selected Wards)` : '(Metropolitan Grid)'}:</span>
-                  <span className="text-emerald-700 font-bold">-{optimizationResult.projectedTempReductionDegC}°C cooling</span>
+                <div className="font-bold text-slate-900 flex items-center space-x-1.5">
+                  <span>
+                    {optimizationResult.isSingleWard 
+                      ? `Ward Optimized: ${optimizationResult.targetWardName}`
+                      : `${currentCity}: Metropolitan Grid Optimized (${optimizationResult.targetWardCount} Wards)`}:
+                  </span>
+                  <span className="text-emerald-800 font-extrabold text-sm">
+                    -{optimizationResult.projectedTempReductionDegC}°C cooling
+                  </span>
                 </div>
-                <div className="text-[11px] font-mono text-slate-600">
-                  Saved {optimizationResult.gridPowerSavedMw} MW grid draw | Shielded {optimizationResult.vulnerablePopProtected.toLocaleString()} citizens
+                <div className="text-[11px] font-mono text-slate-600 mt-0.5">
+                  {optimizationResult.isSingleWard ? (
+                    <span>
+                      Allocated CapEx: <strong>₹{optimizationResult.allocatedBudgetLakhs}L</strong> | Intervention: <strong>{optimizationResult.recommendedIntervention}</strong>
+                    </span>
+                  ) : (
+                    <span>
+                      Saved {optimizationResult.gridPowerSavedMw} MW grid draw | Shielded {optimizationResult.vulnerablePopProtected?.toLocaleString()} citizens
+                    </span>
+                  )}
                 </div>
               </div>
               <button
                 onClick={() => setOptimizationResult(null)}
-                className="text-slate-400 hover:text-slate-700 ml-2 p-1 rounded hover:bg-slate-100 transition-colors"
+                className="text-slate-400 hover:text-slate-700 ml-2 p-1 rounded hover:bg-slate-200 transition-colors"
                 title="Dismiss"
               >
                 <span className="material-symbols-outlined text-[16px]">close</span>
@@ -1007,18 +1030,17 @@ export function MapView() {
 
           {/* 1. TOP FLOATING HUD BAR (From Stitch Design) */}
           <div className="absolute top-3 left-4 right-4 z-20 flex items-center justify-between pointer-events-none gap-2">
-            {/* Search & Dynamic Coordinates Readout Pill */}
-            <div className="pointer-events-auto flex items-center gap-2 bg-white px-3 py-1.5 rounded shadow-md max-w-sm sm:max-w-md w-full border border-slate-200 text-slate-800">
-              <span className="material-symbols-outlined text-[17px] text-slate-400">travel_explore</span>
-              <input 
-                className="w-full bg-transparent text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none"
-                placeholder="Search cadastral plots, heat anomalies, survey # (Press Enter)..."
-                value={spatialQuery}
-                onChange={(e) => setSpatialQuery(e.target.value)}
-                onKeyDown={handleSearchSubmit}
-              />
-              <span className="font-mono text-[10px] text-slate-600 bg-slate-100 px-2 py-0.5 rounded shrink-0 hidden xs:inline border border-slate-200/50">
+            {/* Dynamic Telemetry & Coordinates Readout Pill (Replaces redundant search) */}
+            <div className="pointer-events-auto flex items-center gap-2.5 bg-white/95 px-3 py-1.5 rounded-lg shadow-md border border-[#EAE6DF] text-xs text-slate-800">
+              <span className="material-symbols-outlined text-[17px] text-emerald-700">satellite_alt</span>
+              <span className="font-sans font-bold text-slate-900">{currentCity} Wards & Zones</span>
+              <span className="text-slate-300">|</span>
+              <span className="font-mono text-[11px] text-slate-600">
                 {mapCenterCoords.lat.toFixed(4)}° N, {mapCenterCoords.lng.toFixed(4)}° E
+              </span>
+              <span className="hidden sm:inline text-slate-300">|</span>
+              <span className="hidden sm:inline font-mono text-[10px] text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+                {cityWards.length} Zones Synced
               </span>
             </div>
 
@@ -1527,31 +1549,58 @@ export function MapView() {
           cityResilienceScore={cityResilienceScore}
           currentCity={currentCity}
           wards={cityWards}
+          selectedWard={selectedZones.size > 0 ? selectedWardInfo : null}
           liveTelemetry={liveTelemetry}
           scenarioParams={scenarioParams}
           isOpen={isRightRailOpen}
           onClose={() => setIsRightRailOpen(false)}
           onRunSimulation={handleRunOptimizer}
-          onExportGeoJSON={exportGeoJSON}
+          optimizationResult={optimizationResult}
           onCommitPlan={() => {
             setDataFeedToast({
               type: 'live',
               title: `${currentCity}: Plan Committed`,
-              message: '2024 Heat Action Plan cooling interventions registered to municipal cadastre.'
+              message: '2026 Cooling Action Plan interventions registered to municipal records.'
             });
             setTimeout(() => setDataFeedToast(null), 4000);
           }}
-          onExportHAP={exportGeoJSON}
+          onExportHAP={() => generateCityHAPPDF(currentCity, cityWards, scenarioParams, liveTelemetry, optimizationResult)}
         />
+
+        {/* Collapsed Analytics Quick-Reopen Floating Handle */}
+        {!isRightRailOpen && (
+          <button
+            onClick={() => setIsRightRailOpen(true)}
+            className="absolute top-1/2 -translate-y-1/2 right-0 z-20 bg-white/95 hover:bg-white text-slate-700 hover:text-emerald-800 pl-2 pr-2.5 py-3 rounded-l-xl shadow-md border-y border-l border-[#EAE6DF] font-sans text-xs font-bold flex flex-col items-center gap-1.5 transition-all"
+            title="Open Analytics & Heat Action Plan Drawer"
+          >
+            <span className="material-symbols-outlined text-[18px] text-emerald-700">analytics</span>
+            <span className="text-[10px] uppercase font-mono tracking-wider rotate-180" style={{ writingMode: 'vertical-rl' }}>
+              ANALYTICS
+            </span>
+          </button>
+        )}
       </div>
 
-      {/* Ward Drill-Down Modal */}
+      {/* Ward Drill-Down Modal with Official Cooling Plan PDF Generator */}
       {selectedWardForModal && (
         <WardDetailModal
           ward={selectedWardForModal}
+          currentCity={currentCity}
+          liveTelemetry={liveTelemetry}
+          scenarioParams={scenarioParams}
+          optimizationResult={optimizationResult}
           onClose={() => setSelectedWardForModal(null)}
         />
       )}
+
+      {/* Institutional Multi-Role Authentication Modal */}
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+        currentPersona={currentPersona}
+        onSelectPersona={setCurrentPersona}
+      />
 
       {/* Scanner Overlay during Optimizer simulation */}
       <OptimizingOverlay

@@ -143,7 +143,7 @@ const LandingPage = () => {
                   <span className="text-[10px] text-slate-500 uppercase">Thermal Sensor Grid</span>
                   <div className="font-bold text-slate-900 text-sm">Landsat-9 TIRS-2 + Sentinel-2 MSI</div>
                 </div>
-                <span className="text-slate-500">0.5m Cadastre</span>
+                <span className="text-slate-500">Ward Satellite Grid</span>
               </div>
             </div>
 
@@ -197,10 +197,10 @@ const LandingPage = () => {
                 <ShieldCheck className="w-5 h-5" />
               </div>
               <h3 className="font-sans font-bold text-lg text-slate-900 mb-2">
-                Heat Action Plan Dossiers
+                Heat Action Plans & PDF Reports
               </h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Generate official NDMA-compliant municipal heat resilience reports, GeoJSON spatial plans, and ROI-ranked intervention schedules.
+                Generate official NDMA-compliant municipal heat resilience reports, actionable cooling guidelines, and ROI-ranked intervention schedules.
               </p>
             </div>
           </div>

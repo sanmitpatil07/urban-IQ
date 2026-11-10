@@ -5,11 +5,20 @@ import {
   Award, 
   Download, 
   CheckCircle2, 
-  Clock
+  Clock,
+  FileText
 } from 'lucide-react';
 import { MOCK_DRIVER_ATTRIBUTIONS, DEFAULT_DRIVER_ATTRIBUTIONS, MOCK_INTERVENTIONS } from '../services/mockApi';
+import { generateWardDossierPDF } from '../utils/pdfReportGenerator';
 
-export const WardDetailModal = ({ ward, onClose }) => {
+export const WardDetailModal = ({ 
+  ward, 
+  onClose,
+  currentCity = 'Pune',
+  liveTelemetry = null,
+  scenarioParams = {},
+  optimizationResult = null
+}) => {
   const [isExporting, setIsExporting] = useState(false);
   const [exportSuccess, setExportSuccess] = useState(false);
 
@@ -28,45 +37,18 @@ export const WardDetailModal = ({ ward, onClose }) => {
   const attributions = MOCK_DRIVER_ATTRIBUTIONS[wardId] || DEFAULT_DRIVER_ATTRIBUTIONS;
   const interventions = MOCK_INTERVENTIONS;
 
-  const handleExportReport = () => {
+  const handleExportReport = async () => {
     setIsExporting(true);
-    const reportContent = [
-      'URBAN-IQ — MUNICIPAL ACTION DOSSIER',
-      `Report ID: URB-DSS-${wardId}-2026`,
-      `Generated: ${new Date().toISOString()}`,
-      '========================================',
-      `ZONE: ${wardName} (${wardId})`,
-      `ZONE TYPE: ${zoneName}`,
-      `RISK SEVERITY: ${String(riskSeverity).toUpperCase()}`,
-      '',
-      'THERMAL TELEMETRY',
-      `  LST Anomaly: +${anomaly}°C above baseline`,
-      `  Surface Temperature: ${surfaceTemp}°C`,
-      `  NDVI Canopy Index: ${ndvi}`,
-      `  Vulnerable Population: ${vulnerablePopPct}% (${population.toLocaleString()} total)`,
-      '',
-      'PHYSICS DRIVER ATTRIBUTION',
-      ...attributions.map(a => `  ${a.driverName}: ${a.contributionPct}% — ${a.description}`),
-      '',
-      'RANKED COOLING INTERVENTIONS',
-      ...interventions.map(i => `  #${i.roiRank} ${i.name}: -${i.estCoolingImpactDegC}°C | INR ${i.costInrLakhs}L | ${i.costPerDegreeAvertedLakhs}L/°C`),
-      '',
-      `Co-benefits: ${interventions.flatMap(i => i.coBenefits).join(', ')}`,
-    ].join('\n');
-    const blob = new Blob([reportContent], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `URB-DSS-${wardId}-2026.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    setTimeout(() => {
-      setIsExporting(false);
+    try {
+      generateWardDossierPDF(ward, currentCity, liveTelemetry, scenarioParams, interventions, optimizationResult);
       setExportSuccess(true);
-      setTimeout(() => setExportSuccess(false), 4000);
-    }, 300);
+      setTimeout(() => setExportSuccess(false), 5000);
+    } catch (err) {
+      console.error('PDF generation error:', err);
+      alert('Unable to generate Ward Cooling Plan PDF. Please try again.');
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   const getSeverityBadgeColor = (sev) => {
@@ -246,12 +228,12 @@ export const WardDetailModal = ({ ward, onClose }) => {
         </div>
 
         {/* Footer Actions */}
-        <div className="p-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
+        <div className="p-4 border-t border-[#EAE6DF] bg-[#FAF9F6] flex items-center justify-between">
           <div className="flex items-center gap-2">
             {exportSuccess && (
-              <span className="flex items-center gap-1 text-xs text-emerald-700 font-mono font-bold animate-in fade-in">
-                <CheckCircle2 className="w-4 h-4" />
-                <span>Dossier Exported!</span>
+              <span className="flex items-center gap-1 text-xs text-emerald-800 font-mono font-bold animate-in fade-in">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <span>Ward Cooling Action Plan Downloaded (PDF)!</span>
               </span>
             )}
           </div>
@@ -259,17 +241,17 @@ export const WardDetailModal = ({ ward, onClose }) => {
           <div className="flex items-center gap-2">
             <button
               onClick={onClose}
-              className="px-3.5 py-1.5 bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 rounded text-xs font-mono font-semibold transition-colors shadow-xs"
+              className="px-3.5 py-1.5 bg-white hover:bg-slate-50 text-slate-700 border border-[#EAE6DF] rounded text-xs font-sans font-semibold transition-colors shadow-xs"
             >
               Close
             </button>
             <button
               onClick={handleExportReport}
               disabled={isExporting}
-              className="px-4 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded text-xs font-mono font-bold shadow-sm flex items-center gap-1.5 transition-all disabled:opacity-60"
+              className="px-4 py-1.5 bg-emerald-800 hover:bg-emerald-900 text-white rounded text-xs font-sans font-bold shadow-xs flex items-center gap-1.5 transition-all disabled:opacity-60"
             >
               <Download className="w-3.5 h-3.5" />
-              <span>{isExporting ? 'Generating Brief...' : 'Export Municipal Dossier'}</span>
+              <span>{isExporting ? 'Generating Action Plan PDF...' : 'Download Ward Cooling Plan (PDF)'}</span>
             </button>
           </div>
         </div>

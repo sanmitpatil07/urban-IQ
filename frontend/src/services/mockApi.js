@@ -2732,58 +2732,144 @@ export const MOCK_ALERTS = [
   }
 ];
 
-// Scenario Optimizer Calculation Engine
-export function runScenarioOptimizer(params, targetWardIds = null, wardsList = null) {
-  const { treeCanopyIncreasePct = 15, coolRoofCoveragePct = 35, reflectivePavementAreaPct = 20, budgetInrLakhs = 250 } = params;
+// Scenario Optimizer Calculation Engine - Supports both Single Ward and Whole City modes
+export function runScenarioOptimizer(params = {}, targetWardIds = null, wardsList = null) {
+  const { 
+    treeCanopyIncreasePct = 15, 
+    coolRoofCoveragePct = 35, 
+    reflectivePavementAreaPct = 20, 
+    budgetInrLakhs = 250 
+  } = params;
 
-  const rawCoolingDegC = 
-    (treeCanopyIncreasePct * 0.06) +
-    (coolRoofCoveragePct * 0.035) +
-    (reflectivePavementAreaPct * 0.025);
+  let allWards = (wardsList && wardsList.length > 0) ? wardsList : MOCK_WARDS;
+  
+  // Check if a specific ward or set of wards is selected
+  let isSingleWard = false;
+  let selectedWards = allWards;
 
-  const budgetFactor = Math.min(1.0, budgetInrLakhs / 300);
-  const projectedTempReductionDegC = Number((rawCoolingDegC * (0.4 + 0.6 * budgetFactor)).toFixed(2));
-  const coolingPerLakh = budgetInrLakhs > 0 ? (projectedTempReductionDegC / (budgetInrLakhs / 10)) : 0;
-
-  const estimatedCo2 = Math.round(projectedTempReductionDegC * 420);
-  const vulnerablePop = Math.round(projectedTempReductionDegC * 18500);
-  const powerSavedMw = Number((projectedTempReductionDegC * 6.4).toFixed(1));
-
-  let targetWards = (wardsList && wardsList.length > 0) ? wardsList : MOCK_WARDS;
   if (targetWardIds && targetWardIds.length > 0) {
     const selectedSet = new Set(targetWardIds);
-    const matched = targetWards.filter(w => selectedSet.has(w.id));
-    if (matched.length > 0) targetWards = matched;
+    const matched = allWards.filter(w => selectedSet.has(w.id) || selectedSet.has(w.zone_id));
+    if (matched.length > 0) {
+      selectedWards = matched;
+      isSingleWard = matched.length === 1;
+    }
   }
 
-  // Sort by highest anomaly to prioritize
-  const candidateWards = [...targetWards].sort((a, b) => (b.lstAnomaly || 0) - (a.lstAnomaly || 0)).slice(0, 5);
-  const count = candidateWards.length;
+  // --- MODE 1: SINGLE SPECIFIC WARD OPTIMIZATION ---
+  if (isSingleWard) {
+    const ward = selectedWards[0];
+    const anom = Number(ward.lstAnomaly ?? (ward.lst ? ward.lst - 33.0 : 3.0));
+    const ndviVal = Number(ward.ndviIndex ?? ward.ndvi ?? 0.20);
+    const ndbiVal = Number(ward.ndbi ?? 0.08);
+    const pop = ward.population || 85000;
+    const vuln = Number(ward.vulnerablePopPct ?? 35);
+
+    // Physics sensitivity factors specific to this ward
+    const ndbiMultiplier = ndbiVal >= 0.18 ? 1.35 : 1.0;
+    const ndviMultiplier = ndviVal <= 0.18 ? 1.40 : 1.0;
+    const anomalySensitivity = 1.0 + Math.max(0, (anom - 2.0) * 0.12);
+
+    const localizedCooling = (
+      (coolRoofCoveragePct * 0.048 * ndbiMultiplier) +
+      (treeCanopyIncreasePct * 0.068 * ndviMultiplier) +
+      (reflectivePavementAreaPct * 0.032)
+    ) * anomalySensitivity * (0.65 + 0.35 * Math.min(1.0, budgetInrLakhs / 150));
+
+    const projectedTempReductionDegC = Number(Math.max(0.4, localizedCooling).toFixed(2));
+    const wardCapEx = Math.min(budgetInrLakhs, Math.round(35 + anom * 8));
+
+    let interventionName = 'High-Albedo Polymer Cool Roof (SRI>104) + Reflective Pavers';
+    if (ndviVal < 0.18) {
+      interventionName = 'Miyawaki Dense Pocket Canopy + Native Shade Trees';
+    } else if (vuln > 40) {
+      interventionName = 'Solar Reflective Shade Pergolas + Micro-Mist Canopies';
+    } else if (ndbiVal >= 0.22) {
+      interventionName = 'Industrial Cool Roof Coating + Permeable Tarmac Retrofit';
+    }
+
+    const powerSavedMw = Number((projectedTempReductionDegC * 3.4).toFixed(1));
+    const vulnerableProtected = Math.round(pop * (vuln / 100));
+
+    return {
+      mode: 'ward',
+      isSingleWard: true,
+      targetWardId: ward.id || ward.zone_id,
+      targetWardName: ward.name || `Ward ${ward.id}`,
+      projectedTempReductionDegC,
+      allocatedBudgetLakhs: wardCapEx,
+      recommendedIntervention: interventionName,
+      vulnerablePopProtected: vulnerableProtected,
+      gridPowerSavedMw: powerSavedMw,
+      estimatedCo2ReductionTons: Math.round(projectedTempReductionDegC * 220),
+      targetWardCount: 1,
+      optimizedWards: [
+        {
+          wardId: ward.id || ward.zone_id,
+          wardName: ward.name || `Ward ${ward.id}`,
+          allocatedBudgetLakhs: wardCapEx,
+          expectedCoolingDegC: projectedTempReductionDegC,
+          recommendedIntervention: interventionName
+        }
+      ]
+    };
+  }
+
+  // --- MODE 2: WHOLE CITY / METROPOLITAN GRID OPTIMIZATION ---
+  const rawCoolingDegC = 
+    (treeCanopyIncreasePct * 0.055) +
+    (coolRoofCoveragePct * 0.038) +
+    (reflectivePavementAreaPct * 0.024);
+
+  const budgetFactor = Math.min(1.0, budgetInrLakhs / 300);
+  const projectedTempReductionDegC = Number((rawCoolingDegC * (0.45 + 0.55 * budgetFactor)).toFixed(2));
+  const coolingPerLakh = budgetInrLakhs > 0 ? (projectedTempReductionDegC / (budgetInrLakhs / 10)) : 0;
+
+  const totalPop = allWards.reduce((acc, w) => acc + (w.population || 90000), 0);
+  const vulnerableTotal = Math.round(allWards.reduce((acc, w) => acc + ((w.population || 90000) * ((w.vulnerablePopPct || 35) / 100)), 0));
+  const estimatedCo2 = Math.round(projectedTempReductionDegC * 420);
+  const vulnerablePop = Math.min(vulnerableTotal, Math.round(projectedTempReductionDegC * 22000));
+  const powerSavedMw = Number((projectedTempReductionDegC * 8.6).toFixed(1));
+
+  // Sort candidate wards by highest anomaly to prioritize city-wide allocation
+  const candidateWards = [...allWards].sort((a, b) => (b.lstAnomaly || 0) - (a.lstAnomaly || 0)).slice(0, 8);
+  const count = candidateWards.length || 1;
   const budgetPerWard = Math.round(budgetInrLakhs / count);
 
   const optimizedWards = candidateWards.map((w, idx) => {
-    const coolingShare = Number((projectedTempReductionDegC * (1 - idx * 0.12)).toFixed(2));
+    const coolingShare = Number((projectedTempReductionDegC * (1.15 - idx * 0.10)).toFixed(2));
     let rec = 'Cool Roof Coating + Miyawaki Canopy';
-    if (w.topDriver && w.topDriver.includes('Vegetation')) rec = 'Urban Forestry & Pocket Parks';
-    else if (w.lstAnomaly > 3.5) rec = 'High-Albedo Cool Roofs & Cool Pavements';
-    else rec = 'Building Envelope Albedo Retrofit & Mist Canopies';
+    const ndbi = w.ndbi || 0.08;
+    const ndvi = w.ndviIndex || w.ndvi || 0.22;
+
+    if (ndbi >= 0.18 || (w.lstAnomaly || 0) > 3.8) {
+      rec = 'High-Albedo Polymer Roof (SRI>104) + Cool Tarmac';
+    } else if (ndvi < 0.20) {
+      rec = 'Miyawaki Dense Pocket Canopy + Urban Forestry';
+    } else if ((w.vulnerablePopPct || 0) > 40) {
+      rec = 'Reflective Shade Pergolas + Micro-Mist Canopies';
+    } else {
+      rec = 'Permeable Pavers & Bioswales Retrofit';
+    }
 
     return {
-      wardId: w.id,
-      wardName: w.name,
+      wardId: w.id || w.zone_id,
+      wardName: w.name || `Ward ${w.id}`,
       allocatedBudgetLakhs: budgetPerWard,
-      expectedCoolingDegC: Math.max(0.2, coolingShare),
+      expectedCoolingDegC: Math.max(0.4, coolingShare),
       recommendedIntervention: rec
     };
   });
 
   return {
-    projectedTempReductionDegC: Math.max(0.1, projectedTempReductionDegC),
+    mode: 'city',
+    isSingleWard: false,
+    projectedTempReductionDegC: Math.max(0.2, projectedTempReductionDegC),
     projectedCoolingPerLakhInr: Number(coolingPerLakh.toFixed(3)),
     estimatedCo2ReductionTons: estimatedCo2,
     vulnerablePopProtected: vulnerablePop,
     gridPowerSavedMw: powerSavedMw,
-    targetWardCount: targetWards.length,
+    targetWardCount: allWards.length,
     optimizedWards
   };
 }

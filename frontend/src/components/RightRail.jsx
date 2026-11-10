@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { ResilienceGauge } from './ResilienceGauge';
+import { generateCityHAPPDF } from '../utils/pdfReportGenerator';
 
 // Regional climate profiles across Indian metros for calibrated thermal trends
 const CITY_MONTHLY_PROFILES = {
@@ -36,7 +37,7 @@ const CITY_MONTHLY_PROFILES = {
   chennai: {
     baseCurve: [30.8, 32.6, 35.4, 38.8, 42.0, 41.4, 37.6, 36.5],
     targetDelta: [2.6, 3.0, 4.0, 5.2, 6.0, 5.6, 4.0, 3.5],
-    regime: 'Coromandel Coastal (Agni Nakshatram)'
+    regime: 'Coromandel Coastal'
   },
   kolkata: {
     baseCurve: [28.0, 31.4, 36.6, 41.0, 41.8, 37.4, 33.8, 33.2],
@@ -68,9 +69,12 @@ export const RightRail = ({
   onRunSimulation,
   onCommitPlan,
   onExportHAP,
-  onExportGeoJSON
+  onExportGeoJSON,
+  optimizationResult = null,
+  selectedWard = null
 }) => {
   const [activeTab, setActiveTab] = useState('overview'); // 'overview', 'permits', 'simulation', 'audit'
+  const [isExportingPDF, setIsExportingPDF] = useState(false);
 
   // Computed aggregated metrics from actual wards in current city
   const meanNdvi = useMemo(() => {
@@ -98,72 +102,58 @@ export const RightRail = ({
       name: w.name || `Zone ${w.id}`,
       title: `${w.name || w.id} Thermal Anomaly`,
       delta: Number(w.lstAnomaly || (w.lst ? (w.lst - 33.0).toFixed(1) : 3.2)).toFixed(1),
-      desc: `High impervious fraction & nocturnal heat retention. Surface peak LST: ${Number(w.currentLst || w.lst || 36.8).toFixed(1)}°C.`
+      desc: `Microclimate hotspot • ${(w.currentLst || w.lst || 38.5).toFixed(1)}°C surface radiometry`,
+      type: (w.lstAnomaly || 3) > 4 ? 'critical' : 'warning'
     }));
   }, [wards, alerts]);
 
-  // Dynamic Land Use & Microclimate Cadastre Breakdown computed from actual wards
+  // Dynamic Land Use classification computed from active city wards
   const landUseData = useMemo(() => {
-    if (!wards || wards.length === 0) {
+    if (wards.length === 0) {
       return {
-        residential: { pct: 52, temp: 38.4, count: 0 },
-        commercial: { pct: 26, temp: 41.2, count: 0 },
-        industrial: { pct: 14, temp: 43.8, count: 0 },
-        canopy: { pct: 8, temp: 31.2, count: 0 },
-        totalWards: 0
+        residential: { pct: 45, temp: 38.6, count: 5 },
+        commercial: { pct: 30, temp: 41.2, count: 3 },
+        industrial: { pct: 15, temp: 43.1, count: 2 },
+        canopy: { pct: 10, temp: 31.8, count: 1 },
+        totalWards: 11
       };
     }
-
-    const lsts = wards.map(w => Number(w.currentLst ?? w.lst ?? 36.0));
-    const ndvis = wards.map(w => Number(w.ndviIndex ?? w.ndvi ?? 0.20));
-
-    const avgLst = lsts.reduce((a, b) => a + b, 0) / (lsts.length || 1);
-    const maxLst = Math.max(...lsts);
-    const avgNdvi = ndvis.reduce((a, b) => a + b, 0) / (ndvis.length || 1);
 
     const resWards = [];
     const comWards = [];
     const indWards = [];
     const grnWards = [];
 
-    wards.forEach(w => {
-      const vNdvi = Number(w.ndviIndex ?? w.ndvi ?? avgNdvi);
-      const vNdbi = Number(w.ndbi ?? 0.2);
-      const vLst = Number(w.currentLst ?? w.lst ?? avgLst);
-      const z = ((w.zone || '') + ' ' + (w.name || '')).toLowerCase();
+    const avgLst = wards.reduce((acc, w) => acc + (w.currentLst || w.lst || 35), 0) / wards.length;
 
-      // Industrial or severe thermal anomaly
-      if (z.includes('industrial') || z.includes('port') || z.includes('flank') || z.includes('metal') || vNdbi >= 0.36 || vLst >= (maxLst - 0.7)) {
+    wards.forEach(w => {
+      const z = (w.zone || w.name || '').toLowerCase();
+      const vNdvi = w.ndviIndex || w.ndvi || 0.22;
+      const vNdbi = w.ndbi || 0.05;
+      const vLst = w.currentLst || w.lst || avgLst;
+
+      if (z.includes('industrial') || z.includes('midc') || z.includes('estate') || z.includes('taloja') || z.includes('peenya') || (vNdbi >= 0.25 && vLst >= (avgLst + 1.2))) {
         indWards.push(w);
-      }
-      // Green Canopy / Parks / Wetlands / Afforestation
-      else if (z.includes('park') || z.includes('green') || z.includes('lake') || z.includes('scrub') || z.includes('forest') || vNdvi >= 0.23 || (vNdvi > 0.18 && vNdbi < 0.15)) {
+      } else if (z.includes('park') || z.includes('green') || z.includes('lake') || z.includes('scrub') || z.includes('forest') || vNdvi >= 0.23 || (vNdvi > 0.18 && vNdbi < 0.15)) {
         grnWards.push(w);
-      }
-      // Commercial / Tarmac / Transit corridors / High NDBI
-      else if (z.includes('commercial') || z.includes('business') || z.includes('concourse') || z.includes('fort') || vNdbi >= 0.20 || vLst >= (avgLst + 0.5)) {
+      } else if (z.includes('commercial') || z.includes('business') || z.includes('concourse') || z.includes('fort') || vNdbi >= 0.20 || vLst >= (avgLst + 0.5)) {
         comWards.push(w);
-      }
-      // Dense Residential urban fabric
-      else {
+      } else {
         resWards.push(w);
       }
     });
 
-    // Calculate percentage shares
     const total = wards.length;
     let rPct = Math.round((resWards.length / total) * 100);
     let cPct = Math.round((comWards.length / total) * 100);
     let iPct = Math.round((indWards.length / total) * 100);
     let gPct = Math.round((grnWards.length / total) * 100);
 
-    // Ensure sensible floor values so every segment remains visible and proportional
     rPct = Math.max(25, rPct);
     cPct = Math.max(15, cPct);
     iPct = Math.max(10, iPct);
     gPct = Math.max(6, gPct);
 
-    // Normalize so sum is strictly 100%
     const rawSum = rPct + cPct + iPct + gPct;
     rPct = Math.round((rPct / rawSum) * 100);
     cPct = Math.round((cPct / rawSum) * 100);
@@ -185,16 +175,17 @@ export const RightRail = ({
     };
   }, [wards]);
 
-  // Donut chart vector arc geometry derived dynamically
+  // Donut chart arc geometry: r=42, circumference=263.89
   const donutArcs = useMemo(() => {
-    const C = 276.46; // Circumference of r=44 circle
+    const C = 263.89; // 2 * Math.PI * 42
     const { residential, commercial, industrial, canopy } = landUseData;
-    const lenRes = (residential.pct / 100) * C;
-    const lenCom = (commercial.pct / 100) * C;
-    const lenInd = (industrial.pct / 100) * C;
-    const lenCan = (canopy.pct / 100) * C;
+    const lenRes = Math.max(2, (residential.pct / 100) * C);
+    const lenCom = Math.max(2, (commercial.pct / 100) * C);
+    const lenInd = Math.max(2, (industrial.pct / 100) * C);
+    const lenCan = Math.max(2, (canopy.pct / 100) * C);
 
     return {
+      C,
       res: { strokeDasharray: `${lenRes.toFixed(2)} ${C}`, strokeDashoffset: 0 },
       com: { strokeDasharray: `${lenCom.toFixed(2)} ${C}`, strokeDashoffset: (-lenRes).toFixed(2) },
       ind: { strokeDasharray: `${lenInd.toFixed(2)} ${C}`, strokeDashoffset: (-(lenRes + lenCom)).toFixed(2) },
@@ -204,18 +195,15 @@ export const RightRail = ({
 
   // Dynamic Monthly Thermal Trends calculated from city profile & live satellite telemetry
   const monthlyTrends = useMemo(() => {
-    const key = currentCity.toLowerCase().replace(' ncr', '').replace(' ', '_');
-    const profile = CITY_MONTHLY_PROFILES[key] || CITY_MONTHLY_PROFILES['pune'];
+    const citySafe = (currentCity || 'pune').toLowerCase().replace(' ncr', '').trim().replace(/\s+/g, '_');
+    const profile = CITY_MONTHLY_PROFILES[citySafe] || CITY_MONTHLY_PROFILES['pune'];
 
-    // Live satellite temperature and anomaly calibration
     const anomaly = Number(
       liveTelemetry?.thermal_anomaly_c ?? 
       (wards.length > 0 ? (wards[0].lstAnomaly || 2.4) : 2.4)
     );
 
-    // Calibration factor: shift the seasonal curve with the actual live anomaly
     const anomalyOffset = anomaly * 0.35;
-
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'];
 
     const items = months.map((m, idx) => {
@@ -223,11 +211,11 @@ export const RightRail = ({
       const peakVal = Math.round(base + anomalyOffset);
       const tgtVal = Math.round(peakVal - profile.targetDelta[idx]);
 
-      const hPeak = Math.max(12, Math.round((peakVal - 24) * 3.45));
-      const yPeak = Math.max(18, 105 - hPeak);
+      const hPeak = Math.max(14, Math.round((peakVal - 22) * 3.2));
+      const yPeak = Math.max(16, 110 - hPeak);
 
-      const hTgt = Math.max(8, Math.round((tgtVal - 24) * 3.45));
-      const yTgt = Math.max(25, 105 - hTgt);
+      const hTgt = Math.max(10, Math.round((tgtVal - 22) * 3.2));
+      const yTgt = Math.max(22, 110 - hTgt);
 
       return {
         month: m,
@@ -237,7 +225,7 @@ export const RightRail = ({
         hPeak,
         yTgt,
         hTgt,
-        x: 16 + idx * 40,
+        x: 16 + idx * 39,
         isPeak: peakVal >= 40,
       };
     });
@@ -253,36 +241,104 @@ export const RightRail = ({
     };
   }, [currentCity, liveTelemetry, wards]);
 
-  // Projected cooling based on scenario params
-  const coolRoofVal = scenarioParams.coolRoofCoveragePct || 35;
-  const forestryVal = scenarioParams.treeCanopyIncreasePct || 15;
-  const permeableVal = scenarioParams.reflectivePavementAreaPct || 20;
+  // Ward-wise tailored cooling interventions for the current city
+  const wardWiseInterventions = useMemo(() => {
+    if (!wards || wards.length === 0) return [];
 
-  const tempReduction = (coolRoofVal * 0.042 + forestryVal * 0.065 + permeableVal * 0.024).toFixed(1);
-  const avoidedHours = Math.round(tempReduction * 54);
+    const coolRoofPct = scenarioParams?.coolRoofCoveragePct ?? 35;
+    const treePct = scenarioParams?.treeCanopyIncreasePct ?? 15;
+    const permeablePct = scenarioParams?.reflectivePavementAreaPct ?? 20;
+    const totalBudget = scenarioParams?.budgetInrLakhs ?? 250;
+
+    const sorted = [...wards].sort((a, b) => {
+      const aAnom = a.lstAnomaly ?? (a.lst ? a.lst - 33.0 : 0);
+      const bAnom = b.lstAnomaly ?? (b.lst ? b.lst - 33.0 : 0);
+      return bAnom - aAnom;
+    });
+
+    const candidateCount = Math.min(sorted.length, 8);
+    const perWardCapEx = Math.round(totalBudget / candidateCount);
+
+    return sorted.slice(0, candidateCount).map((w, idx) => {
+      const anom = Number(w.lstAnomaly ?? (w.lst ? (w.lst - 33.0) : 2.5));
+      const ndviVal = Number(w.ndviIndex ?? w.ndvi ?? 0.22);
+      const ndbiVal = Number(w.ndbi ?? 0.08);
+      const vuln = Number(w.vulnerablePopPct ?? 35);
+
+      let interventionType = '';
+      let coolingDelta = 0;
+
+      if (ndbiVal >= 0.16 || anom >= 3.8) {
+        interventionType = 'High-Albedo Polymer Roof (SRI>104) + Cool Tarmac';
+        coolingDelta = Number((coolRoofPct * 0.045 + 0.8 + (anom * 0.12)).toFixed(1));
+      } else if (ndviVal < 0.20) {
+        interventionType = 'Miyawaki Dense Pocket Canopy + Roadside Trees';
+        coolingDelta = Number((treePct * 0.06 + 0.6 + (anom * 0.1)).toFixed(1));
+      } else if (vuln > 40) {
+        interventionType = 'Reflective Shade Pergolas + Micro-Mist Canopies';
+        coolingDelta = Number((permeablePct * 0.04 + 0.9 + (anom * 0.08)).toFixed(1));
+      } else {
+        interventionType = 'Permeable Pavers & Bioswales Retrofit';
+        coolingDelta = Number(((coolRoofPct + treePct) * 0.03 + 0.7).toFixed(1));
+      }
+
+      return {
+        id: w.id || w.zone_id,
+        name: w.name || `Ward ${w.id}`,
+        lst: Number(w.currentLst ?? w.lst ?? 37.0).toFixed(1),
+        anomaly: anom.toFixed(1),
+        interventionType,
+        coolingDelta,
+        capExLakhs: perWardCapEx,
+        vulnerablePct: vuln,
+        priorityRank: idx + 1
+      };
+    });
+  }, [wards, scenarioParams]);
+
+  // Overall projected simulation reductions
+  const coolRoofVal = scenarioParams?.coolRoofCoveragePct ?? 35;
+  const forestryVal = scenarioParams?.treeCanopyIncreasePct ?? 15;
+  const permeableVal = scenarioParams?.reflectivePavementAreaPct ?? 20;
+
+  const tempReduction = optimizationResult 
+    ? optimizationResult.projectedTempReductionDegC 
+    : (coolRoofVal * 0.042 + forestryVal * 0.065 + permeableVal * 0.024).toFixed(1);
+  const avoidedHours = Math.round(Number(tempReduction) * 54);
   const budgetEstimate = (coolRoofVal * 0.035 + forestryVal * 0.058 + permeableVal * 0.02).toFixed(2);
 
-  // If closed, do not render to allow full map canvas expansion
+  const handleDownloadHAP = () => {
+    setIsExportingPDF(true);
+    try {
+      generateCityHAPPDF(currentCity, wards, scenarioParams, liveTelemetry, optimizationResult);
+    } catch (e) {
+      console.error('HAP PDF Generation error:', e);
+      alert(`Unable to compile ${currentCity} Heat Action Plan PDF. Please try again.`);
+    } finally {
+      setIsExportingPDF(false);
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
     <>
       {/* Mobile Drawer Backdrop when open */}
       <div 
-        className="fixed inset-0 bg-black/30 backdrop-blur-xs z-40 xl:hidden"
+        className="fixed inset-0 bg-black/40 backdrop-blur-xs z-40 xl:hidden"
         onClick={onClose}
         aria-hidden="true"
       />
 
-      <aside className="fixed inset-y-0 right-0 z-50 w-96 lg:w-[410px] max-w-[90vw] xl:relative xl:inset-auto xl:z-20 bg-white border-l border-slate-200 flex flex-col h-[100dvh] xl:h-[calc(100dvh-4rem)] shadow-lg select-none overflow-hidden transition-all duration-200 shrink-0 text-slate-800 font-sans">
+      <aside className="fixed inset-y-0 right-0 z-50 w-[380px] sm:w-[410px] max-w-[92vw] xl:relative xl:inset-auto xl:z-20 bg-[#FAF9F6] border-l border-[#EAE6DF] flex flex-col h-full min-h-0 shadow-xl select-none overflow-hidden transition-all duration-200 shrink-0 text-slate-800 font-sans">
         {/* Top Tab Switchers & Collapse Toggle */}
-        <div className="p-2.5 bg-slate-50 flex items-center justify-between border-b border-slate-200 shrink-0">
-          <div className="flex items-center gap-1 bg-slate-200/70 p-1 rounded">
+        <div className="p-2.5 bg-[#F7F5F0] flex items-center justify-between border-b border-[#EAE6DF] shrink-0">
+          <div className="flex items-center gap-1 bg-white p-1 rounded-lg border border-[#EAE6DF] shadow-xs">
             <button
               onClick={() => setActiveTab('overview')}
               className={`px-2.5 py-1 rounded text-xs font-bold transition-all ${
                 activeTab === 'overview'
-                  ? 'bg-white text-slate-900 shadow-xs'
+                  ? 'bg-emerald-800 text-white shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -292,7 +348,7 @@ export const RightRail = ({
               onClick={() => setActiveTab('permits')}
               className={`px-2.5 py-1 rounded text-xs font-bold transition-all ${
                 activeTab === 'permits'
-                  ? 'bg-white text-slate-900 shadow-xs'
+                  ? 'bg-emerald-800 text-white shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -302,7 +358,7 @@ export const RightRail = ({
               onClick={() => setActiveTab('simulation')}
               className={`px-2.5 py-1 rounded text-xs font-bold transition-all ${
                 activeTab === 'simulation'
-                  ? 'bg-white text-slate-900 shadow-xs'
+                  ? 'bg-emerald-800 text-white shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -312,7 +368,7 @@ export const RightRail = ({
               onClick={() => setActiveTab('audit')}
               className={`px-2.5 py-1 rounded text-xs font-bold transition-all ${
                 activeTab === 'audit'
-                  ? 'bg-white text-slate-900 shadow-xs'
+                  ? 'bg-emerald-800 text-white shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -323,7 +379,7 @@ export const RightRail = ({
           {/* Working Collapse / Hide Button */}
           <button
             onClick={onClose}
-            className="flex items-center gap-1 px-2.5 py-1 rounded text-xs text-slate-600 hover:bg-slate-200 hover:text-slate-900 transition-colors font-semibold border border-slate-200 shadow-2xs"
+            className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs text-slate-700 hover:bg-white hover:text-slate-900 transition-colors font-bold border border-[#EAE6DF] shadow-xs"
             title="Collapse Analytics Panel"
           >
             <span className="material-symbols-outlined text-[17px]">chevron_right</span>
@@ -333,65 +389,65 @@ export const RightRail = ({
 
         {/* TAB CONTENT 1: OVERVIEW */}
         {activeTab === 'overview' && (
-          <div className="flex-1 overflow-y-auto p-3.5 flex flex-col gap-3.5 bg-white">
+          <div className="flex-1 overflow-y-auto overscroll-contain p-3.5 flex flex-col gap-3.5 bg-[#FAF9F6] min-h-0">
             {/* Municipal Resilience Score Gauge in pure light theme */}
-            <div className="p-3 bg-slate-50 rounded border border-slate-200 shadow-xs shrink-0">
+            <div className="p-3 bg-white rounded-xl border border-[#EAE6DF] shadow-xs shrink-0">
               <ResilienceGauge score={cityResilienceScore} city={currentCity} scenarioParams={scenarioParams} />
             </div>
 
             {/* 1. Land Use & Heat Vulnerability Donut & Breakdown Graph (Live Dynamic) */}
-            <div className="bg-white rounded-lg border border-slate-200 shadow-xs shrink-0 min-h-fit">
-              <div className="flex items-center justify-between p-3 bg-slate-50 border-b border-slate-200 rounded-t-lg">
+            <div className="bg-white rounded-xl border border-[#EAE6DF] shadow-xs shrink-0 min-h-fit">
+              <div className="flex items-center justify-between p-3 bg-[#F7F5F0] border-b border-[#EAE6DF] rounded-t-xl">
                 <div className="flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-[18px] text-emerald-700">pie_chart</span>
+                  <span className="material-symbols-outlined text-[18px] text-emerald-800">pie_chart</span>
                   <h3 className="font-sans text-xs font-bold text-slate-900 uppercase tracking-wider">
                     Land Use & Heat Distribution
                   </h3>
                 </div>
-                <span className="text-[10px] text-slate-500 uppercase font-mono font-bold bg-white px-2 py-0.5 rounded border border-slate-200">
-                  {currentCity} Cadastre ({landUseData.totalWards} Zones)
+                <span className="text-[10px] text-slate-600 uppercase font-mono font-bold bg-white px-2 py-0.5 rounded border border-[#EAE6DF]">
+                  {currentCity} ({landUseData.totalWards} Zones)
                 </span>
               </div>
 
               <div className="p-3.5 flex flex-col gap-3">
                 {/* Visual Dynamic SVG Donut Chart + Breakdown Legend */}
                 <div className="flex items-center gap-3">
-                  {/* Bulletproof Inline SVG Donut (Explicit 110x110) */}
+                  {/* Clean SVG Donut with center (55, 55) and radius 42 */}
                   <div className="w-[110px] h-[110px] min-w-[110px] min-h-[110px] shrink-0 flex items-center justify-center relative">
-                    <svg width="110" height="110" viewBox="0 0 120 120" className="overflow-visible">
+                    <svg width="110" height="110" viewBox="0 0 110 110" className="overflow-visible block">
                       {/* Background circle */}
-                      <circle cx="60" cy="60" r="44" fill="none" stroke="#f1f5f9" strokeWidth="14" />
+                      <circle cx="55" cy="55" r="42" fill="none" stroke="#F1EFEA" strokeWidth="13" />
 
-                      {/* Rotated group centered at (60, 60) for dynamic arc calculation */}
-                      <g transform="rotate(-90 60 60)">
+                      {/* Rotated group centered at (55, 55) for dynamic arc calculation */}
+                      <g transform="rotate(-90 55 55)">
                         {/* Dense Residential */}
                         <circle 
-                          cx="60" cy="60" r="44" fill="none" 
-                          stroke="#f43f5e" strokeWidth="14" 
+                          cx="55" cy="55" r="42" fill="none" 
+                          stroke="#f43f5e" strokeWidth="13" 
                           strokeDasharray={donutArcs.res.strokeDasharray} 
                           strokeDashoffset={donutArcs.res.strokeDashoffset}
                           className="transition-all duration-700 ease-out"
                         />
                         {/* Commercial Tarmac */}
                         <circle 
-                          cx="60" cy="60" r="44" fill="none" 
-                          stroke="#0284c7" strokeWidth="14" 
+                          cx="55" cy="55" r="42" fill="none" 
+                          stroke="#0284c7" strokeWidth="13" 
                           strokeDasharray={donutArcs.com.strokeDasharray} 
                           strokeDashoffset={donutArcs.com.strokeDashoffset}
                           className="transition-all duration-700 ease-out"
                         />
                         {/* Industrial Metal */}
                         <circle 
-                          cx="60" cy="60" r="44" fill="none" 
-                          stroke="#f59e0b" strokeWidth="14" 
+                          cx="55" cy="55" r="42" fill="none" 
+                          stroke="#f59e0b" strokeWidth="13" 
                           strokeDasharray={donutArcs.ind.strokeDasharray} 
                           strokeDashoffset={donutArcs.ind.strokeDashoffset}
                           className="transition-all duration-700 ease-out"
                         />
                         {/* Canopy / Parks */}
                         <circle 
-                          cx="60" cy="60" r="44" fill="none" 
-                          stroke="#10b981" strokeWidth="14" 
+                          cx="55" cy="55" r="42" fill="none" 
+                          stroke="#10b981" strokeWidth="13" 
                           strokeDasharray={donutArcs.can.strokeDasharray} 
                           strokeDashoffset={donutArcs.can.strokeDashoffset}
                           className="transition-all duration-700 ease-out"
@@ -399,10 +455,10 @@ export const RightRail = ({
                       </g>
 
                       {/* Dynamic Center Readout Text */}
-                      <text x="60" y="55" textAnchor="middle" fontSize="13" fontWeight="bold" fill="#0f172a">
+                      <text x="55" y="52" textAnchor="middle" fontSize="12" fontWeight="bold" fill="#0f172a">
                         {landUseData.totalWards} ZONES
                       </text>
-                      <text x="60" y="69" textAnchor="middle" fontSize="8" fontWeight="bold" fill="#64748b" letterSpacing="0.5">
+                      <text x="55" y="65" textAnchor="middle" fontSize="8" fontWeight="bold" fill="#64748b" letterSpacing="0.5">
                         {currentCity.toUpperCase()}
                       </text>
                     </svg>
@@ -410,10 +466,10 @@ export const RightRail = ({
 
                   {/* Donut Legend Cards with Live City Breakdown Values */}
                   <div className="flex flex-col gap-1.5 flex-1 text-xs">
-                    <div className="flex items-center justify-between p-1 bg-slate-50 rounded border border-slate-100">
+                    <div className="flex items-center justify-between p-1 bg-[#FAF9F6] rounded border border-[#EAE6DF]">
                       <div className="flex items-center gap-1.5">
                         <span className="w-2.5 h-2.5 rounded-xs bg-rose-500 shrink-0" />
-                        <span className="text-[11px] text-slate-800 font-semibold">Dense Residential</span>
+                        <span className="text-[11px] text-slate-800 font-semibold">Residential</span>
                       </div>
                       <div className="text-right">
                         <span className="font-mono font-bold text-slate-900 text-[11px]">{landUseData.residential.pct}%</span>
@@ -421,10 +477,10 @@ export const RightRail = ({
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between p-1 bg-slate-50 rounded border border-slate-100">
+                    <div className="flex items-center justify-between p-1 bg-[#FAF9F6] rounded border border-[#EAE6DF]">
                       <div className="flex items-center gap-1.5">
                         <span className="w-2.5 h-2.5 rounded-xs bg-sky-600 shrink-0" />
-                        <span className="text-[11px] text-slate-800 font-semibold">Commercial Tarmac</span>
+                        <span className="text-[11px] text-slate-800 font-semibold">Commercial</span>
                       </div>
                       <div className="text-right">
                         <span className="font-mono font-bold text-slate-900 text-[11px]">{landUseData.commercial.pct}%</span>
@@ -432,10 +488,10 @@ export const RightRail = ({
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between p-1 bg-slate-50 rounded border border-slate-100">
+                    <div className="flex items-center justify-between p-1 bg-[#FAF9F6] rounded border border-[#EAE6DF]">
                       <div className="flex items-center gap-1.5">
                         <span className="w-2.5 h-2.5 rounded-xs bg-amber-500 shrink-0" />
-                        <span className="text-[11px] text-slate-800 font-semibold">Industrial Metal</span>
+                        <span className="text-[11px] text-slate-800 font-semibold">Industrial</span>
                       </div>
                       <div className="text-right">
                         <span className="font-mono font-bold text-slate-900 text-[11px]">{landUseData.industrial.pct}%</span>
@@ -443,10 +499,10 @@ export const RightRail = ({
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between p-1 bg-emerald-50/60 rounded border border-emerald-100">
+                    <div className="flex items-center justify-between p-1 bg-emerald-50/70 rounded border border-emerald-100">
                       <div className="flex items-center gap-1.5">
                         <span className="w-2.5 h-2.5 rounded-xs bg-emerald-500 shrink-0" />
-                        <span className="text-[11px] text-emerald-900 font-bold">Canopy & Parks</span>
+                        <span className="text-[11px] text-emerald-900 font-bold">Canopy</span>
                       </div>
                       <div className="text-right">
                         <span className="font-mono font-bold text-emerald-800 text-[11px]">{landUseData.canopy.pct}%</span>
@@ -457,7 +513,7 @@ export const RightRail = ({
                 </div>
 
                 {/* Horizontal Segmented Proportion Bar */}
-                <div className="w-full h-2 rounded overflow-hidden flex border border-slate-200">
+                <div className="w-full h-2 rounded overflow-hidden flex border border-[#EAE6DF]">
                   <div className="h-full bg-rose-500 transition-all duration-500" style={{ width: `${landUseData.residential.pct}%` }} title={`Dense Residential: ${landUseData.residential.pct}%`} />
                   <div className="h-full bg-sky-600 transition-all duration-500" style={{ width: `${landUseData.commercial.pct}%` }} title={`Commercial Tarmac: ${landUseData.commercial.pct}%`} />
                   <div className="h-full bg-amber-500 transition-all duration-500" style={{ width: `${landUseData.industrial.pct}%` }} title={`Industrial Metal: ${landUseData.industrial.pct}%`} />
@@ -467,15 +523,15 @@ export const RightRail = ({
             </div>
 
             {/* 2. Monthly Thermal Trends Dynamic Multi-Bar Chart */}
-            <div className="bg-white rounded-lg border border-slate-200 shadow-xs shrink-0 min-h-fit">
-              <div className="flex items-center justify-between p-3 bg-slate-50 border-b border-slate-200 rounded-t-lg">
+            <div className="bg-white rounded-xl border border-[#EAE6DF] shadow-xs shrink-0 min-h-fit">
+              <div className="flex items-center justify-between p-3 bg-[#F7F5F0] border-b border-[#EAE6DF] rounded-t-xl">
                 <div className="flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-[18px] text-emerald-700">bar_chart</span>
+                  <span className="material-symbols-outlined text-[18px] text-emerald-800">bar_chart</span>
                   <h3 className="font-sans text-xs font-bold text-slate-900 uppercase tracking-wider">
                     Monthly Thermal Trends
                   </h3>
                 </div>
-                <span className="text-[10px] text-slate-500 font-mono font-bold bg-white px-2 py-0.5 rounded border border-slate-200">
+                <span className="text-[10px] text-slate-600 font-mono font-bold bg-white px-2 py-0.5 rounded border border-[#EAE6DF]">
                   LST vs Target (°C)
                 </span>
               </div>
@@ -499,20 +555,19 @@ export const RightRail = ({
                 </div>
 
                 {/* Vector SVG Bar Chart Calibrated to Active City */}
-                <div className="w-full bg-slate-50 rounded-lg p-2 border border-slate-200">
+                <div className="w-full bg-[#FAF9F6] rounded-lg p-2 border border-[#EAE6DF]">
                   <svg 
-                    viewBox="0 0 340 135" 
-                    height="140"
-                    className="w-full h-[140px] overflow-visible select-none block"
+                    viewBox="0 0 340 145" 
+                    className="w-full h-[145px] select-none block overflow-visible"
                   >
                     {/* Background gridlines */}
                     <line x1="10" y1="20" x2="330" y2="20" stroke="#e2e8f0" strokeWidth="0.8" />
-                    <line x1="10" y1="50" x2="330" y2="50" stroke="#fca5a5" strokeWidth="1" strokeDasharray="3 3" />
+                    <line x1="10" y1="52" x2="330" y2="52" stroke="#fca5a5" strokeWidth="1" strokeDasharray="3 3" />
                     <line x1="10" y1="80" x2="330" y2="80" stroke="#e2e8f0" strokeWidth="0.8" />
-                    <line x1="10" y1="105" x2="330" y2="105" stroke="#cbd5e1" strokeWidth="1" />
+                    <line x1="10" y1="110" x2="330" y2="110" stroke="#cbd5e1" strokeWidth="1" />
 
                     {/* Danger Line Text Annotation */}
-                    <text x="328" y="46" textAnchor="end" fontSize="8" fontWeight="bold" fill="#e11d48">
+                    <text x="328" y="48" textAnchor="end" fontSize="8" fontWeight="bold" fill="#e11d48">
                       40°C Danger Line
                     </text>
 
@@ -540,13 +595,13 @@ export const RightRail = ({
                           className="transition-all duration-500 ease-out"
                         />
 
-                        {/* Top Temperature Badge for Heatwave Peaks or Season High */}
+                        {/* Top Temperature Badge for Heatwave Peaks */}
                         {(item.isPeak || item.peak === monthlyTrends.highestVal) && (
                           <text
                             x={item.x + 6}
                             y={item.yPeak - 3}
                             textAnchor="middle"
-                            fontSize="9"
+                            fontSize="8.5"
                             fontWeight="bold"
                             fill={item.isPeak ? '#e11d48' : '#047857'}
                             fontFamily="monospace"
@@ -558,7 +613,7 @@ export const RightRail = ({
                         {/* Month Label */}
                         <text
                           x={item.x + 12}
-                          y="120"
+                          y="126"
                           textAnchor="middle"
                           fontSize="9.5"
                           fontWeight="bold"
@@ -580,28 +635,27 @@ export const RightRail = ({
                   </div>
                   <div className="flex items-center gap-1.5">
                     <span className="w-2.5 h-2.5 rounded-xs bg-emerald-500" />
-                    <span className="font-semibold">Cooling Target</span>
+                    <span className="font-semibold">Mitigation Target</span>
                   </div>
-                  <div className="flex items-center gap-1 font-mono text-[9px] text-rose-600 font-bold">
-                    <span className="w-3 border-b-2 border-dashed border-rose-400" />
-                    <span>&gt;40°C Alert</span>
+                  <div className="flex items-center gap-1.5 text-slate-500 font-mono">
+                    <span>{monthlyTrends.highestVal}°C Peak</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Key Telemetry Quick Bars */}
-            <div className="p-3 bg-slate-50 rounded border border-slate-200 flex flex-col gap-2.5 shadow-xs shrink-0">
-              <span className="text-[10px] text-slate-500 uppercase font-bold">
-                Critical Municipal Indicators
+            {/* City Baseline Indicators & Vulnerability Stats */}
+            <div className="p-3 bg-white rounded-xl border border-[#EAE6DF] shadow-xs flex flex-col gap-2 shrink-0">
+              <span className="text-[10px] font-sans text-slate-500 uppercase tracking-wider font-bold">
+                Metropolitan Baseline Metrics
               </span>
               <div className="flex flex-col gap-1 text-xs">
                 <div className="flex justify-between">
-                  <span className="text-slate-600">City Mean Canopy (NDVI):</span>
-                  <span className="font-mono font-bold text-emerald-700">{meanNdvi}</span>
+                  <span className="text-slate-600">Mean Canopy Cover (NDVI):</span>
+                  <span className="font-mono font-bold text-slate-900">{meanNdvi}</span>
                 </div>
-                <div className="w-full bg-slate-200 h-1.5 rounded overflow-hidden">
-                  <div className="bg-emerald-600 h-full rounded" style={{ width: `${Math.min(100, meanNdvi * 250)}%` }} />
+                <div className="w-full bg-slate-100 h-1.5 rounded overflow-hidden">
+                  <div className="bg-emerald-600 h-full rounded" style={{ width: `${Math.min(100, meanNdvi * 200)}%` }} />
                 </div>
               </div>
 
@@ -610,7 +664,7 @@ export const RightRail = ({
                   <span className="text-slate-600">Grid Peak Load:</span>
                   <span className="font-mono font-bold text-slate-900">{totalGridLoadMw} MW</span>
                 </div>
-                <div className="w-full bg-slate-200 h-1.5 rounded overflow-hidden">
+                <div className="w-full bg-slate-100 h-1.5 rounded overflow-hidden">
                   <div className="bg-amber-600 h-full rounded" style={{ width: `${Math.min(100, (totalGridLoadMw / 3000) * 100)}%` }} />
                 </div>
               </div>
@@ -626,41 +680,33 @@ export const RightRail = ({
             {/* Executive Quick Actions */}
             <div className="flex flex-col gap-2 pt-1 shrink-0 pb-4">
               <button
-                onClick={onCommitPlan || (() => alert(`2024 Heat Action Dossier for ${currentCity} committed to Municipal Registry.`))}
-                className="w-full py-2 bg-emerald-700 text-white text-xs font-bold rounded hover:bg-emerald-800 transition-colors shadow-xs flex items-center justify-center gap-1.5"
+                onClick={onCommitPlan || (() => alert(`2026 Cooling Action Plan for ${currentCity} committed to Municipal Registry.`))}
+                className="w-full py-2 bg-emerald-800 text-white text-xs font-bold rounded-lg hover:bg-emerald-900 transition-colors shadow-xs flex items-center justify-center gap-1.5"
               >
                 <span className="material-symbols-outlined text-[17px]">verified</span>
-                <span>Commit 2024 Cooling Plan</span>
+                <span>Commit Cooling Action Plan</span>
               </button>
-              <div className="flex gap-2">
-                <button
-                  onClick={onExportHAP || (() => alert(`Compiling ${currentCity} Heat Action Plan Dossier (PDF)... Ready.`))}
-                  className="flex-1 py-1.5 bg-white hover:bg-slate-50 text-slate-700 rounded text-xs font-semibold transition-colors flex items-center justify-center gap-1 border border-slate-300 shadow-xs"
-                >
-                  <span className="material-symbols-outlined text-[15px] text-rose-600">picture_as_pdf</span>
-                  <span>HAP PDF</span>
-                </button>
-                <button
-                  onClick={onExportGeoJSON || (() => alert(`Exporting ${currentCity} GIS Spatial Interventions (GeoJSON)... Ready.`))}
-                  className="flex-1 py-1.5 bg-white hover:bg-slate-50 text-slate-700 rounded text-xs font-semibold transition-colors flex items-center justify-center gap-1 border border-slate-300 shadow-xs"
-                >
-                  <span className="material-symbols-outlined text-[15px] text-emerald-700">data_object</span>
-                  <span>GeoJSON</span>
-                </button>
-              </div>
+              <button
+                onClick={handleDownloadHAP}
+                disabled={isExportingPDF}
+                className="w-full py-2 bg-white hover:bg-[#FAF9F6] text-slate-800 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-1.5 border border-[#EAE6DF] shadow-xs disabled:opacity-60"
+              >
+                <span className="material-symbols-outlined text-[16px] text-rose-600">picture_as_pdf</span>
+                <span>{isExportingPDF ? 'Generating Action Plan PDF...' : `Download ${currentCity} Heat Action Plan (PDF)`}</span>
+              </button>
             </div>
           </div>
         )}
 
         {/* TAB CONTENT 2: PERMITS */}
         {activeTab === 'permits' && (
-          <div className="flex-1 overflow-y-auto p-3.5 flex flex-col gap-3 bg-white">
+          <div className="flex-1 overflow-y-auto overscroll-contain p-3.5 flex flex-col gap-3 bg-[#FAF9F6] min-h-0">
             <div className="flex items-center justify-between shrink-0">
               <h3 className="font-sans text-sm font-bold text-slate-900">Cooling Permits & Mandates</h3>
               <span className="text-[10px] font-bold text-slate-500">Total: {dynamicAlerts.length + 3} Files</span>
             </div>
             <div className="flex flex-col gap-2 text-xs shrink-0">
-              <div className="p-3 bg-slate-50 rounded border border-slate-200 flex flex-col gap-1 shrink-0">
+              <div className="p-3 bg-white rounded-lg border border-[#EAE6DF] flex flex-col gap-1 shrink-0">
                 <div className="flex items-center justify-between">
                   <span className="font-mono font-bold text-slate-900">#HAP-2024-089</span>
                   <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-emerald-100 text-emerald-800">APPROVED</span>
@@ -669,7 +715,7 @@ export const RightRail = ({
                 <span className="text-[11px] text-slate-500 font-mono">Target SRI: 104 • Area: 22,400 sq.m • Grant: ₹42L</span>
               </div>
 
-              <div className="p-3 bg-slate-50 rounded border border-slate-200 flex flex-col gap-1 shrink-0">
+              <div className="p-3 bg-white rounded-lg border border-[#EAE6DF] flex flex-col gap-1 shrink-0">
                 <div className="flex items-center justify-between">
                   <span className="font-mono font-bold text-slate-900">#HAP-2024-094</span>
                   <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-amber-100 text-amber-800">CIVIC REVIEW</span>
@@ -678,20 +724,20 @@ export const RightRail = ({
                 <span className="text-[11px] text-slate-500 font-mono">Notice under EPA sec 133 • Uncoated Metal Roofs</span>
               </div>
 
-              <div className="p-3 bg-slate-50 rounded border border-slate-200 flex flex-col gap-1 shrink-0">
+              <div className="p-3 bg-white rounded-lg border border-[#EAE6DF] flex flex-col gap-1 shrink-0">
                 <div className="flex items-center justify-between">
                   <span className="font-mono font-bold text-slate-900">#HAP-2024-102</span>
                   <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-emerald-100 text-emerald-800">COMMISSIONED</span>
                 </div>
                 <span className="font-semibold text-slate-800">Metro Bioswale & Afforestation</span>
-                <span className="text-[11px] text-slate-500 font-mono">MahaMetro Infrastructure Joint cooling initiative</span>
+                <span className="text-[11px] text-slate-500 font-mono">Urban Infrastructure Joint cooling initiative</span>
               </div>
 
               {dynamicAlerts.map((al, idx) => (
                 <div 
                   key={idx}
                   onClick={() => onSelectWard && onSelectWard(al.wardId)}
-                  className="p-3 bg-white rounded border border-slate-200 flex flex-col gap-1 cursor-pointer hover:bg-slate-50 transition-colors shadow-xs shrink-0"
+                  className="p-3 bg-white rounded-lg border border-[#EAE6DF] flex flex-col gap-1 cursor-pointer hover:bg-white/90 transition-colors shadow-xs shrink-0"
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-mono font-bold text-slate-900">{al.wardId}</span>
@@ -707,26 +753,33 @@ export const RightRail = ({
           </div>
         )}
 
-        {/* TAB CONTENT 3: SIMULATION LEVERS */}
+        {/* TAB CONTENT 3: SIMULATION & WARD-WISE COOLING OPTIMIZATION */}
         {activeTab === 'simulation' && (
-          <div className="flex-1 overflow-y-auto p-3.5 flex flex-col gap-3.5 bg-white">
+          <div className="flex-1 overflow-y-auto overscroll-contain p-3.5 flex flex-col gap-3.5 bg-[#FAF9F6] min-h-0">
             <div className="flex flex-col shrink-0">
-              <span className="text-[10px] text-emerald-700 uppercase font-bold">Physics-Informed Neural Network</span>
-              <h3 className="font-sans text-sm font-bold text-slate-900">Thermal Mitigation Impact</h3>
+              <span className="text-[10px] text-emerald-800 uppercase font-bold tracking-wider">
+                Physics-Informed ML Simulation
+              </span>
+              <h3 className="font-sans text-sm font-bold text-slate-900">
+                Metropolitan Cooling & Ward Optimization
+              </h3>
               <p className="text-[11px] text-slate-500 mt-0.5">
-                Simulate microclimate cooling by adjusting municipal intervention percentages.
+                Ward-specific microclimate interventions calibrated by NDBI, NDVI, and surface thermal anomaly.
               </p>
             </div>
 
-            <div className="p-3 bg-emerald-50 rounded border border-emerald-200 flex flex-col gap-2 shrink-0">
+            {/* Aggregated Projected Cooling Box */}
+            <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200 flex flex-col gap-2 shrink-0">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] text-emerald-800 font-bold uppercase tracking-wider">PROJECTED COOLING</span>
+                <span className="text-[10px] text-emerald-800 font-bold uppercase tracking-wider">
+                  PROJECTED METRO COOLING
+                </span>
                 <span className="text-[9px] font-mono bg-white px-1.5 py-0.5 rounded text-emerald-800 font-bold shadow-xs border border-emerald-200">
                   PINN RMSE: ±0.3°C
                 </span>
               </div>
               <div className="flex items-baseline gap-2">
-                <span className="font-sans font-extrabold text-2xl text-emerald-700">-{tempReduction}°C</span>
+                <span className="font-sans font-extrabold text-2xl text-emerald-800">-{tempReduction}°C</span>
                 <span className="text-xs text-slate-600">Peak LST Reduction</span>
               </div>
               <div className="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-emerald-200 text-[11px]">
@@ -741,21 +794,84 @@ export const RightRail = ({
               </div>
             </div>
 
+            {/* WARD-WISE DIFFERENT COOLING OPTIMIZATION BREAKDOWN TABLE */}
+            <div className="bg-white rounded-xl border border-[#EAE6DF] shadow-xs shrink-0 flex flex-col overflow-hidden">
+              <div className="p-3 bg-[#F7F5F0] border-b border-[#EAE6DF] flex items-center justify-between">
+                <div>
+                  <h4 className="font-sans text-xs font-bold text-slate-900 uppercase tracking-wider">
+                    Ward-Wise Tailored Interventions
+                  </h4>
+                  <span className="text-[10px] text-slate-500">
+                    Different physics levers per ward ({wardWiseInterventions.length} Priority Wards)
+                  </span>
+                </div>
+                <span className="text-[9px] font-mono font-bold bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded">
+                  TAILORED
+                </span>
+              </div>
+
+              <div className="divide-y divide-[#EAE6DF] max-h-72 overflow-y-auto">
+                {wardWiseInterventions.map((wi) => (
+                  <div 
+                    key={wi.id}
+                    className="p-2.5 hover:bg-slate-50 transition-colors flex flex-col gap-1 text-xs"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-700 font-mono font-bold text-[10px] flex items-center justify-center border border-slate-200 shrink-0">
+                          #{wi.priorityRank}
+                        </span>
+                        <strong className="text-slate-900 text-[11px] truncate max-w-[130px]">
+                          {wi.name}
+                        </strong>
+                      </div>
+                      <div className="flex items-center gap-1 font-mono">
+                        <span className="text-slate-500 text-[10px]">{wi.lst}°C</span>
+                        <span className="bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.2 rounded text-[10px]">
+                          -{wi.coolingDelta}°C
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="text-[11px] text-emerald-800 font-medium flex items-center gap-1">
+                      <span className="material-symbols-outlined text-[13px] text-emerald-700 shrink-0">nature</span>
+                      <span className="truncate">{wi.interventionType}</span>
+                    </div>
+
+                    <div className="flex items-center justify-between text-[10px] text-slate-500 pt-0.5">
+                      <span>CapEx: <strong>₹{wi.capExLakhs} Lakhs</strong></span>
+                      <button
+                        onClick={() => onSelectWard && onSelectWard(wi.id)}
+                        className="text-emerald-700 hover:text-emerald-900 font-bold flex items-center gap-0.5 hover:underline"
+                      >
+                        <span>Fly to Ward</span>
+                        <span className="material-symbols-outlined text-[12px]">arrow_forward</span>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <button
               onClick={onRunSimulation}
-              className="w-full py-2 bg-emerald-700 text-white text-xs font-bold rounded hover:bg-emerald-800 transition-colors shadow-xs flex items-center justify-center gap-1.5 shrink-0"
+              className="w-full py-2 bg-emerald-800 text-white text-xs font-bold rounded-lg hover:bg-emerald-900 transition-colors shadow-xs flex items-center justify-center gap-1.5 shrink-0"
             >
               <span className="material-symbols-outlined text-[16px]">play_arrow</span>
-              <span>Re-calculate Microclimate Impact</span>
+              <span>
+                {selectedWard 
+                  ? `Run Cooling Optimizer for ${selectedWard.name || selectedWard.id}`
+                  : `Run Cooling Optimizer (Whole ${currentCity})`}
+              </span>
             </button>
           </div>
         )}
 
         {/* TAB CONTENT 4: AUDIT TRAIL */}
         {activeTab === 'audit' && (
-          <div className="flex-1 overflow-y-auto p-3.5 flex flex-col gap-3 text-xs bg-white">
+          <div className="flex-1 overflow-y-auto overscroll-contain p-3.5 flex flex-col gap-3 text-xs bg-[#FAF9F6] min-h-0">
             <h3 className="font-sans text-sm font-bold text-slate-900 shrink-0">Ingestion & Telemetry Log</h3>
-            <div className="p-2.5 bg-slate-50 rounded border border-slate-200 flex flex-col gap-1 shrink-0">
+            <div className="p-2.5 bg-white rounded-lg border border-[#EAE6DF] flex flex-col gap-1 shrink-0">
               <div className="flex justify-between font-bold">
                 <span className="text-slate-900">LANDSAT-9 TIRS-2 SCENE</span>
                 <span className="text-emerald-700 font-bold">OK 200</span>
@@ -764,7 +880,7 @@ export const RightRail = ({
               <span className="text-[9px] font-mono text-slate-500">LIVE SYNC OK</span>
             </div>
 
-            <div className="p-2.5 bg-slate-50 rounded border border-slate-200 flex flex-col gap-1 shrink-0">
+            <div className="p-2.5 bg-white rounded-lg border border-[#EAE6DF] flex flex-col gap-1 shrink-0">
               <div className="flex justify-between font-bold">
                 <span className="text-slate-900">SENTINEL-2 MSI LEVEL-2A</span>
                 <span className="text-emerald-700 font-bold">OK 200</span>
@@ -773,7 +889,7 @@ export const RightRail = ({
               <span className="text-[9px] font-mono text-slate-500">MULTI-SPECTRAL ACTIVE</span>
             </div>
 
-            <div className="p-2.5 bg-slate-50 rounded border border-slate-200 flex flex-col gap-1 shrink-0">
+            <div className="p-2.5 bg-white rounded-lg border border-[#EAE6DF] flex flex-col gap-1 shrink-0">
               <div className="flex justify-between font-bold">
                 <span className="text-slate-900">NASA OPEN API TELEMETRY</span>
                 <span className="text-emerald-700 font-bold">AUTHENTICATED</span>

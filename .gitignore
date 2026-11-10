@@ -4,6 +4,10 @@ data/
 *.tiff
 *.img
 
+# Generated PDF reports (user downloads, not source files)
+frontend/*.pdf
+frontend/**/*.pdf
+
 # Python
 __pycache__/
 *.py[cod]
