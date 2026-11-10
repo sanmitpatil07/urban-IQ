@@ -1,0 +1,589 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.55029411764706,
+              22.950882352941186
+            ],
+            [
+              72.53465317919074,
+              22.937196531791912
+            ],
+            [
+              72.5233908045977,
+              22.94948275862069
+            ],
+            [
+              72.5175,
+              23.002499999999998
+            ],
+            [
+              72.54108695652174,
+              23.073260869565217
+            ],
+            [
+              72.565,
+              23.066428571428574
+            ],
+            [
+              72.565,
+              22.99499999999999
+            ],
+            [
+              72.55029411764706,
+              22.950882352941186
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "AMD-01",
+        "name": "Navrangpura & CG Road",
+        "zone": "Commercial Hub",
+        "lst": 38.6,
+        "ndvi": 0.14,
+        "ndbi": 0.34,
+        "population": 140000,
+        "vulnerable_pop_pct": 28,
+        "anomaly": 5.6,
+        "risk_severity": "critical",
+        "grid_mw": 95
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.565,
+              23.066428571428574
+            ],
+            [
+              72.59833333333333,
+              23.061666666666667
+            ],
+            [
+              72.565,
+              22.99499999999999
+            ],
+            [
+              72.565,
+              23.066428571428574
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "AMD-02",
+        "name": "Ashram Road & Sabarmati",
+        "zone": "Riverfront Promenade",
+        "lst": 36.8,
+        "ndvi": 0.22,
+        "ndbi": 0.3,
+        "population": 110000,
+        "vulnerable_pop_pct": 26,
+        "anomaly": 3.8,
+        "risk_severity": "high",
+        "grid_mw": 80
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.59833333333333,
+              23.061666666666667
+            ],
+            [
+              72.60722222222222,
+              23.06277777777778
+            ],
+            [
+              72.65772727272727,
+              23.012272727272723
+            ],
+            [
+              72.55029411764706,
+              22.950882352941186
+            ],
+            [
+              72.565,
+              22.99499999999999
+            ],
+            [
+              72.59833333333333,
+              23.061666666666667
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "AMD-03",
+        "name": "Khadia & Kalupur Core",
+        "zone": "Historic Walled City",
+        "lst": 40.5,
+        "ndvi": 0.05,
+        "ndbi": 0.39,
+        "population": 240000,
+        "vulnerable_pop_pct": 60,
+        "anomaly": 7.5,
+        "risk_severity": "critical",
+        "grid_mw": 88
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.54108695652174,
+              23.073260869565217
+            ],
+            [
+              72.5175,
+              23.002499999999998
+            ],
+            [
+              72.4,
+              23.11999999999999
+            ],
+            [
+              72.4,
+              23.148437500000053
+            ],
+            [
+              72.41369382022472,
+              23.25
+            ],
+            [
+              72.42332461645746,
+              23.25579149232915
+            ],
+            [
+              72.43090909090908,
+              23.249545454545466
+            ],
+            [
+              72.54108695652174,
+              23.073260869565217
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "AMD-04",
+        "name": "SG Highway (Bodakdev/Thaltej)",
+        "zone": "Prime Commercial Strip",
+        "lst": 37.6,
+        "ndvi": 0.16,
+        "ndbi": 0.33,
+        "population": 210000,
+        "vulnerable_pop_pct": 24,
+        "anomaly": 4.6,
+        "risk_severity": "critical",
+        "grid_mw": 115
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.5175,
+              23.002499999999998
+            ],
+            [
+              72.5233908045977,
+              22.94948275862069
+            ],
+            [
+              72.43576923076922,
+              22.97576923076923
+            ],
+            [
+              72.4,
+              23.056249999999995
+            ],
+            [
+              72.4,
+              23.11999999999999
+            ],
+            [
+              72.5175,
+              23.002499999999998
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "AMD-05",
+        "name": "Bopal & South Bopal",
+        "zone": "High-Density Western Hub",
+        "lst": 37.4,
+        "ndvi": 0.16,
+        "ndbi": 0.33,
+        "population": 190000,
+        "vulnerable_pop_pct": 30,
+        "anomaly": 4.4,
+        "risk_severity": "critical",
+        "grid_mw": 80
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.75,
+              22.998076923076916
+            ],
+            [
+              72.75,
+              22.88
+            ],
+            [
+              72.54368421052631,
+              22.88
+            ],
+            [
+              72.53465317919074,
+              22.937196531791912
+            ],
+            [
+              72.55029411764706,
+              22.950882352941186
+            ],
+            [
+              72.65772727272727,
+              23.012272727272723
+            ],
+            [
+              72.75,
+              22.998076923076916
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "AMD-06",
+        "name": "Vatva GIDC Chemical Industrial",
+        "zone": "Chemical Cluster",
+        "lst": 41.6,
+        "ndvi": 0.04,
+        "ndbi": 0.4,
+        "population": 180000,
+        "vulnerable_pop_pct": 58,
+        "anomaly": 8.6,
+        "risk_severity": "critical",
+        "grid_mw": 165
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.65772727272727,
+              23.012272727272723
+            ],
+            [
+              72.60722222222222,
+              23.06277777777778
+            ],
+            [
+              72.62758064516129,
+              23.13403225806452
+            ],
+            [
+              72.75,
+              23.088125
+            ],
+            [
+              72.75,
+              22.998076923076916
+            ],
+            [
+              72.65772727272727,
+              23.012272727272723
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "AMD-07",
+        "name": "Naroda GIDC Industrial",
+        "zone": "Heavy Manufacturing",
+        "lst": 41.2,
+        "ndvi": 0.05,
+        "ndbi": 0.39,
+        "population": 200000,
+        "vulnerable_pop_pct": 50,
+        "anomaly": 8.2,
+        "risk_severity": "critical",
+        "grid_mw": 150
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.61285714285715,
+              23.158571428571424
+            ],
+            [
+              72.43090909090908,
+              23.249545454545466
+            ],
+            [
+              72.42332461645746,
+              23.25579149232915
+            ],
+            [
+              72.42625000000001,
+              23.261093750000004
+            ],
+            [
+              72.48442307692308,
+              23.28
+            ],
+            [
+              72.75,
+              23.28
+            ],
+            [
+              72.75,
+              23.250000000000007
+            ],
+            [
+              72.61285714285715,
+              23.158571428571424
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "AMD-08",
+        "name": "Gandhinagar Capital (Sect 1-30)",
+        "zone": "State Capital Core",
+        "lst": 35.2,
+        "ndvi": 0.35,
+        "ndbi": 0.23,
+        "population": 170000,
+        "vulnerable_pop_pct": 20,
+        "anomaly": 2.2,
+        "risk_severity": "moderate",
+        "grid_mw": 85
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.62758064516129,
+              23.13403225806452
+            ],
+            [
+              72.61285714285715,
+              23.158571428571424
+            ],
+            [
+              72.75,
+              23.250000000000007
+            ],
+            [
+              72.75,
+              23.088125
+            ],
+            [
+              72.62758064516129,
+              23.13403225806452
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "AMD-09",
+        "name": "GIFT City Financial Hub",
+        "zone": "International Financial SEZ",
+        "lst": 36.5,
+        "ndvi": 0.22,
+        "ndbi": 0.3,
+        "population": 90000,
+        "vulnerable_pop_pct": 18,
+        "anomaly": 3.5,
+        "risk_severity": "high",
+        "grid_mw": 130
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.43576923076922,
+              22.97576923076923
+            ],
+            [
+              72.4,
+              22.94000000000001
+            ],
+            [
+              72.4,
+              23.056249999999995
+            ],
+            [
+              72.43576923076922,
+              22.97576923076923
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "AMD-10",
+        "name": "Sanand Automobile Industrial",
+        "zone": "Automobile Mega Cluster",
+        "lst": 40.5,
+        "ndvi": 0.08,
+        "ndbi": 0.38,
+        "population": 140000,
+        "vulnerable_pop_pct": 52,
+        "anomaly": 7.5,
+        "risk_severity": "critical",
+        "grid_mw": 160
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.53465317919074,
+              22.937196531791912
+            ],
+            [
+              72.54368421052631,
+              22.88
+            ],
+            [
+              72.4,
+              22.88
+            ],
+            [
+              72.4,
+              22.94000000000001
+            ],
+            [
+              72.43576923076922,
+              22.97576923076923
+            ],
+            [
+              72.5233908045977,
+              22.94948275862069
+            ],
+            [
+              72.53465317919074,
+              22.937196531791912
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "AMD-11",
+        "name": "Changodar & Moraiya Industrial",
+        "zone": "Pharma & Logistics",
+        "lst": 39.8,
+        "ndvi": 0.07,
+        "ndbi": 0.38,
+        "population": 130000,
+        "vulnerable_pop_pct": 50,
+        "anomaly": 6.8,
+        "risk_severity": "critical",
+        "grid_mw": 135
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.565,
+              23.066428571428574
+            ],
+            [
+              72.54108695652174,
+              23.073260869565217
+            ],
+            [
+              72.43090909090908,
+              23.249545454545466
+            ],
+            [
+              72.61285714285715,
+              23.158571428571424
+            ],
+            [
+              72.62758064516129,
+              23.13403225806452
+            ],
+            [
+              72.60722222222222,
+              23.06277777777778
+            ],
+            [
+              72.59833333333333,
+              23.061666666666667
+            ],
+            [
+              72.565,
+              23.066428571428574
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "AMD-12",
+        "name": "Motera & Chandkheda",
+        "zone": "Sports & Northern Corridor",
+        "lst": 36.8,
+        "ndvi": 0.2,
+        "ndbi": 0.31,
+        "population": 210000,
+        "vulnerable_pop_pct": 32,
+        "anomaly": 3.8,
+        "risk_severity": "high",
+        "grid_mw": 90
+      }
+    }
+  ]
+}

@@ -1,0 +1,2102 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.84333333333332,
+              18.943333333333335
+            ],
+            [
+              72.95375000000001,
+              18.921249999999986
+            ],
+            [
+              72.97142857142858,
+              18.88
+            ],
+            [
+              72.78000000000003,
+              18.88
+            ],
+            [
+              72.84333333333332,
+              18.943333333333335
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "MUM-01",
+        "name": "Colaba & Fort",
+        "zone": "Heritage Commercial",
+        "lst": 35.8,
+        "ndvi": 0.12,
+        "ndbi": 0.35,
+        "population": 110000,
+        "vulnerable_pop_pct": 28,
+        "anomaly": 2.8,
+        "risk_severity": "high",
+        "grid_mw": 72
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.82333333333334,
+              18.953333333333333
+            ],
+            [
+              72.84333333333332,
+              18.943333333333335
+            ],
+            [
+              72.78000000000003,
+              18.88
+            ],
+            [
+              72.75,
+              18.88
+            ],
+            [
+              72.82333333333334,
+              18.953333333333333
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "MUM-02",
+        "name": "Marine Drive & Nariman Pt",
+        "zone": "Financial CBD",
+        "lst": 34.9,
+        "ndvi": 0.14,
+        "ndbi": 0.34,
+        "population": 85000,
+        "vulnerable_pop_pct": 22,
+        "anomaly": 1.9,
+        "risk_severity": "moderate",
+        "grid_mw": 95
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.813125,
+              18.973749999999995
+            ],
+            [
+              72.82333333333334,
+              18.953333333333333
+            ],
+            [
+              72.75,
+              18.88000000000001
+            ],
+            [
+              72.75,
+              18.99899999999999
+            ],
+            [
+              72.813125,
+              18.973749999999995
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "MUM-03",
+        "name": "Malabar Hill & Walkeshwar",
+        "zone": "Coastal Ridge",
+        "lst": 33.2,
+        "ndvi": 0.32,
+        "ndbi": 0.24,
+        "population": 60000,
+        "vulnerable_pop_pct": 18,
+        "anomaly": 0.2,
+        "risk_severity": "moderate",
+        "grid_mw": 45
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.95375000000001,
+              18.921249999999986
+            ],
+            [
+              72.84333333333332,
+              18.943333333333335
+            ],
+            [
+              72.82333333333334,
+              18.953333333333333
+            ],
+            [
+              72.813125,
+              18.973749999999995
+            ],
+            [
+              72.84499999999998,
+              18.994999999999997
+            ],
+            [
+              72.885,
+              18.994999999999997
+            ],
+            [
+              72.89307692307692,
+              18.99269230769231
+            ],
+            [
+              72.94555555555556,
+              18.953333333333337
+            ],
+            [
+              72.95000000000002,
+              18.93999999999997
+            ],
+            [
+              72.95375000000001,
+              18.921249999999986
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "MUM-04",
+        "name": "Byculla & Mazgaon",
+        "zone": "High-Density Residential",
+        "lst": 36.4,
+        "ndvi": 0.1,
+        "ndbi": 0.36,
+        "population": 160000,
+        "vulnerable_pop_pct": 48,
+        "anomaly": 3.4,
+        "risk_severity": "high",
+        "grid_mw": 68
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.885,
+              18.994999999999997
+            ],
+            [
+              72.84499999999998,
+              18.994999999999997
+            ],
+            [
+              72.81250000000001,
+              19.0275
+            ],
+            [
+              72.8425,
+              19.0375
+            ],
+            [
+              72.885,
+              18.994999999999997
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "MUM-05",
+        "name": "Dadar & Shivaji Park",
+        "zone": "Central Transit Hub",
+        "lst": 35.2,
+        "ndvi": 0.2,
+        "ndbi": 0.31,
+        "population": 140000,
+        "vulnerable_pop_pct": 36,
+        "anomaly": 2.2,
+        "risk_severity": "moderate",
+        "grid_mw": 75
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.81250000000001,
+              19.0275
+            ],
+            [
+              72.84499999999998,
+              18.994999999999997
+            ],
+            [
+              72.813125,
+              18.973749999999995
+            ],
+            [
+              72.75,
+              18.99899999999999
+            ],
+            [
+              72.75,
+              19.040000000000006
+            ],
+            [
+              72.81250000000001,
+              19.0275
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "MUM-06",
+        "name": "Worli & Lower Parel",
+        "zone": "Commercial Redevelopment",
+        "lst": 36.8,
+        "ndvi": 0.11,
+        "ndbi": 0.36,
+        "population": 130000,
+        "vulnerable_pop_pct": 34,
+        "anomaly": 3.8,
+        "risk_severity": "high",
+        "grid_mw": 110
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.83833333333334,
+              19.075
+            ],
+            [
+              72.84666666666666,
+              19.049999999999997
+            ],
+            [
+              72.8425,
+              19.0375
+            ],
+            [
+              72.81250000000001,
+              19.0275
+            ],
+            [
+              72.75,
+              19.040000000000006
+            ],
+            [
+              72.75,
+              19.075000000000003
+            ],
+            [
+              72.83833333333334,
+              19.075
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "MUM-07",
+        "name": "Bandra West & Bandstand",
+        "zone": "Coastal Urban",
+        "lst": 34.5,
+        "ndvi": 0.22,
+        "ndbi": 0.3,
+        "population": 120000,
+        "vulnerable_pop_pct": 24,
+        "anomaly": 1.5,
+        "risk_severity": "moderate",
+        "grid_mw": 70
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.83833333333334,
+              19.075
+            ],
+            [
+              72.85772727272727,
+              19.08954545454545
+            ],
+            [
+              72.8775,
+              19.049999999999997
+            ],
+            [
+              72.84666666666666,
+              19.049999999999997
+            ],
+            [
+              72.83833333333334,
+              19.075
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "MUM-08",
+        "name": "BKC (Bandra-Kurla)",
+        "zone": "Major Financial Center",
+        "lst": 37.6,
+        "ndvi": 0.09,
+        "ndbi": 0.37,
+        "population": 90000,
+        "vulnerable_pop_pct": 30,
+        "anomaly": 4.6,
+        "risk_severity": "critical",
+        "grid_mw": 140
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.84666666666666,
+              19.049999999999997
+            ],
+            [
+              72.8775,
+              19.049999999999997
+            ],
+            [
+              72.879,
+              19.048999999999996
+            ],
+            [
+              72.89307692307692,
+              18.99269230769231
+            ],
+            [
+              72.885,
+              18.994999999999997
+            ],
+            [
+              72.8425,
+              19.0375
+            ],
+            [
+              72.84666666666666,
+              19.049999999999997
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "MUM-09",
+        "name": "Dharavi & Sion",
+        "zone": "High-Density Microclimate",
+        "lst": 38.4,
+        "ndvi": 0.07,
+        "ndbi": 0.38,
+        "population": 280000,
+        "vulnerable_pop_pct": 62,
+        "anomaly": 5.4,
+        "risk_severity": "critical",
+        "grid_mw": 85
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.91499999999999,
+              19.085
+            ],
+            [
+              72.879,
+              19.048999999999996
+            ],
+            [
+              72.8775,
+              19.049999999999997
+            ],
+            [
+              72.85772727272727,
+              19.08954545454545
+            ],
+            [
+              72.85909090909091,
+              19.091818181818184
+            ],
+            [
+              72.885,
+              19.097
+            ],
+            [
+              72.91499999999999,
+              19.085
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "MUM-10",
+        "name": "Kurla & Chunabhatti",
+        "zone": "Transit Nexus",
+        "lst": 37.1,
+        "ndvi": 0.11,
+        "ndbi": 0.36,
+        "population": 210000,
+        "vulnerable_pop_pct": 52,
+        "anomaly": 4.1,
+        "risk_severity": "critical",
+        "grid_mw": 78
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.845,
+              19.12
+            ],
+            [
+              72.85909090909091,
+              19.091818181818184
+            ],
+            [
+              72.85772727272727,
+              19.08954545454545
+            ],
+            [
+              72.83833333333334,
+              19.075
+            ],
+            [
+              72.75,
+              19.075000000000003
+            ],
+            [
+              72.75,
+              19.12
+            ],
+            [
+              72.845,
+              19.12
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "MUM-11",
+        "name": "Juhu & Vile Parle",
+        "zone": "Coastal Residential",
+        "lst": 34.1,
+        "ndvi": 0.24,
+        "ndbi": 0.29,
+        "population": 150000,
+        "vulnerable_pop_pct": 26,
+        "anomaly": 1.1,
+        "risk_severity": "moderate",
+        "grid_mw": 82
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.885,
+              19.097
+            ],
+            [
+              72.85909090909091,
+              19.091818181818184
+            ],
+            [
+              72.845,
+              19.12
+            ],
+            [
+              72.85357142857143,
+              19.137142857142855
+            ],
+            [
+              72.885,
+              19.145000000000003
+            ],
+            [
+              72.885,
+              19.097
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "MUM-12",
+        "name": "Andheri East (MIDC/SEEPZ)",
+        "zone": "Industrial Corridor",
+        "lst": 38.2,
+        "ndvi": 0.08,
+        "ndbi": 0.38,
+        "population": 220000,
+        "vulnerable_pop_pct": 44,
+        "anomaly": 5.2,
+        "risk_severity": "critical",
+        "grid_mw": 135
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.839,
+              19.159
+            ],
+            [
+              72.85357142857143,
+              19.137142857142855
+            ],
+            [
+              72.845,
+              19.12
+            ],
+            [
+              72.75,
+              19.12
+            ],
+            [
+              72.75,
+              19.181250000000013
+            ],
+            [
+              72.839,
+              19.159
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "MUM-13",
+        "name": "Andheri West & Lokhandwala",
+        "zone": "Commercial Residential",
+        "lst": 35.4,
+        "ndvi": 0.16,
+        "ndbi": 0.33,
+        "population": 240000,
+        "vulnerable_pop_pct": 32,
+        "anomaly": 2.4,
+        "risk_severity": "moderate",
+        "grid_mw": 92
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.90409090909091,
+              19.16409090909091
+            ],
+            [
+              72.90833333333335,
+              19.16166666666666
+            ],
+            [
+              72.95,
+              19.12000000000001
+            ],
+            [
+              72.95333333333333,
+              19.11
+            ],
+            [
+              72.93944444444445,
+              19.085
+            ],
+            [
+              72.91499999999999,
+              19.085
+            ],
+            [
+              72.885,
+              19.097
+            ],
+            [
+              72.885,
+              19.145000000000003
+            ],
+            [
+              72.90409090909091,
+              19.16409090909091
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "MUM-14",
+        "name": "Powai & IIT Campus",
+        "zone": "Lakefront Mixed",
+        "lst": 34.0,
+        "ndvi": 0.35,
+        "ndbi": 0.23,
+        "population": 140000,
+        "vulnerable_pop_pct": 25,
+        "anomaly": 1.0,
+        "risk_severity": "moderate",
+        "grid_mw": 78
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.85357142857143,
+              19.137142857142855
+            ],
+            [
+              72.839,
+              19.159
+            ],
+            [
+              72.86166666666668,
+              19.18166666666667
+            ],
+            [
+              72.89442857142856,
+              19.189857142857146
+            ],
+            [
+              72.90409090909091,
+              19.16409090909091
+            ],
+            [
+              72.885,
+              19.145000000000003
+            ],
+            [
+              72.85357142857143,
+              19.137142857142855
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "MUM-15",
+        "name": "Goregaon East & Film City",
+        "zone": "Green Flank",
+        "lst": 34.8,
+        "ndvi": 0.3,
+        "ndbi": 0.26,
+        "population": 180000,
+        "vulnerable_pop_pct": 35,
+        "anomaly": 1.8,
+        "risk_severity": "moderate",
+        "grid_mw": 84
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.86166666666668,
+              19.18166666666667
+            ],
+            [
+              72.839,
+              19.159
+            ],
+            [
+              72.75,
+              19.181250000000013
+            ],
+            [
+              72.75,
+              19.237499999999958
+            ],
+            [
+              72.86166666666668,
+              19.18166666666667
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "MUM-16",
+        "name": "Malad & Mindspace IT",
+        "zone": "Commercial IT Park",
+        "lst": 36.9,
+        "ndvi": 0.12,
+        "ndbi": 0.35,
+        "population": 230000,
+        "vulnerable_pop_pct": 38,
+        "anomaly": 3.9,
+        "risk_severity": "high",
+        "grid_mw": 115
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.75000000000004,
+              19.25
+            ],
+            [
+              72.89571428571428,
+              19.201428571428565
+            ],
+            [
+              72.89442857142856,
+              19.189857142857146
+            ],
+            [
+              72.86166666666668,
+              19.18166666666667
+            ],
+            [
+              72.75,
+              19.237499999999958
+            ],
+            [
+              72.75000000000004,
+              19.25
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "MUM-17",
+        "name": "Kandivali Industrial",
+        "zone": "Industrial Heavy",
+        "lst": 37.4,
+        "ndvi": 0.1,
+        "ndbi": 0.36,
+        "population": 210000,
+        "vulnerable_pop_pct": 42,
+        "anomaly": 4.4,
+        "risk_severity": "critical",
+        "grid_mw": 98
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.78500000000004,
+              19.255000000000003
+            ],
+            [
+              72.90166666666667,
+              19.255000000000003
+            ],
+            [
+              72.91,
+              19.230000000000004
+            ],
+            [
+              72.89571428571428,
+              19.201428571428565
+            ],
+            [
+              72.75000000000004,
+              19.25
+            ],
+            [
+              72.78500000000004,
+              19.255000000000003
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "MUM-18",
+        "name": "Borivali & SGNP Border",
+        "zone": "National Park Buffer",
+        "lst": 33.6,
+        "ndvi": 0.38,
+        "ndbi": 0.21,
+        "population": 190000,
+        "vulnerable_pop_pct": 28,
+        "anomaly": 0.6,
+        "risk_severity": "moderate",
+        "grid_mw": 64
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.89307692307692,
+              18.99269230769231
+            ],
+            [
+              72.879,
+              19.048999999999996
+            ],
+            [
+              72.91499999999999,
+              19.085
+            ],
+            [
+              72.93944444444445,
+              19.085
+            ],
+            [
+              72.95547619047619,
+              19.012857142857147
+            ],
+            [
+              72.94555555555556,
+              18.953333333333337
+            ],
+            [
+              72.89307692307692,
+              18.99269230769231
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "MUM-19",
+        "name": "Chembur & Govandi",
+        "zone": "Industrial Refinery Flank",
+        "lst": 37.9,
+        "ndvi": 0.1,
+        "ndbi": 0.36,
+        "population": 250000,
+        "vulnerable_pop_pct": 56,
+        "anomaly": 4.9,
+        "risk_severity": "critical",
+        "grid_mw": 105
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.97333333333333,
+              19.16666666666667
+            ],
+            [
+              72.95,
+              19.12000000000001
+            ],
+            [
+              72.90833333333335,
+              19.16166666666666
+            ],
+            [
+              72.955,
+              19.185000000000002
+            ],
+            [
+              72.97333333333333,
+              19.16666666666667
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "MUM-20",
+        "name": "Mulund West & Foothills",
+        "zone": "Residential Foothills",
+        "lst": 34.2,
+        "ndvi": 0.28,
+        "ndbi": 0.27,
+        "population": 180000,
+        "vulnerable_pop_pct": 29,
+        "anomaly": 1.2,
+        "risk_severity": "moderate",
+        "grid_mw": 68
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.955,
+              19.210000000000008
+            ],
+            [
+              72.98785714285714,
+              19.193571428571428
+            ],
+            [
+              72.98,
+              19.17
+            ],
+            [
+              72.97333333333333,
+              19.16666666666667
+            ],
+            [
+              72.955,
+              19.185000000000002
+            ],
+            [
+              72.955,
+              19.210000000000008
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "THN-01",
+        "name": "Thane West (Naupada/Station)",
+        "zone": "Historic Transit Core",
+        "lst": 36.5,
+        "ndvi": 0.14,
+        "ndbi": 0.34,
+        "population": 210000,
+        "vulnerable_pop_pct": 36,
+        "anomaly": 3.5,
+        "risk_severity": "high",
+        "grid_mw": 85
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.89571428571428,
+              19.201428571428565
+            ],
+            [
+              72.91,
+              19.230000000000004
+            ],
+            [
+              72.94769230769231,
+              19.224615384615387
+            ],
+            [
+              72.955,
+              19.210000000000008
+            ],
+            [
+              72.955,
+              19.185000000000002
+            ],
+            [
+              72.90833333333335,
+              19.16166666666666
+            ],
+            [
+              72.90409090909091,
+              19.16409090909091
+            ],
+            [
+              72.89442857142856,
+              19.189857142857146
+            ],
+            [
+              72.89571428571428,
+              19.201428571428565
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "THN-02",
+        "name": "Thane Wagle Industrial Estate",
+        "zone": "Heavy Industrial Hub",
+        "lst": 38.6,
+        "ndvi": 0.08,
+        "ndbi": 0.38,
+        "population": 170000,
+        "vulnerable_pop_pct": 48,
+        "anomaly": 5.6,
+        "risk_severity": "critical",
+        "grid_mw": 120
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.955,
+              19.210000000000008
+            ],
+            [
+              72.94769230769231,
+              19.224615384615387
+            ],
+            [
+              73.02443396226415,
+              19.270660377358492
+            ],
+            [
+              73.029375,
+              19.221249999999994
+            ],
+            [
+              72.98785714285714,
+              19.193571428571428
+            ],
+            [
+              72.955,
+              19.210000000000008
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "THN-03",
+        "name": "Thane Majiwada & Viviana",
+        "zone": "High-Rise Commercial",
+        "lst": 36.8,
+        "ndvi": 0.15,
+        "ndbi": 0.34,
+        "population": 190000,
+        "vulnerable_pop_pct": 30,
+        "anomaly": 3.8,
+        "risk_severity": "high",
+        "grid_mw": 95
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.06204011471463,
+              19.44836103243167
+            ],
+            [
+              73.05239130434782,
+              19.36152173913042
+            ],
+            [
+              73.02443396226415,
+              19.270660377358492
+            ],
+            [
+              72.94769230769231,
+              19.224615384615387
+            ],
+            [
+              72.91,
+              19.230000000000004
+            ],
+            [
+              72.90166666666667,
+              19.255000000000003
+            ],
+            [
+              72.91625,
+              19.32062500000002
+            ],
+            [
+              72.95272727272726,
+              19.411818181818155
+            ],
+            [
+              72.96017241379312,
+              19.422241379310353
+            ],
+            [
+              72.99533333333332,
+              19.45
+            ],
+            [
+              73.03650500000005,
+              19.45
+            ],
+            [
+              73.06204011471463,
+              19.44836103243167
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "THN-04",
+        "name": "Thane Ghodbunder Road",
+        "zone": "Growth Mega Corridor",
+        "lst": 36.2,
+        "ndvi": 0.22,
+        "ndbi": 0.3,
+        "population": 230000,
+        "vulnerable_pop_pct": 28,
+        "anomaly": 3.2,
+        "risk_severity": "high",
+        "grid_mw": 90
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.03423076923076,
+              19.151923076923072
+            ],
+            [
+              72.98,
+              19.17
+            ],
+            [
+              72.98785714285714,
+              19.193571428571428
+            ],
+            [
+              73.029375,
+              19.221249999999994
+            ],
+            [
+              73.0603125,
+              19.159374999999997
+            ],
+            [
+              73.03423076923076,
+              19.151923076923072
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "THN-05",
+        "name": "Kalwa & Mumbra Flank",
+        "zone": "Dense Riverine Industrial",
+        "lst": 38.0,
+        "ndvi": 0.09,
+        "ndbi": 0.37,
+        "population": 240000,
+        "vulnerable_pop_pct": 58,
+        "anomaly": 5.0,
+        "risk_severity": "critical",
+        "grid_mw": 88
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.12,
+              19.21999999999999
+            ],
+            [
+              73.10166666666666,
+              19.238333333333333
+            ],
+            [
+              73.05239130434782,
+              19.36152173913042
+            ],
+            [
+              73.06204011471463,
+              19.44836103243167
+            ],
+            [
+              73.06637016129032,
+              19.45
+            ],
+            [
+              73.2,
+              19.45
+            ],
+            [
+              73.2,
+              19.300000000000054
+            ],
+            [
+              73.12,
+              19.21999999999999
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "KDMC-01",
+        "name": "Kalyan West & Khadakpada",
+        "zone": "Major Eastern Urban Hub",
+        "lst": 37.4,
+        "ndvi": 0.15,
+        "ndbi": 0.34,
+        "population": 260000,
+        "vulnerable_pop_pct": 42,
+        "anomaly": 4.4,
+        "risk_severity": "critical",
+        "grid_mw": 92
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.12666666666667,
+              19.206666666666656
+            ],
+            [
+              73.12,
+              19.21999999999999
+            ],
+            [
+              73.2,
+              19.300000000000054
+            ],
+            [
+              73.2,
+              19.28000000000002
+            ],
+            [
+              73.12666666666667,
+              19.206666666666656
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "KDMC-02",
+        "name": "Kalyan East & Station Corridor",
+        "zone": "High-Density Rail Hub",
+        "lst": 38.1,
+        "ndvi": 0.09,
+        "ndbi": 0.37,
+        "population": 270000,
+        "vulnerable_pop_pct": 52,
+        "anomaly": 5.1,
+        "risk_severity": "critical",
+        "grid_mw": 96
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.10166666666666,
+              19.238333333333333
+            ],
+            [
+              73.12,
+              19.21999999999999
+            ],
+            [
+              73.12666666666667,
+              19.206666666666656
+            ],
+            [
+              73.13857142857142,
+              19.147142857142853
+            ],
+            [
+              73.13688811188811,
+              19.13199300699301
+            ],
+            [
+              73.09804347826086,
+              19.129565217391306
+            ],
+            [
+              73.0617857142857,
+              19.158571428571427
+            ],
+            [
+              73.10166666666666,
+              19.238333333333333
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "KDMC-03",
+        "name": "Dombivli East & MIDC Industrial",
+        "zone": "Chemical & Industrial Cluster",
+        "lst": 39.2,
+        "ndvi": 0.06,
+        "ndbi": 0.39,
+        "population": 240000,
+        "vulnerable_pop_pct": 50,
+        "anomaly": 6.2,
+        "risk_severity": "critical",
+        "grid_mw": 130
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.029375,
+              19.221249999999994
+            ],
+            [
+              73.02443396226415,
+              19.270660377358492
+            ],
+            [
+              73.05239130434782,
+              19.36152173913042
+            ],
+            [
+              73.10166666666666,
+              19.238333333333333
+            ],
+            [
+              73.0617857142857,
+              19.158571428571427
+            ],
+            [
+              73.0603125,
+              19.159374999999997
+            ],
+            [
+              73.029375,
+              19.221249999999994
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "KDMC-04",
+        "name": "Dombivli West & Retibunder",
+        "zone": "Riverine Residential",
+        "lst": 36.6,
+        "ndvi": 0.16,
+        "ndbi": 0.33,
+        "population": 210000,
+        "vulnerable_pop_pct": 38,
+        "anomaly": 3.6,
+        "risk_severity": "high",
+        "grid_mw": 78
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.13857142857142,
+              19.147142857142853
+            ],
+            [
+              73.12666666666667,
+              19.206666666666656
+            ],
+            [
+              73.2,
+              19.28000000000002
+            ],
+            [
+              73.2,
+              19.269999999999992
+            ],
+            [
+              73.13857142857142,
+              19.147142857142853
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "KDMC-05",
+        "name": "Ulhasnagar Industrial & Market",
+        "zone": "Dense Commercial Manufacturing",
+        "lst": 38.9,
+        "ndvi": 0.07,
+        "ndbi": 0.38,
+        "population": 250000,
+        "vulnerable_pop_pct": 54,
+        "anomaly": 5.9,
+        "risk_severity": "critical",
+        "grid_mw": 110
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.13688811188811,
+              19.13199300699301
+            ],
+            [
+              73.13857142857142,
+              19.147142857142853
+            ],
+            [
+              73.2,
+              19.269999999999992
+            ],
+            [
+              73.2,
+              19.098333333333333
+            ],
+            [
+              73.13688811188811,
+              19.13199300699301
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "KDMC-06",
+        "name": "Ambernath MIDC Industrial Basin",
+        "zone": "Heavy Chemical Engineering",
+        "lst": 39.8,
+        "ndvi": 0.05,
+        "ndbi": 0.39,
+        "population": 180000,
+        "vulnerable_pop_pct": 55,
+        "anomaly": 6.8,
+        "risk_severity": "critical",
+        "grid_mw": 135
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.93944444444445,
+              19.085
+            ],
+            [
+              72.95333333333333,
+              19.11
+            ],
+            [
+              72.97833333333332,
+              19.11
+            ],
+            [
+              73.03166666666667,
+              19.07
+            ],
+            [
+              72.95547619047619,
+              19.012857142857147
+            ],
+            [
+              72.93944444444445,
+              19.085
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "NMM-01",
+        "name": "Vashi & Palm Beach Road",
+        "zone": "Navi Mumbai Commercial Gate",
+        "lst": 35.8,
+        "ndvi": 0.18,
+        "ndbi": 0.32,
+        "population": 190000,
+        "vulnerable_pop_pct": 24,
+        "anomaly": 2.8,
+        "risk_severity": "high",
+        "grid_mw": 90
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.94555555555556,
+              18.953333333333337
+            ],
+            [
+              72.95547619047619,
+              19.012857142857147
+            ],
+            [
+              73.03166666666667,
+              19.07
+            ],
+            [
+              73.045,
+              19.07
+            ],
+            [
+              73.045,
+              19.035000000000004
+            ],
+            [
+              72.95000000000002,
+              18.93999999999997
+            ],
+            [
+              72.94555555555556,
+              18.953333333333337
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "NMM-02",
+        "name": "Nerul & Seawoods Grand Central",
+        "zone": "Planned Transit Commercial",
+        "lst": 35.2,
+        "ndvi": 0.24,
+        "ndbi": 0.29,
+        "population": 210000,
+        "vulnerable_pop_pct": 26,
+        "anomaly": 2.2,
+        "risk_severity": "moderate",
+        "grid_mw": 85
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.95375000000001,
+              18.921249999999986
+            ],
+            [
+              72.95000000000002,
+              18.93999999999997
+            ],
+            [
+              73.045,
+              19.035000000000004
+            ],
+            [
+              73.07300000000001,
+              18.993000000000006
+            ],
+            [
+              73.04071428571429,
+              18.88
+            ],
+            [
+              72.97142857142858,
+              18.88
+            ],
+            [
+              72.95375000000001,
+              18.921249999999986
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "NMM-03",
+        "name": "Belapur CBD & Government Core",
+        "zone": "Administrative Financial",
+        "lst": 35.0,
+        "ndvi": 0.26,
+        "ndbi": 0.28,
+        "population": 150000,
+        "vulnerable_pop_pct": 22,
+        "anomaly": 2.0,
+        "risk_severity": "moderate",
+        "grid_mw": 80
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.045,
+              19.07
+            ],
+            [
+              73.06785714285714,
+              19.084285714285716
+            ],
+            [
+              73.1,
+              19.02
+            ],
+            [
+              73.07300000000001,
+              18.993000000000006
+            ],
+            [
+              73.045,
+              19.035000000000004
+            ],
+            [
+              73.045,
+              19.07
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "NMM-04",
+        "name": "Kharghar & Central Park Sector",
+        "zone": "Educational Residential",
+        "lst": 34.6,
+        "ndvi": 0.28,
+        "ndbi": 0.27,
+        "population": 220000,
+        "vulnerable_pop_pct": 25,
+        "anomaly": 1.6,
+        "risk_severity": "moderate",
+        "grid_mw": 82
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.07300000000001,
+              18.993000000000006
+            ],
+            [
+              73.1,
+              19.02
+            ],
+            [
+              73.2,
+              19.02
+            ],
+            [
+              73.2,
+              18.88
+            ],
+            [
+              73.04071428571429,
+              18.88
+            ],
+            [
+              73.07300000000001,
+              18.993000000000006
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "NMM-05",
+        "name": "Panvel & Airport Influence Zone",
+        "zone": "Major Logistics Nexus",
+        "lst": 37.2,
+        "ndvi": 0.16,
+        "ndbi": 0.33,
+        "population": 250000,
+        "vulnerable_pop_pct": 40,
+        "anomaly": 4.2,
+        "risk_severity": "critical",
+        "grid_mw": 115
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.98,
+              19.17
+            ],
+            [
+              73.03423076923076,
+              19.151923076923072
+            ],
+            [
+              72.97833333333332,
+              19.11
+            ],
+            [
+              72.95333333333333,
+              19.11
+            ],
+            [
+              72.95,
+              19.12000000000001
+            ],
+            [
+              72.97333333333333,
+              19.16666666666667
+            ],
+            [
+              72.98,
+              19.17
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "NMM-06",
+        "name": "Airoli Mindspace & Knowledge Park",
+        "zone": "IT Corridor North",
+        "lst": 36.8,
+        "ndvi": 0.14,
+        "ndbi": 0.34,
+        "population": 180000,
+        "vulnerable_pop_pct": 28,
+        "anomaly": 3.8,
+        "risk_severity": "high",
+        "grid_mw": 125
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.03166666666667,
+              19.07
+            ],
+            [
+              72.97833333333332,
+              19.11
+            ],
+            [
+              73.03423076923076,
+              19.151923076923072
+            ],
+            [
+              73.0603125,
+              19.159374999999997
+            ],
+            [
+              73.09804347826086,
+              19.129565217391306
+            ],
+            [
+              73.06785714285714,
+              19.084285714285716
+            ],
+            [
+              73.045,
+              19.07
+            ],
+            [
+              73.03166666666667,
+              19.07
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "NMM-07",
+        "name": "Mahape Millennium Business Park",
+        "zone": "Electronic IT MIDC",
+        "lst": 37.8,
+        "ndvi": 0.1,
+        "ndbi": 0.36,
+        "population": 160000,
+        "vulnerable_pop_pct": 32,
+        "anomaly": 4.8,
+        "risk_severity": "critical",
+        "grid_mw": 130
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.09804347826086,
+              19.129565217391306
+            ],
+            [
+              73.13688811188811,
+              19.13199300699301
+            ],
+            [
+              73.2,
+              19.098333333333333
+            ],
+            [
+              73.2,
+              19.02
+            ],
+            [
+              73.1,
+              19.02
+            ],
+            [
+              73.06785714285714,
+              19.084285714285716
+            ],
+            [
+              73.09804347826086,
+              19.129565217391306
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "NMM-08",
+        "name": "Taloja MIDC Industrial Strip",
+        "zone": "Heavy Chemical & Steel Basin",
+        "lst": 40.2,
+        "ndvi": 0.05,
+        "ndbi": 0.39,
+        "population": 140000,
+        "vulnerable_pop_pct": 60,
+        "anomaly": 7.2,
+        "risk_severity": "critical",
+        "grid_mw": 150
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.78500000000004,
+              19.255000000000003
+            ],
+            [
+              72.91625,
+              19.32062500000002
+            ],
+            [
+              72.90166666666667,
+              19.255000000000003
+            ],
+            [
+              72.78500000000004,
+              19.255000000000003
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "MBR-01",
+        "name": "Mira Road (Shanti Nagar/Silver)",
+        "zone": "Dense Northern Suburb",
+        "lst": 36.8,
+        "ndvi": 0.14,
+        "ndbi": 0.34,
+        "population": 280000,
+        "vulnerable_pop_pct": 42,
+        "anomaly": 3.8,
+        "risk_severity": "high",
+        "grid_mw": 85
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.95272727272726,
+              19.411818181818155
+            ],
+            [
+              72.91625,
+              19.32062500000002
+            ],
+            [
+              72.78500000000004,
+              19.255000000000003
+            ],
+            [
+              72.75,
+              19.25
+            ],
+            [
+              72.75,
+              19.276666666666678
+            ],
+            [
+              72.95272727272726,
+              19.411818181818155
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "MBR-02",
+        "name": "Bhayandar Industrial & Coastal",
+        "zone": "Salt Pan & Manufacturing",
+        "lst": 37.5,
+        "ndvi": 0.12,
+        "ndbi": 0.35,
+        "population": 220000,
+        "vulnerable_pop_pct": 46,
+        "anomaly": 4.5,
+        "risk_severity": "critical",
+        "grid_mw": 92
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.96017241379312,
+              19.422241379310353
+            ],
+            [
+              72.95272727272726,
+              19.411818181818155
+            ],
+            [
+              72.75,
+              19.276666666666678
+            ],
+            [
+              72.75,
+              19.398888888888884
+            ],
+            [
+              72.96017241379312,
+              19.422241379310353
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "VVMC-01",
+        "name": "Vasai West & Historical Coast",
+        "zone": "Coastal Agrarian Urban",
+        "lst": 34.2,
+        "ndvi": 0.28,
+        "ndbi": 0.27,
+        "population": 230000,
+        "vulnerable_pop_pct": 34,
+        "anomaly": 1.2,
+        "risk_severity": "moderate",
+        "grid_mw": 75
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.96017241379312,
+              19.422241379310353
+            ],
+            [
+              72.75,
+              19.398888888888884
+            ],
+            [
+              72.75,
+              19.45
+            ],
+            [
+              72.99533333333332,
+              19.45
+            ],
+            [
+              72.96017241379312,
+              19.422241379310353
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "VVMC-02",
+        "name": "Virar East & West (MMR North)",
+        "zone": "Far Northern Commuter Hub",
+        "lst": 35.2,
+        "ndvi": 0.22,
+        "ndbi": 0.3,
+        "population": 270000,
+        "vulnerable_pop_pct": 38,
+        "anomaly": 2.2,
+        "risk_severity": "moderate",
+        "grid_mw": 80
+      }
+    }
+  ]
+}

@@ -1,0 +1,879 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.625,
+              12.9525
+            ],
+            [
+              77.58833333333334,
+              12.943333333333332
+            ],
+            [
+              77.57333333333334,
+              12.950833333333334
+            ],
+            [
+              77.59439393939394,
+              13.003484848484849
+            ],
+            [
+              77.625,
+              13.007857142857144
+            ],
+            [
+              77.625,
+              12.9525
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "BLR-01",
+        "name": "MG Road & Central Core",
+        "zone": "CBD",
+        "lst": 34.2,
+        "ndvi": 0.18,
+        "ndbi": 0.32,
+        "population": 90000,
+        "vulnerable_pop_pct": 22,
+        "anomaly": 1.2,
+        "risk_severity": "moderate",
+        "grid_mw": 85
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.65,
+              12.932499999999992
+            ],
+            [
+              77.60499999999999,
+              12.910000000000007
+            ],
+            [
+              77.58833333333334,
+              12.943333333333332
+            ],
+            [
+              77.625,
+              12.9525
+            ],
+            [
+              77.65,
+              12.940000000000001
+            ],
+            [
+              77.65,
+              12.932499999999992
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "BLR-02",
+        "name": "Koramangala 1-8 Blocks",
+        "zone": "Startup Corridor",
+        "lst": 35.4,
+        "ndvi": 0.2,
+        "ndbi": 0.31,
+        "population": 140000,
+        "vulnerable_pop_pct": 25,
+        "anomaly": 2.4,
+        "risk_severity": "moderate",
+        "grid_mw": 95
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.69416666666666,
+              12.984166666666669
+            ],
+            [
+              77.65,
+              12.940000000000001
+            ],
+            [
+              77.625,
+              12.9525
+            ],
+            [
+              77.625,
+              13.007857142857144
+            ],
+            [
+              77.68870370370371,
+              13.044259259259267
+            ],
+            [
+              77.69416666666666,
+              12.984166666666669
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "BLR-03",
+        "name": "Indiranagar & Domlur",
+        "zone": "Green Commercial",
+        "lst": 33.8,
+        "ndvi": 0.28,
+        "ndbi": 0.27,
+        "population": 120000,
+        "vulnerable_pop_pct": 20,
+        "anomaly": 0.8,
+        "risk_severity": "moderate",
+        "grid_mw": 75
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.69809090909091,
+              13.067727272727272
+            ],
+            [
+              77.85,
+              12.983333333333341
+            ],
+            [
+              77.85,
+              12.848333333333333
+            ],
+            [
+              77.73772727272728,
+              12.92318181818181
+            ],
+            [
+              77.69416666666666,
+              12.984166666666669
+            ],
+            [
+              77.68870370370371,
+              13.044259259259267
+            ],
+            [
+              77.69809090909091,
+              13.067727272727272
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "BLR-04",
+        "name": "Whitefield & ITPL",
+        "zone": "Tech Mega-Corridor",
+        "lst": 36.8,
+        "ndvi": 0.12,
+        "ndbi": 0.35,
+        "population": 220000,
+        "vulnerable_pop_pct": 32,
+        "anomaly": 3.8,
+        "risk_severity": "high",
+        "grid_mw": 140
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.60024390243903,
+              12.84317073170732
+            ],
+            [
+              77.60499999999999,
+              12.84928571428571
+            ],
+            [
+              77.6520588235294,
+              12.876176470588234
+            ],
+            [
+              77.85,
+              12.797000000000017
+            ],
+            [
+              77.85,
+              12.75
+            ],
+            [
+              77.73999999999998,
+              12.75
+            ],
+            [
+              77.60024390243903,
+              12.84317073170732
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "BLR-05",
+        "name": "Electronic City Phase 1 & 2",
+        "zone": "Southern Tech Hub",
+        "lst": 36.5,
+        "ndvi": 0.14,
+        "ndbi": 0.34,
+        "population": 160000,
+        "vulnerable_pop_pct": 30,
+        "anomaly": 3.5,
+        "risk_severity": "high",
+        "grid_mw": 125
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.73772727272728,
+              12.92318181818181
+            ],
+            [
+              77.66136363636363,
+              12.904090909090913
+            ],
+            [
+              77.65,
+              12.932499999999992
+            ],
+            [
+              77.65,
+              12.940000000000001
+            ],
+            [
+              77.69416666666666,
+              12.984166666666669
+            ],
+            [
+              77.73772727272728,
+              12.92318181818181
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "BLR-06",
+        "name": "Bellandur & Outer Ring Road",
+        "zone": "Tech Strip",
+        "lst": 37.2,
+        "ndvi": 0.1,
+        "ndbi": 0.36,
+        "population": 210000,
+        "vulnerable_pop_pct": 34,
+        "anomaly": 4.2,
+        "risk_severity": "critical",
+        "grid_mw": 130
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.65,
+              12.932499999999992
+            ],
+            [
+              77.66136363636363,
+              12.904090909090913
+            ],
+            [
+              77.6520588235294,
+              12.876176470588234
+            ],
+            [
+              77.60499999999999,
+              12.84928571428571
+            ],
+            [
+              77.60499999999999,
+              12.910000000000007
+            ],
+            [
+              77.65,
+              12.932499999999992
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "BLR-07",
+        "name": "HSR Layout & BTM",
+        "zone": "Planned Residential",
+        "lst": 35.5,
+        "ndvi": 0.18,
+        "ndbi": 0.32,
+        "population": 230000,
+        "vulnerable_pop_pct": 34,
+        "anomaly": 2.5,
+        "risk_severity": "high",
+        "grid_mw": 82
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.57333333333334,
+              12.950833333333334
+            ],
+            [
+              77.58833333333334,
+              12.943333333333332
+            ],
+            [
+              77.60499999999999,
+              12.910000000000007
+            ],
+            [
+              77.60499999999999,
+              12.84928571428571
+            ],
+            [
+              77.60024390243903,
+              12.84317073170732
+            ],
+            [
+              77.53,
+              12.81615384615385
+            ],
+            [
+              77.53,
+              12.940000000000003
+            ],
+            [
+              77.57333333333334,
+              12.950833333333334
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "BLR-08",
+        "name": "Jayanagar & JP Nagar",
+        "zone": "Garden Suburb",
+        "lst": 33.6,
+        "ndvi": 0.32,
+        "ndbi": 0.24,
+        "population": 220000,
+        "vulnerable_pop_pct": 26,
+        "anomaly": 0.6,
+        "risk_severity": "moderate",
+        "grid_mw": 70
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.42175675675675,
+              12.996081081081078
+            ],
+            [
+              77.50500000000001,
+              13.115000000000002
+            ],
+            [
+              77.55642857142857,
+              13.063571428571434
+            ],
+            [
+              77.56055555555555,
+              13.030555555555555
+            ],
+            [
+              77.5,
+              12.969999999999999
+            ],
+            [
+              77.42175675675675,
+              12.996081081081078
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "BLR-09",
+        "name": "Peenya Industrial Area",
+        "zone": "Heavy Industrial Basin",
+        "lst": 38.6,
+        "ndvi": 0.06,
+        "ndbi": 0.39,
+        "population": 170000,
+        "vulnerable_pop_pct": 54,
+        "anomaly": 5.6,
+        "risk_severity": "critical",
+        "grid_mw": 160
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.56055555555555,
+              13.030555555555555
+            ],
+            [
+              77.59439393939394,
+              13.003484848484849
+            ],
+            [
+              77.57333333333334,
+              12.950833333333334
+            ],
+            [
+              77.53,
+              12.940000000000003
+            ],
+            [
+              77.5,
+              12.969999999999999
+            ],
+            [
+              77.56055555555555,
+              13.030555555555555
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "BLR-10",
+        "name": "Malleshwaram & Rajajinagar",
+        "zone": "Heritage West",
+        "lst": 34.5,
+        "ndvi": 0.24,
+        "ndbi": 0.29,
+        "population": 170000,
+        "vulnerable_pop_pct": 30,
+        "anomaly": 1.5,
+        "risk_severity": "moderate",
+        "grid_mw": 70
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.625,
+              13.007857142857144
+            ],
+            [
+              77.59439393939394,
+              13.003484848484849
+            ],
+            [
+              77.56055555555555,
+              13.030555555555555
+            ],
+            [
+              77.55642857142857,
+              13.063571428571434
+            ],
+            [
+              77.69524390243902,
+              13.086707317073154
+            ],
+            [
+              77.69809090909091,
+              13.067727272727272
+            ],
+            [
+              77.68870370370371,
+              13.044259259259267
+            ],
+            [
+              77.625,
+              13.007857142857144
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "BLR-11",
+        "name": "Hebbal & Manyata Tech Park",
+        "zone": "North Tech Nexus",
+        "lst": 36.4,
+        "ndvi": 0.16,
+        "ndbi": 0.33,
+        "population": 200000,
+        "vulnerable_pop_pct": 32,
+        "anomaly": 3.4,
+        "risk_severity": "high",
+        "grid_mw": 120
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.69623456790123,
+              13.093641975308644
+            ],
+            [
+              77.69524390243902,
+              13.086707317073154
+            ],
+            [
+              77.55642857142857,
+              13.063571428571434
+            ],
+            [
+              77.50500000000001,
+              13.115000000000002
+            ],
+            [
+              77.505,
+              13.25
+            ],
+            [
+              77.55409090909092,
+              13.25
+            ],
+            [
+              77.69623456790123,
+              13.093641975308644
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "BLR-12",
+        "name": "Yelahanka New Town",
+        "zone": "Northern Suburb",
+        "lst": 34.2,
+        "ndvi": 0.26,
+        "ndbi": 0.28,
+        "population": 180000,
+        "vulnerable_pop_pct": 30,
+        "anomaly": 1.2,
+        "risk_severity": "moderate",
+        "grid_mw": 68
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.55409090909092,
+              13.25
+            ],
+            [
+              77.85,
+              13.25
+            ],
+            [
+              77.85,
+              13.211923076923066
+            ],
+            [
+              77.69623456790123,
+              13.093641975308644
+            ],
+            [
+              77.55409090909092,
+              13.25
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "BLR-13",
+        "name": "Devanahalli Airport City (BIAL)",
+        "zone": "Aviation & Aerotropolis",
+        "lst": 36.0,
+        "ndvi": 0.22,
+        "ndbi": 0.3,
+        "population": 140000,
+        "vulnerable_pop_pct": 28,
+        "anomaly": 3.0,
+        "risk_severity": "high",
+        "grid_mw": 110
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.73772727272728,
+              12.92318181818181
+            ],
+            [
+              77.85,
+              12.848333333333333
+            ],
+            [
+              77.85,
+              12.797000000000017
+            ],
+            [
+              77.6520588235294,
+              12.876176470588234
+            ],
+            [
+              77.66136363636363,
+              12.904090909090913
+            ],
+            [
+              77.73772727272728,
+              12.92318181818181
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "BLR-14",
+        "name": "Sarjapur Road Corridor",
+        "zone": "Emerging Tech Basin",
+        "lst": 35.8,
+        "ndvi": 0.2,
+        "ndbi": 0.31,
+        "population": 170000,
+        "vulnerable_pop_pct": 28,
+        "anomaly": 2.8,
+        "risk_severity": "high",
+        "grid_mw": 85
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.42175675675675,
+              12.996081081081078
+            ],
+            [
+              77.5,
+              12.969999999999999
+            ],
+            [
+              77.53,
+              12.940000000000003
+            ],
+            [
+              77.53,
+              12.81615384615385
+            ],
+            [
+              77.47266666666667,
+              12.75
+            ],
+            [
+              77.4,
+              12.75
+            ],
+            [
+              77.4,
+              12.989210526315789
+            ],
+            [
+              77.42175675675675,
+              12.996081081081078
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "BLR-15",
+        "name": "Kengeri & Mysore Road Hub",
+        "zone": "Southwest Industrial",
+        "lst": 35.6,
+        "ndvi": 0.22,
+        "ndbi": 0.3,
+        "population": 160000,
+        "vulnerable_pop_pct": 44,
+        "anomaly": 2.6,
+        "risk_severity": "high",
+        "grid_mw": 74
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.53,
+              12.81615384615385
+            ],
+            [
+              77.60024390243903,
+              12.84317073170732
+            ],
+            [
+              77.73999999999998,
+              12.75
+            ],
+            [
+              77.47266666666667,
+              12.75
+            ],
+            [
+              77.53,
+              12.81615384615385
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "BLR-16",
+        "name": "Jigani & Anekal Industrial",
+        "zone": "Southern Industrial Belt",
+        "lst": 38.2,
+        "ndvi": 0.1,
+        "ndbi": 0.36,
+        "population": 150000,
+        "vulnerable_pop_pct": 50,
+        "anomaly": 5.2,
+        "risk_severity": "critical",
+        "grid_mw": 120
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.69623456790123,
+              13.093641975308644
+            ],
+            [
+              77.85,
+              13.211923076923066
+            ],
+            [
+              77.85,
+              12.983333333333341
+            ],
+            [
+              77.69809090909091,
+              13.067727272727272
+            ],
+            [
+              77.69524390243902,
+              13.086707317073154
+            ],
+            [
+              77.69623456790123,
+              13.093641975308644
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "BLR-17",
+        "name": "Hoskote Industrial Corridor",
+        "zone": "Automotive East Cluster",
+        "lst": 37.8,
+        "ndvi": 0.14,
+        "ndbi": 0.34,
+        "population": 130000,
+        "vulnerable_pop_pct": 46,
+        "anomaly": 4.8,
+        "risk_severity": "critical",
+        "grid_mw": 105
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.50500000000001,
+              13.115000000000002
+            ],
+            [
+              77.42175675675675,
+              12.996081081081078
+            ],
+            [
+              77.4,
+              12.989210526315789
+            ],
+            [
+              77.4,
+              13.25
+            ],
+            [
+              77.505,
+              13.25
+            ],
+            [
+              77.50500000000001,
+              13.115000000000002
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "BLR-18",
+        "name": "Nelamangala Highway Nexus",
+        "zone": "Northwest Logistics",
+        "lst": 36.6,
+        "ndvi": 0.18,
+        "ndbi": 0.32,
+        "population": 150000,
+        "vulnerable_pop_pct": 42,
+        "anomaly": 3.6,
+        "risk_severity": "high",
+        "grid_mw": 85
+      }
+    }
+  ]
+}

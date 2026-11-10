@@ -1,0 +1,22 @@
+{
+  "model_type": "Physics-Informed Monotonic Gradient Boosting",
+  "feature_mode": "relative_spatial",
+  "feature_names": [
+    "ndvi",
+    "ndbi",
+    "dist_center_km"
+  ],
+  "rmse": 0.49378857873975807,
+  "r2": -14.674603174603726,
+  "physics_loss_term": 0.0,
+  "physics_consistency_score_pct": 100.0,
+  "ndvi_monotonicity_violation_pct": 0.0,
+  "ndbi_monotonicity_violation_pct": 0.0,
+  "train_samples": 9,
+  "test_samples": 3,
+  "feature_importances": {
+    "ndvi": 0.0,
+    "ndbi": 0.0,
+    "dist_center_km": 0.0
+  }
+}

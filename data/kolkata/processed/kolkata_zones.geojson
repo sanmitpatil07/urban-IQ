@@ -1,0 +1,483 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              88.38666666666667,
+              22.58333333333334
+            ],
+            [
+              88.35428571428571,
+              22.518571428571427
+            ],
+            [
+              88.31304347826087,
+              22.508260869565213
+            ],
+            [
+              88.3,
+              22.530000000000005
+            ],
+            [
+              88.37772727272727,
+              22.60772727272727
+            ],
+            [
+              88.38064102564103,
+              22.607435897435895
+            ],
+            [
+              88.38666666666667,
+              22.58333333333334
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "KOL-01",
+        "name": "BBD Bagh & Park Street",
+        "zone": "Central CBD",
+        "lst": 37.5,
+        "ndvi": 0.14,
+        "ndbi": 0.34,
+        "population": 160000,
+        "vulnerable_pop_pct": 28,
+        "anomaly": 4.5,
+        "risk_severity": "critical",
+        "grid_mw": 90
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              88.50394736842108,
+              22.467631578947355
+            ],
+            [
+              88.49999999999997,
+              22.470000000000017
+            ],
+            [
+              88.38666666666667,
+              22.58333333333334
+            ],
+            [
+              88.38064102564103,
+              22.607435897435895
+            ],
+            [
+              88.43055555555556,
+              22.65111111111111
+            ],
+            [
+              88.50394736842108,
+              22.467631578947355
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "KOL-02",
+        "name": "Salt Lake Sector 5 & Town",
+        "zone": "IT Electronics Hub",
+        "lst": 38.5,
+        "ndvi": 0.12,
+        "ndbi": 0.35,
+        "population": 170000,
+        "vulnerable_pop_pct": 25,
+        "anomaly": 5.5,
+        "risk_severity": "critical",
+        "grid_mw": 130
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              88.57270781527531,
+              22.40460116933097
+            ],
+            [
+              88.50394736842108,
+              22.467631578947355
+            ],
+            [
+              88.43055555555556,
+              22.65111111111111
+            ],
+            [
+              88.435,
+              22.66
+            ],
+            [
+              88.58,
+              22.66
+            ],
+            [
+              88.58,
+              22.40932083333333
+            ],
+            [
+              88.57270781527531,
+              22.40460116933097
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "KOL-03",
+        "name": "New Town Action Area 1-3",
+        "zone": "Modern Satellite City",
+        "lst": 36.2,
+        "ndvi": 0.22,
+        "ndbi": 0.3,
+        "population": 210000,
+        "vulnerable_pop_pct": 26,
+        "anomaly": 3.2,
+        "risk_severity": "high",
+        "grid_mw": 95
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              88.3,
+              22.530000000000005
+            ],
+            [
+              88.2,
+              22.62999999999999
+            ],
+            [
+              88.2,
+              22.674374999999998
+            ],
+            [
+              88.37772727272727,
+              22.60772727272727
+            ],
+            [
+              88.3,
+              22.530000000000005
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "KOL-04",
+        "name": "Howrah Station & Shibpur",
+        "zone": "Historic River Transit Core",
+        "lst": 39.1,
+        "ndvi": 0.05,
+        "ndbi": 0.39,
+        "population": 270000,
+        "vulnerable_pop_pct": 62,
+        "anomaly": 6.1,
+        "risk_severity": "critical",
+        "grid_mw": 88
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              88.38064102564103,
+              22.607435897435895
+            ],
+            [
+              88.37772727272727,
+              22.60772727272727
+            ],
+            [
+              88.2,
+              22.674374999999998
+            ],
+            [
+              88.2,
+              22.72650000000001
+            ],
+            [
+              88.41236842105263,
+              22.705263157894734
+            ],
+            [
+              88.435,
+              22.66
+            ],
+            [
+              88.43055555555556,
+              22.65111111111111
+            ],
+            [
+              88.38064102564103,
+              22.607435897435895
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "KOL-05",
+        "name": "Bally & Kamarhati Industrial",
+        "zone": "North Riverine Factory Belt",
+        "lst": 39.4,
+        "ndvi": 0.06,
+        "ndbi": 0.39,
+        "population": 240000,
+        "vulnerable_pop_pct": 58,
+        "anomaly": 6.4,
+        "risk_severity": "critical",
+        "grid_mw": 95
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              88.41236842105263,
+              22.705263157894734
+            ],
+            [
+              88.2,
+              22.72650000000001
+            ],
+            [
+              88.2,
+              22.78
+            ],
+            [
+              88.43954545454547,
+              22.78
+            ],
+            [
+              88.41236842105263,
+              22.705263157894734
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "KOL-06",
+        "name": "Barrackpore & Titagarh",
+        "zone": "Far North Industrial Fringe",
+        "lst": 37.6,
+        "ndvi": 0.18,
+        "ndbi": 0.32,
+        "population": 220000,
+        "vulnerable_pop_pct": 52,
+        "anomaly": 4.6,
+        "risk_severity": "critical",
+        "grid_mw": 80
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              88.49999999999997,
+              22.470000000000017
+            ],
+            [
+              88.35428571428571,
+              22.518571428571427
+            ],
+            [
+              88.38666666666667,
+              22.58333333333334
+            ],
+            [
+              88.49999999999997,
+              22.470000000000017
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "KOL-07",
+        "name": "Topsia & Tangra Tannery",
+        "zone": "Leather Industrial Basin",
+        "lst": 39.8,
+        "ndvi": 0.06,
+        "ndbi": 0.39,
+        "population": 210000,
+        "vulnerable_pop_pct": 58,
+        "anomaly": 6.8,
+        "risk_severity": "critical",
+        "grid_mw": 105
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              88.57270781527531,
+              22.40460116933097
+            ],
+            [
+              88.5554941690962,
+              22.38
+            ],
+            [
+              88.29166666666667,
+              22.38
+            ],
+            [
+              88.31304347826087,
+              22.508260869565213
+            ],
+            [
+              88.35428571428571,
+              22.518571428571427
+            ],
+            [
+              88.49999999999997,
+              22.470000000000017
+            ],
+            [
+              88.50394736842108,
+              22.467631578947355
+            ],
+            [
+              88.57270781527531,
+              22.40460116933097
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "KOL-08",
+        "name": "Garia, Jadavpur & EM Bypass",
+        "zone": "Southern Gateway",
+        "lst": 35.8,
+        "ndvi": 0.22,
+        "ndbi": 0.3,
+        "population": 230000,
+        "vulnerable_pop_pct": 34,
+        "anomaly": 2.8,
+        "risk_severity": "high",
+        "grid_mw": 75
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              88.3,
+              22.530000000000005
+            ],
+            [
+              88.31304347826087,
+              22.508260869565213
+            ],
+            [
+              88.29166666666667,
+              22.38
+            ],
+            [
+              88.2,
+              22.38
+            ],
+            [
+              88.2,
+              22.62999999999999
+            ],
+            [
+              88.3,
+              22.530000000000005
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "KOL-09",
+        "name": "Maheshtala & Taratala MIDC",
+        "zone": "Southwest Industrial Strip",
+        "lst": 38.6,
+        "ndvi": 0.12,
+        "ndbi": 0.35,
+        "population": 250000,
+        "vulnerable_pop_pct": 52,
+        "anomaly": 5.6,
+        "risk_severity": "critical",
+        "grid_mw": 96
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              88.435,
+              22.66
+            ],
+            [
+              88.41236842105263,
+              22.705263157894734
+            ],
+            [
+              88.43954545454547,
+              22.78
+            ],
+            [
+              88.58,
+              22.78
+            ],
+            [
+              88.58,
+              22.66
+            ],
+            [
+              88.435,
+              22.66
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "KOL-10",
+        "name": "Barasat & Airport Highway",
+        "zone": "Northeast Growth Hub",
+        "lst": 36.8,
+        "ndvi": 0.2,
+        "ndbi": 0.31,
+        "population": 200000,
+        "vulnerable_pop_pct": 38,
+        "anomaly": 3.8,
+        "risk_severity": "high",
+        "grid_mw": 80
+      }
+    }
+  ]
+}

@@ -1,0 +1,452 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              80.91333333333333,
+              26.846666666666664
+            ],
+            [
+              80.9375,
+              26.895000000000003
+            ],
+            [
+              80.96499999999999,
+              26.858333333333338
+            ],
+            [
+              80.96499999999999,
+              26.795
+            ],
+            [
+              80.91333333333333,
+              26.846666666666664
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "LKO-01",
+        "name": "Hazratganj & Vidhan Sabha",
+        "zone": "State Administrative Core",
+        "lst": 37.8,
+        "ndvi": 0.18,
+        "ndbi": 0.32,
+        "population": 120000,
+        "vulnerable_pop_pct": 24,
+        "anomaly": 4.8,
+        "risk_severity": "critical",
+        "grid_mw": 90
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              80.75441176470588,
+              26.868529411764708
+            ],
+            [
+              80.75,
+              26.932499999999973
+            ],
+            [
+              80.75,
+              26.999109665427508
+            ],
+            [
+              80.7693775862069,
+              27.02
+            ],
+            [
+              80.84161,
+              27.02
+            ],
+            [
+              80.92378425309231,
+              27.004725975261657
+            ],
+            [
+              80.9375,
+              26.895000000000003
+            ],
+            [
+              80.91333333333333,
+              26.846666666666664
+            ],
+            [
+              80.85499999999999,
+              26.835000000000008
+            ],
+            [
+              80.75441176470588,
+              26.868529411764708
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "LKO-02",
+        "name": "Chowk & Old City (Nakhhas)",
+        "zone": "Dense Heritage Historic",
+        "lst": 40.2,
+        "ndvi": 0.05,
+        "ndbi": 0.39,
+        "population": 270000,
+        "vulnerable_pop_pct": 62,
+        "anomaly": 7.2,
+        "risk_severity": "critical",
+        "grid_mw": 82
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              81.02764705882352,
+              26.858529411764707
+            ],
+            [
+              80.97,
+              26.781666666666663
+            ],
+            [
+              80.96499999999999,
+              26.795
+            ],
+            [
+              80.96499999999999,
+              26.858333333333338
+            ],
+            [
+              81.01636363636364,
+              26.875454545454538
+            ],
+            [
+              81.02764705882352,
+              26.858529411764707
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "LKO-03",
+        "name": "Gomti Nagar (Vipul/Vivek)",
+        "zone": "Planned Riverfront City",
+        "lst": 36.4,
+        "ndvi": 0.24,
+        "ndbi": 0.29,
+        "population": 220000,
+        "vulnerable_pop_pct": 26,
+        "anomaly": 3.4,
+        "risk_severity": "high",
+        "grid_mw": 95
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              80.97,
+              26.774583333333332
+            ],
+            [
+              80.97,
+              26.781666666666663
+            ],
+            [
+              81.02764705882352,
+              26.858529411764707
+            ],
+            [
+              81.15,
+              26.823571428571437
+            ],
+            [
+              81.15,
+              26.699583333333333
+            ],
+            [
+              80.97,
+              26.774583333333332
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "LKO-04",
+        "name": "Gomti Nagar Extension Hub",
+        "zone": "East High-Rise Growth",
+        "lst": 37.5,
+        "ndvi": 0.16,
+        "ndbi": 0.33,
+        "population": 170000,
+        "vulnerable_pop_pct": 28,
+        "anomaly": 4.5,
+        "risk_severity": "critical",
+        "grid_mw": 85
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              80.97,
+              26.774583333333332
+            ],
+            [
+              80.93552631578947,
+              26.75447368421053
+            ],
+            [
+              80.85499999999999,
+              26.835000000000008
+            ],
+            [
+              80.91333333333333,
+              26.846666666666664
+            ],
+            [
+              80.96499999999999,
+              26.795
+            ],
+            [
+              80.97,
+              26.781666666666663
+            ],
+            [
+              80.97,
+              26.774583333333332
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "LKO-05",
+        "name": "Alambagh & Charbagh Stn",
+        "zone": "Major Railway Transit",
+        "lst": 38.9,
+        "ndvi": 0.08,
+        "ndbi": 0.38,
+        "population": 240000,
+        "vulnerable_pop_pct": 54,
+        "anomaly": 5.9,
+        "risk_severity": "critical",
+        "grid_mw": 92
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              81.01636363636364,
+              26.875454545454538
+            ],
+            [
+              80.96499999999999,
+              26.858333333333338
+            ],
+            [
+              80.9375,
+              26.895000000000003
+            ],
+            [
+              80.92378425309231,
+              27.004725975261657
+            ],
+            [
+              80.99668990775909,
+              27.01317064568638
+            ],
+            [
+              81.01636363636364,
+              26.875454545454538
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "LKO-06",
+        "name": "Indira Nagar & Munshi Pulia",
+        "zone": "Vast Residential Core",
+        "lst": 36.5,
+        "ndvi": 0.22,
+        "ndbi": 0.3,
+        "population": 250000,
+        "vulnerable_pop_pct": 32,
+        "anomaly": 3.5,
+        "risk_severity": "high",
+        "grid_mw": 78
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              80.75441176470588,
+              26.868529411764708
+            ],
+            [
+              80.85499999999999,
+              26.835000000000008
+            ],
+            [
+              80.93552631578947,
+              26.75447368421053
+            ],
+            [
+              80.88136363636364,
+              26.68
+            ],
+            [
+              80.75,
+              26.68
+            ],
+            [
+              80.75,
+              26.85214285714287
+            ],
+            [
+              80.75441176470588,
+              26.868529411764708
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "LKO-07",
+        "name": "Transport Nagar & Sarojini",
+        "zone": "South Industrial Logistics",
+        "lst": 39.8,
+        "ndvi": 0.07,
+        "ndbi": 0.38,
+        "population": 180000,
+        "vulnerable_pop_pct": 52,
+        "anomaly": 6.8,
+        "risk_severity": "critical",
+        "grid_mw": 115
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              80.93552631578947,
+              26.75447368421053
+            ],
+            [
+              80.97,
+              26.774583333333332
+            ],
+            [
+              81.15,
+              26.699583333333333
+            ],
+            [
+              81.15,
+              26.68
+            ],
+            [
+              80.88136363636364,
+              26.68
+            ],
+            [
+              80.93552631578947,
+              26.75447368421053
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "LKO-08",
+        "name": "Mohanlalganj & Outer South",
+        "zone": "Southern Growth Corridor",
+        "lst": 37.0,
+        "ndvi": 0.24,
+        "ndbi": 0.29,
+        "population": 150000,
+        "vulnerable_pop_pct": 44,
+        "anomaly": 4.0,
+        "risk_severity": "critical",
+        "grid_mw": 75
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              81.02764705882352,
+              26.858529411764707
+            ],
+            [
+              81.01636363636364,
+              26.875454545454538
+            ],
+            [
+              80.99668990775909,
+              27.01317064568638
+            ],
+            [
+              81.013695,
+              27.02
+            ],
+            [
+              81.15,
+              27.02
+            ],
+            [
+              81.15,
+              26.823571428571437
+            ],
+            [
+              81.02764705882352,
+              26.858529411764707
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "LKO-09",
+        "name": "Chinhat & Faizabad Road",
+        "zone": "Industrial Tech Nexus",
+        "lst": 38.4,
+        "ndvi": 0.14,
+        "ndbi": 0.34,
+        "population": 190000,
+        "vulnerable_pop_pct": 42,
+        "anomaly": 5.4,
+        "risk_severity": "critical",
+        "grid_mw": 90
+      }
+    }
+  ]
+}

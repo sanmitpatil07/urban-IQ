@@ -150,6 +150,9 @@ def get_city_data(city: str) -> tuple[gpd.GeoDataFrame, dict, UrbanHeatModel]:
     
     log.info(f"Loading model for {city} from {model_path} into memory...")
     model = UrbanHeatModel(model_path)
+    if city in CITY_LOCATIONS:
+        model.center_x = CITY_LOCATIONS[city]["lon"]
+        model.center_y = CITY_LOCATIONS[city]["lat"]
 
     # Store in LRU cache
     _CITY_CACHE.put(city, {"gdf": gdf, "raw": raw_geojson, "model": model})

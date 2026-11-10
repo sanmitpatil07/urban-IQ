@@ -1,5 +1,6 @@
-# Data directories — large files, never commit
-data/
+# Data directories — large raw files, never commit
+data/*/raw/
+data/*/boundary/
 *.tif
 *.tiff
 *.img

@@ -1,0 +1,581 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.41648148148148,
+              17.4587037037037
+            ],
+            [
+              78.39,
+              17.39249999999999
+            ],
+            [
+              78.33568965517242,
+              17.47396551724138
+            ],
+            [
+              78.33594339622641,
+              17.47481132075472
+            ],
+            [
+              78.41648148148148,
+              17.4587037037037
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "HYD-01",
+        "name": "HITEC City & Madhapur",
+        "zone": "IT Cyber Gateway",
+        "lst": 37.6,
+        "ndvi": 0.12,
+        "ndbi": 0.35,
+        "population": 180000,
+        "vulnerable_pop_pct": 24,
+        "anomaly": 4.6,
+        "risk_severity": "critical",
+        "grid_mw": 140
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.2,
+              17.245555555555544
+            ],
+            [
+              78.2,
+              17.284000000000006
+            ],
+            [
+              78.33568965517242,
+              17.47396551724138
+            ],
+            [
+              78.39,
+              17.39249999999999
+            ],
+            [
+              78.39,
+              17.35000000000001
+            ],
+            [
+              78.37714285714286,
+              17.32428571428571
+            ],
+            [
+              78.2,
+              17.245555555555544
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "HYD-02",
+        "name": "Gachibowli Financial District",
+        "zone": "Financial Tech Core",
+        "lst": 37.2,
+        "ndvi": 0.15,
+        "ndbi": 0.34,
+        "population": 140000,
+        "vulnerable_pop_pct": 20,
+        "anomaly": 4.2,
+        "risk_severity": "critical",
+        "grid_mw": 130
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.4722,
+              17.404799999999998
+            ],
+            [
+              78.39,
+              17.35000000000001
+            ],
+            [
+              78.39,
+              17.39249999999999
+            ],
+            [
+              78.41648148148148,
+              17.4587037037037
+            ],
+            [
+              78.4511403508772,
+              17.478508771929828
+            ],
+            [
+              78.4722,
+              17.404799999999998
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "HYD-03",
+        "name": "Banjara & Jubilee Hills",
+        "zone": "Affluent Green Ridge",
+        "lst": 34.4,
+        "ndvi": 0.34,
+        "ndbi": 0.23,
+        "population": 130000,
+        "vulnerable_pop_pct": 20,
+        "anomaly": 1.4,
+        "risk_severity": "moderate",
+        "grid_mw": 75
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.5,
+              17.283333333333335
+            ],
+            [
+              78.37714285714286,
+              17.32428571428571
+            ],
+            [
+              78.39,
+              17.35000000000001
+            ],
+            [
+              78.4722,
+              17.404799999999998
+            ],
+            [
+              78.5,
+              17.394375
+            ],
+            [
+              78.5,
+              17.283333333333335
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "HYD-04",
+        "name": "Charminar & Old City Core",
+        "zone": "Dense Historic Center",
+        "lst": 38.6,
+        "ndvi": 0.07,
+        "ndbi": 0.38,
+        "population": 260000,
+        "vulnerable_pop_pct": 62,
+        "anomaly": 5.6,
+        "risk_severity": "critical",
+        "grid_mw": 78
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.47615577889447,
+              17.53354271356784
+            ],
+            [
+              78.57274193548386,
+              17.543709677419354
+            ],
+            [
+              78.54635135135135,
+              17.411756756756755
+            ],
+            [
+              78.5,
+              17.394375
+            ],
+            [
+              78.4722,
+              17.404799999999998
+            ],
+            [
+              78.4511403508772,
+              17.478508771929828
+            ],
+            [
+              78.47615577889447,
+              17.53354271356784
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "HYD-05",
+        "name": "Secunderabad Station Hub",
+        "zone": "Transit Nexus",
+        "lst": 37.0,
+        "ndvi": 0.14,
+        "ndbi": 0.34,
+        "population": 180000,
+        "vulnerable_pop_pct": 42,
+        "anomaly": 4.0,
+        "risk_severity": "critical",
+        "grid_mw": 82
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.32785714285714,
+              17.519285714285708
+            ],
+            [
+              78.35600917431194,
+              17.61077981651376
+            ],
+            [
+              78.47615577889447,
+              17.53354271356784
+            ],
+            [
+              78.4511403508772,
+              17.478508771929828
+            ],
+            [
+              78.41648148148148,
+              17.4587037037037
+            ],
+            [
+              78.33594339622641,
+              17.47481132075472
+            ],
+            [
+              78.32785714285714,
+              17.519285714285708
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "HYD-06",
+        "name": "Kukatpally & Miyapur",
+        "zone": "Mega Residential Hub",
+        "lst": 37.2,
+        "ndvi": 0.14,
+        "ndbi": 0.34,
+        "population": 290000,
+        "vulnerable_pop_pct": 38,
+        "anomaly": 4.2,
+        "risk_severity": "critical",
+        "grid_mw": 92
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.37714285714286,
+              17.32428571428571
+            ],
+            [
+              78.5,
+              17.283333333333335
+            ],
+            [
+              78.62400000000001,
+              17.18
+            ],
+            [
+              78.2,
+              17.18
+            ],
+            [
+              78.2,
+              17.245555555555544
+            ],
+            [
+              78.37714285714286,
+              17.32428571428571
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "HYD-07",
+        "name": "Shamshabad Airport City (RGIA)",
+        "zone": "Aviation & Logistics",
+        "lst": 36.4,
+        "ndvi": 0.24,
+        "ndbi": 0.29,
+        "population": 120000,
+        "vulnerable_pop_pct": 32,
+        "anomaly": 3.4,
+        "risk_severity": "high",
+        "grid_mw": 115
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.2,
+              17.47666666666667
+            ],
+            [
+              78.2,
+              17.65
+            ],
+            [
+              78.33818181818182,
+              17.65
+            ],
+            [
+              78.35600917431194,
+              17.61077981651376
+            ],
+            [
+              78.32785714285714,
+              17.519285714285708
+            ],
+            [
+              78.2,
+              17.47666666666667
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "HYD-08",
+        "name": "Patancheru Industrial Area",
+        "zone": "Heavy Chemical Cluster",
+        "lst": 40.2,
+        "ndvi": 0.05,
+        "ndbi": 0.39,
+        "population": 160000,
+        "vulnerable_pop_pct": 58,
+        "anomaly": 7.2,
+        "risk_severity": "critical",
+        "grid_mw": 155
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.33818181818182,
+              17.65
+            ],
+            [
+              78.7,
+              17.65
+            ],
+            [
+              78.7,
+              17.616428571428568
+            ],
+            [
+              78.57274193548386,
+              17.543709677419354
+            ],
+            [
+              78.47615577889447,
+              17.53354271356784
+            ],
+            [
+              78.35600917431194,
+              17.61077981651376
+            ],
+            [
+              78.33818181818182,
+              17.65
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "HYD-09",
+        "name": "Medchal Industrial Corridor",
+        "zone": "Northern Manufacturing",
+        "lst": 38.4,
+        "ndvi": 0.12,
+        "ndbi": 0.35,
+        "population": 150000,
+        "vulnerable_pop_pct": 48,
+        "anomaly": 5.4,
+        "risk_severity": "critical",
+        "grid_mw": 110
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.5,
+              17.283333333333335
+            ],
+            [
+              78.5,
+              17.394375
+            ],
+            [
+              78.54635135135135,
+              17.411756756756755
+            ],
+            [
+              78.7,
+              17.232500000000016
+            ],
+            [
+              78.7,
+              17.185246371552978
+            ],
+            [
+              78.69476123188406,
+              17.18
+            ],
+            [
+              78.62400000000001,
+              17.18
+            ],
+            [
+              78.5,
+              17.283333333333335
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "HYD-10",
+        "name": "Dilsukhnagar & LB Nagar",
+        "zone": "Eastern Transit Gateway",
+        "lst": 37.8,
+        "ndvi": 0.11,
+        "ndbi": 0.36,
+        "population": 250000,
+        "vulnerable_pop_pct": 46,
+        "anomaly": 4.8,
+        "risk_severity": "critical",
+        "grid_mw": 85
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.54635135135135,
+              17.411756756756755
+            ],
+            [
+              78.57274193548386,
+              17.543709677419354
+            ],
+            [
+              78.7,
+              17.616428571428568
+            ],
+            [
+              78.7,
+              17.232500000000016
+            ],
+            [
+              78.54635135135135,
+              17.411756756756755
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "HYD-11",
+        "name": "Uppal & Ghatkesar Corridor",
+        "zone": "East Industrial Strip",
+        "lst": 37.9,
+        "ndvi": 0.12,
+        "ndbi": 0.35,
+        "population": 190000,
+        "vulnerable_pop_pct": 42,
+        "anomaly": 4.9,
+        "risk_severity": "critical",
+        "grid_mw": 95
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.33568965517242,
+              17.47396551724138
+            ],
+            [
+              78.2,
+              17.284000000000006
+            ],
+            [
+              78.2,
+              17.47666666666667
+            ],
+            [
+              78.32785714285714,
+              17.519285714285708
+            ],
+            [
+              78.33568965517242,
+              17.47396551724138
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "HYD-12",
+        "name": "Tellapur & Kollur Expansion",
+        "zone": "Outer Growth Ring",
+        "lst": 36.2,
+        "ndvi": 0.22,
+        "ndbi": 0.3,
+        "population": 140000,
+        "vulnerable_pop_pct": 25,
+        "anomaly": 3.2,
+        "risk_severity": "high",
+        "grid_mw": 80
+      }
+    }
+  ]
+}

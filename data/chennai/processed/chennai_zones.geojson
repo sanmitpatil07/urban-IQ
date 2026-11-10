@@ -1,0 +1,475 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              80.1734210526316,
+              13.056052631578956
+            ],
+            [
+              80.23708333333335,
+              13.128809523809522
+            ],
+            [
+              80.3225,
+              13.079999999999997
+            ],
+            [
+              80.23,
+              13.01833333333333
+            ],
+            [
+              80.1734210526316,
+              13.056052631578956
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "CHN-01",
+        "name": "T. Nagar & Central Core",
+        "zone": "Commercial Core",
+        "lst": 37.8,
+        "ndvi": 0.12,
+        "ndbi": 0.35,
+        "population": 190000,
+        "vulnerable_pop_pct": 35,
+        "anomaly": 4.8,
+        "risk_severity": "critical",
+        "grid_mw": 95
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              80.22999999999999,
+              12.993750000000002
+            ],
+            [
+              80.23,
+              13.01833333333333
+            ],
+            [
+              80.3225,
+              13.079999999999997
+            ],
+            [
+              80.35,
+              13.07029411764706
+            ],
+            [
+              80.35,
+              12.963749999999987
+            ],
+            [
+              80.22999999999999,
+              12.993750000000002
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "CHN-02",
+        "name": "Mylapore & Adyar Coast",
+        "zone": "Coastal Green Enclave",
+        "lst": 34.0,
+        "ndvi": 0.32,
+        "ndbi": 0.24,
+        "population": 180000,
+        "vulnerable_pop_pct": 24,
+        "anomaly": 1.0,
+        "risk_severity": "moderate",
+        "grid_mw": 68
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              80.21392857142857,
+              12.897142857142857
+            ],
+            [
+              80.18318181818182,
+              12.958636363636364
+            ],
+            [
+              80.22999999999999,
+              12.993750000000002
+            ],
+            [
+              80.35,
+              12.963749999999987
+            ],
+            [
+              80.35,
+              12.879000000000005
+            ],
+            [
+              80.21392857142857,
+              12.897142857142857
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "CHN-03",
+        "name": "OMR Cyber Corridor (Taramani)",
+        "zone": "Tech IT Expressway",
+        "lst": 37.4,
+        "ndvi": 0.13,
+        "ndbi": 0.35,
+        "population": 180000,
+        "vulnerable_pop_pct": 26,
+        "anomaly": 4.4,
+        "risk_severity": "critical",
+        "grid_mw": 135
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              80.21392857142857,
+              12.897142857142857
+            ],
+            [
+              80.35,
+              12.879000000000005
+            ],
+            [
+              80.35,
+              12.75
+            ],
+            [
+              80.03,
+              12.75
+            ],
+            [
+              80.21392857142857,
+              12.897142857142857
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "CHN-04",
+        "name": "Siruseri SIPCOT IT Park",
+        "zone": "Far South Tech Mega Park",
+        "lst": 36.8,
+        "ndvi": 0.18,
+        "ndbi": 0.32,
+        "population": 150000,
+        "vulnerable_pop_pct": 25,
+        "anomaly": 3.8,
+        "risk_severity": "high",
+        "grid_mw": 120
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              80.22999999999999,
+              12.993750000000002
+            ],
+            [
+              80.18318181818182,
+              12.958636363636364
+            ],
+            [
+              80.1082258064516,
+              13.016935483870968
+            ],
+            [
+              80.1734210526316,
+              13.056052631578956
+            ],
+            [
+              80.23,
+              13.01833333333333
+            ],
+            [
+              80.22999999999999,
+              12.993750000000002
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "CHN-05",
+        "name": "Guindy Industrial Estate",
+        "zone": "Central Manufacturing",
+        "lst": 38.8,
+        "ndvi": 0.09,
+        "ndbi": 0.37,
+        "population": 140000,
+        "vulnerable_pop_pct": 42,
+        "anomaly": 5.8,
+        "risk_severity": "critical",
+        "grid_mw": 120
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              80.06166666666667,
+              13.008333333333331
+            ],
+            [
+              80.10541666666667,
+              13.017083333333334
+            ],
+            [
+              80.1082258064516,
+              13.016935483870968
+            ],
+            [
+              80.18318181818182,
+              12.958636363636364
+            ],
+            [
+              80.21392857142857,
+              12.897142857142857
+            ],
+            [
+              80.03,
+              12.75
+            ],
+            [
+              80.02,
+              12.75
+            ],
+            [
+              80.02,
+              12.849999999999989
+            ],
+            [
+              80.06166666666667,
+              13.008333333333331
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "CHN-06",
+        "name": "Tambaram & Chromepet",
+        "zone": "Southern Transit City",
+        "lst": 36.2,
+        "ndvi": 0.2,
+        "ndbi": 0.31,
+        "population": 230000,
+        "vulnerable_pop_pct": 40,
+        "anomaly": 3.2,
+        "risk_severity": "high",
+        "grid_mw": 78
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              80.1082258064516,
+              13.016935483870968
+            ],
+            [
+              80.10541666666667,
+              13.017083333333334
+            ],
+            [
+              80.15799999999999,
+              13.28
+            ],
+            [
+              80.17093750000001,
+              13.28
+            ],
+            [
+              80.23708333333335,
+              13.128809523809522
+            ],
+            [
+              80.1734210526316,
+              13.056052631578956
+            ],
+            [
+              80.1082258064516,
+              13.016935483870968
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "CHN-07",
+        "name": "Ambattur Industrial Estate",
+        "zone": "Major Manufacturing Hub",
+        "lst": 39.5,
+        "ndvi": 0.06,
+        "ndbi": 0.39,
+        "population": 210000,
+        "vulnerable_pop_pct": 52,
+        "anomaly": 6.5,
+        "risk_severity": "critical",
+        "grid_mw": 145
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              80.06166666666667,
+              13.008333333333331
+            ],
+            [
+              80.02,
+              12.849999999999989
+            ],
+            [
+              80.02,
+              13.050000000000002
+            ],
+            [
+              80.06166666666667,
+              13.008333333333331
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "CHN-08",
+        "name": "Sriperumbudur Auto SEZ",
+        "zone": "Global Electronics Auto",
+        "lst": 40.2,
+        "ndvi": 0.08,
+        "ndbi": 0.38,
+        "population": 160000,
+        "vulnerable_pop_pct": 50,
+        "anomaly": 7.2,
+        "risk_severity": "critical",
+        "grid_mw": 160
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              80.3225,
+              13.079999999999997
+            ],
+            [
+              80.23708333333335,
+              13.128809523809522
+            ],
+            [
+              80.17093750000001,
+              13.28
+            ],
+            [
+              80.35,
+              13.28
+            ],
+            [
+              80.35,
+              13.07029411764706
+            ],
+            [
+              80.3225,
+              13.079999999999997
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "CHN-09",
+        "name": "Ennore Port & Manali Petrochem",
+        "zone": "Petrochemical Refinery",
+        "lst": 40.8,
+        "ndvi": 0.04,
+        "ndbi": 0.4,
+        "population": 150000,
+        "vulnerable_pop_pct": 62,
+        "anomaly": 7.8,
+        "risk_severity": "critical",
+        "grid_mw": 160
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              80.10541666666667,
+              13.017083333333334
+            ],
+            [
+              80.06166666666667,
+              13.008333333333331
+            ],
+            [
+              80.02,
+              13.050000000000002
+            ],
+            [
+              80.02,
+              13.28
+            ],
+            [
+              80.15799999999999,
+              13.28
+            ],
+            [
+              80.10541666666667,
+              13.017083333333334
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "CHN-10",
+        "name": "Avadi & Pattabiram",
+        "zone": "Heavy Vehicles Military Hub",
+        "lst": 37.6,
+        "ndvi": 0.16,
+        "ndbi": 0.33,
+        "population": 220000,
+        "vulnerable_pop_pct": 44,
+        "anomaly": 4.6,
+        "risk_severity": "critical",
+        "grid_mw": 85
+      }
+    }
+  ]
+}

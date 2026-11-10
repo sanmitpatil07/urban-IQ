@@ -1,0 +1,1275 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.24249999999999,
+              28.581875000000004
+            ],
+            [
+              77.19071428571428,
+              28.620714285714286
+            ],
+            [
+              77.238,
+              28.667999999999996
+            ],
+            [
+              77.2595,
+              28.635749999999998
+            ],
+            [
+              77.244,
+              28.581500000000002
+            ],
+            [
+              77.24249999999999,
+              28.581875000000004
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "DEL-01",
+        "name": "Connaught Place & CBD",
+        "zone": "Central Commercial",
+        "lst": 38.5,
+        "ndvi": 0.12,
+        "ndbi": 0.35,
+        "population": 75000,
+        "vulnerable_pop_pct": 22,
+        "anomaly": 5.5,
+        "risk_severity": "critical",
+        "grid_mw": 120
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.13192307692309,
+              28.554230769230763
+            ],
+            [
+              77.12113861386139,
+              28.569059405940596
+            ],
+            [
+              77.11694285714286,
+              28.6278
+            ],
+            [
+              77.1238888888889,
+              28.631851851851856
+            ],
+            [
+              77.19071428571428,
+              28.620714285714286
+            ],
+            [
+              77.24249999999999,
+              28.581875000000004
+            ],
+            [
+              77.13192307692309,
+              28.554230769230763
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "DEL-02",
+        "name": "Chanakyapuri & Lutyens",
+        "zone": "Diplomatic Green Enclave",
+        "lst": 34.1,
+        "ndvi": 0.42,
+        "ndbi": 0.19,
+        "population": 50000,
+        "vulnerable_pop_pct": 14,
+        "anomaly": 1.1,
+        "risk_severity": "moderate",
+        "grid_mw": 45
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.1238888888889,
+              28.631851851851856
+            ],
+            [
+              77.21625,
+              28.754999999999992
+            ],
+            [
+              77.238,
+              28.667999999999996
+            ],
+            [
+              77.19071428571428,
+              28.620714285714286
+            ],
+            [
+              77.1238888888889,
+              28.631851851851856
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "DEL-03",
+        "name": "Karol Bagh & Old Delhi",
+        "zone": "Historic Dense Core",
+        "lst": 39.2,
+        "ndvi": 0.07,
+        "ndbi": 0.38,
+        "population": 260000,
+        "vulnerable_pop_pct": 58,
+        "anomaly": 6.2,
+        "risk_severity": "critical",
+        "grid_mw": 92
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              76.97233333333337,
+              28.705666666666655
+            ],
+            [
+              77.22173076923077,
+              28.776923076923097
+            ],
+            [
+              77.21625,
+              28.754999999999992
+            ],
+            [
+              77.1238888888889,
+              28.631851851851856
+            ],
+            [
+              77.11694285714286,
+              28.6278
+            ],
+            [
+              76.97233333333337,
+              28.705666666666655
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "DEL-04",
+        "name": "Rohini & Pitampura",
+        "zone": "Northwest Sub-City",
+        "lst": 37.5,
+        "ndvi": 0.14,
+        "ndbi": 0.34,
+        "population": 240000,
+        "vulnerable_pop_pct": 36,
+        "anomaly": 4.5,
+        "risk_severity": "critical",
+        "grid_mw": 88
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              76.97233333333337,
+              28.705666666666655
+            ],
+            [
+              77.11694285714286,
+              28.6278
+            ],
+            [
+              77.12113861386139,
+              28.569059405940596
+            ],
+            [
+              76.97081818181817,
+              28.50463636363636
+            ],
+            [
+              76.92112903225808,
+              28.507741935483864
+            ],
+            [
+              76.85,
+              28.549772727272728
+            ],
+            [
+              76.85,
+              28.736249999999995
+            ],
+            [
+              76.97233333333337,
+              28.705666666666655
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "DEL-05",
+        "name": "Dwarka Sub-City 1-24",
+        "zone": "Major Planned Sub-City",
+        "lst": 36.5,
+        "ndvi": 0.2,
+        "ndbi": 0.31,
+        "population": 260000,
+        "vulnerable_pop_pct": 28,
+        "anomaly": 3.5,
+        "risk_severity": "high",
+        "grid_mw": 88
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.246,
+              28.578500000000005
+            ],
+            [
+              77.20710526315789,
+              28.442368421052628
+            ],
+            [
+              77.20667364016737,
+              28.442029288702926
+            ],
+            [
+              77.15807692307693,
+              28.49602564102563
+            ],
+            [
+              77.14071428571428,
+              28.52785714285715
+            ],
+            [
+              77.13192307692309,
+              28.554230769230763
+            ],
+            [
+              77.24249999999999,
+              28.581875000000004
+            ],
+            [
+              77.244,
+              28.581500000000002
+            ],
+            [
+              77.246,
+              28.578500000000005
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "DEL-06",
+        "name": "Hauz Khas & Green Park",
+        "zone": "Urban Village Green",
+        "lst": 35.8,
+        "ndvi": 0.25,
+        "ndbi": 0.28,
+        "population": 130000,
+        "vulnerable_pop_pct": 26,
+        "anomaly": 2.8,
+        "risk_severity": "high",
+        "grid_mw": 72
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.32388888888889,
+              28.51388888888889
+            ],
+            [
+              77.31758064516129,
+              28.479193548387098
+            ],
+            [
+              77.20710526315789,
+              28.442368421052628
+            ],
+            [
+              77.246,
+              28.578500000000005
+            ],
+            [
+              77.27874999999999,
+              28.570312500000004
+            ],
+            [
+              77.32388888888889,
+              28.51388888888889
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "DEL-07",
+        "name": "Okhla Industrial Phase 1-3",
+        "zone": "Heavy Industrial Basin",
+        "lst": 40.2,
+        "ndvi": 0.05,
+        "ndbi": 0.39,
+        "population": 160000,
+        "vulnerable_pop_pct": 52,
+        "anomaly": 7.2,
+        "risk_severity": "critical",
+        "grid_mw": 155
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.246,
+              28.578500000000005
+            ],
+            [
+              77.244,
+              28.581500000000002
+            ],
+            [
+              77.2595,
+              28.635749999999998
+            ],
+            [
+              77.29722222222222,
+              28.64203703703704
+            ],
+            [
+              77.325,
+              28.605
+            ],
+            [
+              77.27874999999999,
+              28.570312500000004
+            ],
+            [
+              77.246,
+              28.578500000000005
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "DEL-08",
+        "name": "Mayur Vihar & Laxmi Nagar",
+        "zone": "East Trans-Yamuna",
+        "lst": 37.8,
+        "ndvi": 0.14,
+        "ndbi": 0.34,
+        "population": 250000,
+        "vulnerable_pop_pct": 46,
+        "anomaly": 4.8,
+        "risk_severity": "critical",
+        "grid_mw": 85
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.315,
+              28.671666666666663
+            ],
+            [
+              77.29722222222222,
+              28.64203703703704
+            ],
+            [
+              77.2595,
+              28.635749999999998
+            ],
+            [
+              77.238,
+              28.667999999999996
+            ],
+            [
+              77.21625,
+              28.754999999999992
+            ],
+            [
+              77.22173076923077,
+              28.776923076923097
+            ],
+            [
+              77.26638888888888,
+              28.85
+            ],
+            [
+              77.315,
+              28.85
+            ],
+            [
+              77.315,
+              28.671666666666663
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "DEL-09",
+        "name": "Shahdara & Seelampur",
+        "zone": "High-Density Microzone",
+        "lst": 39.8,
+        "ndvi": 0.06,
+        "ndbi": 0.39,
+        "population": 290000,
+        "vulnerable_pop_pct": 64,
+        "anomaly": 6.8,
+        "risk_severity": "critical",
+        "grid_mw": 84
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.22173076923077,
+              28.776923076923097
+            ],
+            [
+              76.97233333333337,
+              28.705666666666655
+            ],
+            [
+              76.85,
+              28.736249999999995
+            ],
+            [
+              76.85,
+              28.85
+            ],
+            [
+              77.26638888888888,
+              28.85
+            ],
+            [
+              77.22173076923077,
+              28.776923076923097
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "DEL-10",
+        "name": "Narela & Bawana Industrial",
+        "zone": "Outlying Industrial Basin",
+        "lst": 40.6,
+        "ndvi": 0.07,
+        "ndbi": 0.38,
+        "population": 180000,
+        "vulnerable_pop_pct": 56,
+        "anomaly": 7.6,
+        "risk_severity": "critical",
+        "grid_mw": 130
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.15807692307693,
+              28.49602564102563
+            ],
+            [
+              77.05545454545454,
+              28.46181818181819
+            ],
+            [
+              77.03617647058825,
+              28.475588235294115
+            ],
+            [
+              77.14071428571428,
+              28.52785714285715
+            ],
+            [
+              77.15807692307693,
+              28.49602564102563
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "GGN-01",
+        "name": "Cyber City & DLF Phase 1-3",
+        "zone": "Global IT Hub",
+        "lst": 38.6,
+        "ndvi": 0.12,
+        "ndbi": 0.35,
+        "population": 190000,
+        "vulnerable_pop_pct": 24,
+        "anomaly": 5.6,
+        "risk_severity": "critical",
+        "grid_mw": 150
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.20667364016737,
+              28.442029288702926
+            ],
+            [
+              77.18126582278481,
+              28.33531645569621
+            ],
+            [
+              77.16223529411765,
+              28.301647058823548
+            ],
+            [
+              77.05545454545454,
+              28.46181818181819
+            ],
+            [
+              77.15807692307693,
+              28.49602564102563
+            ],
+            [
+              77.20667364016737,
+              28.442029288702926
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "GGN-02",
+        "name": "Golf Course Road & Horizon",
+        "zone": "Ultra-High Rise Corridor",
+        "lst": 36.8,
+        "ndvi": 0.2,
+        "ndbi": 0.31,
+        "population": 160000,
+        "vulnerable_pop_pct": 18,
+        "anomaly": 3.8,
+        "risk_severity": "high",
+        "grid_mw": 130
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              76.92112903225808,
+              28.507741935483864
+            ],
+            [
+              76.97081818181817,
+              28.50463636363636
+            ],
+            [
+              77.03617647058825,
+              28.475588235294115
+            ],
+            [
+              77.05545454545454,
+              28.46181818181819
+            ],
+            [
+              77.16223529411765,
+              28.301647058823548
+            ],
+            [
+              77.16172413793103,
+              28.3
+            ],
+            [
+              77.025,
+              28.3
+            ],
+            [
+              76.92112903225808,
+              28.507741935483864
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "GGN-03",
+        "name": "Sohna Road & Subhash Chowk",
+        "zone": "Southern Commercial Hub",
+        "lst": 37.8,
+        "ndvi": 0.14,
+        "ndbi": 0.34,
+        "population": 220000,
+        "vulnerable_pop_pct": 30,
+        "anomaly": 4.8,
+        "risk_severity": "critical",
+        "grid_mw": 95
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.03617647058825,
+              28.475588235294115
+            ],
+            [
+              76.97081818181817,
+              28.50463636363636
+            ],
+            [
+              77.12113861386139,
+              28.569059405940596
+            ],
+            [
+              77.13192307692309,
+              28.554230769230763
+            ],
+            [
+              77.14071428571428,
+              28.52785714285715
+            ],
+            [
+              77.03617647058825,
+              28.475588235294115
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "GGN-04",
+        "name": "Udyog Vihar Industrial",
+        "zone": "Manufacturing Export Zone",
+        "lst": 39.5,
+        "ndvi": 0.08,
+        "ndbi": 0.38,
+        "population": 170000,
+        "vulnerable_pop_pct": 48,
+        "anomaly": 6.5,
+        "risk_severity": "critical",
+        "grid_mw": 140
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.025,
+              28.3
+            ],
+            [
+              76.85,
+              28.3
+            ],
+            [
+              76.85,
+              28.549772727272728
+            ],
+            [
+              76.92112903225808,
+              28.507741935483864
+            ],
+            [
+              77.025,
+              28.3
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "GGN-05",
+        "name": "Manesar IMT Industrial Basin",
+        "zone": "Heavy Auto Mega-Cluster",
+        "lst": 41.2,
+        "ndvi": 0.06,
+        "ndbi": 0.39,
+        "population": 180000,
+        "vulnerable_pop_pct": 54,
+        "anomaly": 8.2,
+        "risk_severity": "critical",
+        "grid_mw": 175
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.325,
+              28.605
+            ],
+            [
+              77.32804347826087,
+              28.604565217391304
+            ],
+            [
+              77.3761111111111,
+              28.566111111111113
+            ],
+            [
+              77.32388888888889,
+              28.51388888888889
+            ],
+            [
+              77.27874999999999,
+              28.570312500000004
+            ],
+            [
+              77.325,
+              28.605
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "NDA-01",
+        "name": "Noida Sector 18 & Film City",
+        "zone": "Commercial Retail CBD",
+        "lst": 38.2,
+        "ndvi": 0.14,
+        "ndbi": 0.34,
+        "population": 180000,
+        "vulnerable_pop_pct": 26,
+        "anomaly": 5.2,
+        "risk_severity": "critical",
+        "grid_mw": 115
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.35,
+              28.637500000000006
+            ],
+            [
+              77.39625,
+              28.614374999999992
+            ],
+            [
+              77.38280821917809,
+              28.56732876712329
+            ],
+            [
+              77.3761111111111,
+              28.566111111111113
+            ],
+            [
+              77.32804347826087,
+              28.604565217391304
+            ],
+            [
+              77.35,
+              28.637500000000006
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "NDA-02",
+        "name": "Noida Sector 62 IT Hub",
+        "zone": "Tech Institutional Core",
+        "lst": 37.5,
+        "ndvi": 0.16,
+        "ndbi": 0.33,
+        "population": 210000,
+        "vulnerable_pop_pct": 28,
+        "anomaly": 4.5,
+        "risk_severity": "critical",
+        "grid_mw": 120
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.3761111111111,
+              28.566111111111113
+            ],
+            [
+              77.38280821917809,
+              28.56732876712329
+            ],
+            [
+              77.4528125,
+              28.5284375
+            ],
+            [
+              77.42071428571428,
+              28.432142857142857
+            ],
+            [
+              77.36713114754099,
+              28.44450819672131
+            ],
+            [
+              77.31758064516129,
+              28.479193548387098
+            ],
+            [
+              77.32388888888889,
+              28.51388888888889
+            ],
+            [
+              77.3761111111111,
+              28.566111111111113
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "NDA-03",
+        "name": "Noida Expressway (Sec 128-137)",
+        "zone": "High-Rise Living Strip",
+        "lst": 36.8,
+        "ndvi": 0.2,
+        "ndbi": 0.31,
+        "population": 240000,
+        "vulnerable_pop_pct": 22,
+        "anomaly": 3.8,
+        "risk_severity": "high",
+        "grid_mw": 105
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.42071428571428,
+              28.432142857142857
+            ],
+            [
+              77.4528125,
+              28.5284375
+            ],
+            [
+              77.58,
+              28.596923076923066
+            ],
+            [
+              77.58,
+              28.3
+            ],
+            [
+              77.5,
+              28.3
+            ],
+            [
+              77.42071428571428,
+              28.432142857142857
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "NDA-04",
+        "name": "Greater Noida (Pari Chowk/Alpha)",
+        "zone": "Planned Educational Sub-City",
+        "lst": 36.2,
+        "ndvi": 0.26,
+        "ndbi": 0.28,
+        "population": 220000,
+        "vulnerable_pop_pct": 28,
+        "anomaly": 3.2,
+        "risk_severity": "high",
+        "grid_mw": 90
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.4528125,
+              28.5284375
+            ],
+            [
+              77.38280821917809,
+              28.56732876712329
+            ],
+            [
+              77.39625,
+              28.614374999999992
+            ],
+            [
+              77.47400000000005,
+              28.73100000000007
+            ],
+            [
+              77.57812499999997,
+              28.85
+            ],
+            [
+              77.58,
+              28.85
+            ],
+            [
+              77.58,
+              28.596923076923066
+            ],
+            [
+              77.4528125,
+              28.5284375
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "NDA-05",
+        "name": "Greater Noida West (Noida Ext)",
+        "zone": "Mega Residential Cluster",
+        "lst": 37.9,
+        "ndvi": 0.12,
+        "ndbi": 0.35,
+        "population": 280000,
+        "vulnerable_pop_pct": 36,
+        "anomaly": 4.9,
+        "risk_severity": "critical",
+        "grid_mw": 95
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.35,
+              28.648333333333333
+            ],
+            [
+              77.47400000000005,
+              28.73100000000007
+            ],
+            [
+              77.39625,
+              28.614374999999992
+            ],
+            [
+              77.35,
+              28.637500000000006
+            ],
+            [
+              77.35,
+              28.648333333333333
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "GZB-01",
+        "name": "Indirapuram & Shipra Sun City",
+        "zone": "High-Density Residential",
+        "lst": 38.0,
+        "ndvi": 0.14,
+        "ndbi": 0.34,
+        "population": 250000,
+        "vulnerable_pop_pct": 34,
+        "anomaly": 5.0,
+        "risk_severity": "critical",
+        "grid_mw": 88
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.29722222222222,
+              28.64203703703704
+            ],
+            [
+              77.315,
+              28.671666666666663
+            ],
+            [
+              77.35,
+              28.648333333333333
+            ],
+            [
+              77.35,
+              28.637500000000006
+            ],
+            [
+              77.32804347826087,
+              28.604565217391304
+            ],
+            [
+              77.325,
+              28.605
+            ],
+            [
+              77.29722222222222,
+              28.64203703703704
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "GZB-02",
+        "name": "Vaishali & Kaushambi Metro",
+        "zone": "Border Transit Hub",
+        "lst": 38.4,
+        "ndvi": 0.11,
+        "ndbi": 0.36,
+        "population": 220000,
+        "vulnerable_pop_pct": 40,
+        "anomaly": 5.4,
+        "risk_severity": "critical",
+        "grid_mw": 85
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.315,
+              28.671666666666663
+            ],
+            [
+              77.315,
+              28.85
+            ],
+            [
+              77.57812499999997,
+              28.85
+            ],
+            [
+              77.47400000000005,
+              28.73100000000007
+            ],
+            [
+              77.35,
+              28.648333333333333
+            ],
+            [
+              77.315,
+              28.671666666666663
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "GZB-03",
+        "name": "Sahibabad Industrial Area",
+        "zone": "Heavy Industrial Basin",
+        "lst": 40.5,
+        "ndvi": 0.05,
+        "ndbi": 0.39,
+        "population": 210000,
+        "vulnerable_pop_pct": 58,
+        "anomaly": 7.5,
+        "risk_severity": "critical",
+        "grid_mw": 135
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.30923076923077,
+              28.36730769230769
+            ],
+            [
+              77.18126582278481,
+              28.33531645569621
+            ],
+            [
+              77.20667364016737,
+              28.442029288702926
+            ],
+            [
+              77.31758064516129,
+              28.479193548387098
+            ],
+            [
+              77.36713114754099,
+              28.44450819672131
+            ],
+            [
+              77.30923076923077,
+              28.36730769230769
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "FBD-01",
+        "name": "Old Faridabad & Badkhal",
+        "zone": "Central Commercial Hub",
+        "lst": 38.6,
+        "ndvi": 0.12,
+        "ndbi": 0.35,
+        "population": 240000,
+        "vulnerable_pop_pct": 45,
+        "anomaly": 5.6,
+        "risk_severity": "critical",
+        "grid_mw": 92
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.30923076923077,
+              28.36730769230769
+            ],
+            [
+              77.36713114754099,
+              28.44450819672131
+            ],
+            [
+              77.42071428571428,
+              28.432142857142857
+            ],
+            [
+              77.5,
+              28.3
+            ],
+            [
+              77.47750000000003,
+              28.3
+            ],
+            [
+              77.30923076923077,
+              28.36730769230769
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "FBD-02",
+        "name": "Neharpar Greater Faridabad",
+        "zone": "Expansive Modern Corridor",
+        "lst": 37.2,
+        "ndvi": 0.18,
+        "ndbi": 0.32,
+        "population": 210000,
+        "vulnerable_pop_pct": 32,
+        "anomaly": 4.2,
+        "risk_severity": "critical",
+        "grid_mw": 85
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.16172413793103,
+              28.3
+            ],
+            [
+              77.18126582278481,
+              28.33531645569621
+            ],
+            [
+              77.30923076923077,
+              28.36730769230769
+            ],
+            [
+              77.47750000000003,
+              28.3
+            ],
+            [
+              77.16172413793103,
+              28.3
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "FBD-03",
+        "name": "Ballabgarh Industrial Core",
+        "zone": "Heavy Manufacturing Cluster",
+        "lst": 40.8,
+        "ndvi": 0.06,
+        "ndbi": 0.39,
+        "population": 230000,
+        "vulnerable_pop_pct": 56,
+        "anomaly": 7.8,
+        "risk_severity": "critical",
+        "grid_mw": 140
+      }
+    }
+  ]
+}

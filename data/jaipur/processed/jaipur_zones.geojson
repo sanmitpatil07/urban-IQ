@@ -1,0 +1,405 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.77772727272726,
+              26.942272727272723
+            ],
+            [
+              75.815,
+              26.963571428571427
+            ],
+            [
+              75.94368421052629,
+              26.908421052631585
+            ],
+            [
+              75.83800000000001,
+              26.882
+            ],
+            [
+              75.77772727272726,
+              26.942272727272723
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "JAI-01",
+        "name": "Walled City (Pink City)",
+        "zone": "Historic Masonry Core",
+        "lst": 40.2,
+        "ndvi": 0.05,
+        "ndbi": 0.39,
+        "population": 260000,
+        "vulnerable_pop_pct": 56,
+        "anomaly": 7.2,
+        "risk_severity": "critical",
+        "grid_mw": 85
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.72863636363635,
+              26.931363636363635
+            ],
+            [
+              75.77772727272726,
+              26.942272727272723
+            ],
+            [
+              75.83800000000001,
+              26.882
+            ],
+            [
+              75.802,
+              26.858
+            ],
+            [
+              75.72863636363635,
+              26.931363636363635
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "JAI-02",
+        "name": "C-Scheme & Civil Lines",
+        "zone": "Administrative Green",
+        "lst": 36.2,
+        "ndvi": 0.28,
+        "ndbi": 0.27,
+        "population": 110000,
+        "vulnerable_pop_pct": 20,
+        "anomaly": 3.2,
+        "risk_severity": "high",
+        "grid_mw": 70
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.68209359605912,
+              26.72120689655173
+            ],
+            [
+              75.62838403041826,
+              26.946787072243342
+            ],
+            [
+              75.72863636363635,
+              26.931363636363635
+            ],
+            [
+              75.802,
+              26.858
+            ],
+            [
+              75.79180000000001,
+              26.817200000000003
+            ],
+            [
+              75.68209359605912,
+              26.72120689655173
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "JAI-03",
+        "name": "Mansarovar Mega Suburb",
+        "zone": "Planned Residential",
+        "lst": 37.5,
+        "ndvi": 0.16,
+        "ndbi": 0.33,
+        "population": 240000,
+        "vulnerable_pop_pct": 34,
+        "anomaly": 4.5,
+        "risk_severity": "critical",
+        "grid_mw": 85
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.68209359605912,
+              26.72120689655173
+            ],
+            [
+              75.79180000000001,
+              26.817200000000003
+            ],
+            [
+              75.98,
+              26.785833333333322
+            ],
+            [
+              75.98,
+              26.7
+            ],
+            [
+              75.67982142857142,
+              26.7
+            ],
+            [
+              75.68209359605912,
+              26.72120689655173
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "JAI-04",
+        "name": "Sitapura Industrial Area",
+        "zone": "Export Industrial Hub",
+        "lst": 41.5,
+        "ndvi": 0.04,
+        "ndbi": 0.4,
+        "population": 130000,
+        "vulnerable_pop_pct": 48,
+        "anomaly": 8.5,
+        "risk_severity": "critical",
+        "grid_mw": 140
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.815,
+              26.963571428571427
+            ],
+            [
+              75.77772727272726,
+              26.942272727272723
+            ],
+            [
+              75.72863636363635,
+              26.931363636363635
+            ],
+            [
+              75.62838403041826,
+              26.946787072243342
+            ],
+            [
+              75.61646640671864,
+              26.962015146970618
+            ],
+            [
+              75.6,
+              27.013554999999997
+            ],
+            [
+              75.6,
+              27.068515695067262
+            ],
+            [
+              75.6081821086262,
+              27.08
+            ],
+            [
+              75.815,
+              27.08
+            ],
+            [
+              75.815,
+              26.963571428571427
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "JAI-05",
+        "name": "VKI Industrial Area North",
+        "zone": "Heavy Metal Industrial",
+        "lst": 41.8,
+        "ndvi": 0.03,
+        "ndbi": 0.4,
+        "population": 140000,
+        "vulnerable_pop_pct": 54,
+        "anomaly": 8.8,
+        "risk_severity": "critical",
+        "grid_mw": 155
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.61646640671864,
+              26.962015146970618
+            ],
+            [
+              75.62838403041826,
+              26.946787072243342
+            ],
+            [
+              75.68209359605912,
+              26.72120689655173
+            ],
+            [
+              75.67982142857142,
+              26.7
+            ],
+            [
+              75.6,
+              26.7
+            ],
+            [
+              75.6,
+              26.944931250000018
+            ],
+            [
+              75.61646640671864,
+              26.962015146970618
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "JAI-06",
+        "name": "Bagru Industrial & Textile",
+        "zone": "Western Industrial Corridor",
+        "lst": 41.0,
+        "ndvi": 0.06,
+        "ndbi": 0.39,
+        "population": 120000,
+        "vulnerable_pop_pct": 52,
+        "anomaly": 8.0,
+        "risk_severity": "critical",
+        "grid_mw": 130
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.815,
+              26.963571428571427
+            ],
+            [
+              75.815,
+              27.08
+            ],
+            [
+              75.98,
+              27.08
+            ],
+            [
+              75.98,
+              26.936055000000014
+            ],
+            [
+              75.96885475896168,
+              26.90674301606923
+            ],
+            [
+              75.94368421052629,
+              26.908421052631585
+            ],
+            [
+              75.815,
+              26.963571428571427
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "JAI-07",
+        "name": "Amer & Aravalli Foothills",
+        "zone": "Heritage Hillside",
+        "lst": 34.0,
+        "ndvi": 0.36,
+        "ndbi": 0.22,
+        "population": 95000,
+        "vulnerable_pop_pct": 30,
+        "anomaly": 1.0,
+        "risk_severity": "moderate",
+        "grid_mw": 48
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.79180000000001,
+              26.817200000000003
+            ],
+            [
+              75.802,
+              26.858
+            ],
+            [
+              75.83800000000001,
+              26.882
+            ],
+            [
+              75.94368421052629,
+              26.908421052631585
+            ],
+            [
+              75.96885475896168,
+              26.90674301606923
+            ],
+            [
+              75.98,
+              26.845890000000015
+            ],
+            [
+              75.98,
+              26.785833333333322
+            ],
+            [
+              75.79180000000001,
+              26.817200000000003
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_id": "JAI-08",
+        "name": "Jagatpura & Malviya Nagar",
+        "zone": "East Tech Mixed",
+        "lst": 37.8,
+        "ndvi": 0.16,
+        "ndbi": 0.33,
+        "population": 210000,
+        "vulnerable_pop_pct": 30,
+        "anomaly": 4.8,
+        "risk_severity": "critical",
+        "grid_mw": 85
+      }
+    }
+  ]
+}
