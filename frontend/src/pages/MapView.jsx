@@ -102,6 +102,20 @@ const CITY_COORDINATES = {
   'lucknow': { longitude: 80.96, latitude: 26.85, zoom: 10.6 }
 };
 
+// Robust 2D Ray-Casting Point-in-Polygon (handles arbitrary winding, self-intersecting loops, and non-convex rings)
+function pointInPoly(pt, ring) {
+  if (!pt || !ring || ring.length < 3) return false;
+  const x = pt[0], y = pt[1];
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const xi = ring[i][0], yi = ring[i][1];
+    const xj = ring[j][0], yj = ring[j][1];
+    const intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+    if (intersect) inside = !inside;
+  }
+  return inside;
+}
+
 export function MapView() {
   const mapRef = useRef(null);
   const [currentCity, setCurrentCity] = useState('Pune');
@@ -184,6 +198,7 @@ export function MapView() {
   const [isDrawingLasso, setIsDrawingLasso] = useState(false);
   const [lassoPath, setLassoPath] = useState([]);
   const [lassoPathLngLat, setLassoPathLngLat] = useState([]);
+  const lassoCoordsRef = useRef([]);
   const [drawnTrees, setDrawnTrees] = useState([]);
   const [drawnPolygons, setDrawnPolygons] = useState([]);
   const [currentPolygonPath, setCurrentPolygonPath] = useState([]);
@@ -747,8 +762,12 @@ export function MapView() {
       setMapCenterCoords({ lng: event.lngLat.lng, lat: event.lngLat.lat });
     }
     if (interactionMode === 'lasso' && isDrawingLasso) {
-      setLassoPath(prev => [...prev, event.point]);
-      setLassoPathLngLat(prev => [...prev, [event.lngLat.lng, event.lngLat.lat]]);
+      if (event.lngLat && event.point) {
+        const pt = [event.lngLat.lng, event.lngLat.lat];
+        lassoCoordsRef.current.push(pt);
+        setLassoPath(prev => [...prev, event.point]);
+        setLassoPathLngLat(prev => [...prev, pt]);
+      }
     } else if (interactionMode === 'select' || interactionMode === 'navigate') {
       const { features, lngLat } = event;
       const hoveredFeature = features && features[0];
@@ -761,8 +780,12 @@ export function MapView() {
   // Only start lasso drawing on pointer down
   const onMouseDown = useCallback(event => {
     if (interactionMode === 'lasso') {
+      if (event.originalEvent) {
+        event.originalEvent.preventDefault();
+      }
       const lngLatArr = [event.lngLat.lng, event.lngLat.lat];
       setIsDrawingLasso(true);
+      lassoCoordsRef.current = [lngLatArr];
       setLassoPath([event.point]);
       setLassoPathLngLat([lngLatArr]);
     }
@@ -808,23 +831,92 @@ export function MapView() {
   const onPointerUp = useCallback(() => {
     if (interactionMode === 'lasso' && isDrawingLasso) {
       setIsDrawingLasso(false);
-      if (lassoPathLngLat.length > 2 && pointData) {
-        const coords = [...lassoPathLngLat, lassoPathLngLat[0]];
-        try {
-          const searchPoly = turf.polygon([coords]);
-          const newSelection = new Set(selectedZones);
-          pointData.features.forEach(feat => {
-            if (turf.booleanPointInPolygon(feat.geometry, searchPoly)) {
-              newSelection.add(feat.properties.zone_id);
+      const ring = lassoCoordsRef.current.length >= 3 ? lassoCoordsRef.current : lassoPathLngLat;
+
+      if (ring && ring.length >= 3) {
+        const featuresToTest = mapData?.features || geoData?.features || [];
+        const newSelection = new Set(selectedZones);
+        const prevCount = newSelection.size;
+
+        featuresToTest.forEach(feat => {
+          if (!feat) return;
+          const zoneId = feat.properties?.zone_id || feat.properties?.id;
+          if (!zoneId) return;
+
+          // 1. Centroid check via ray-casting
+          let center = null;
+          try {
+            center = turf.centroid(feat)?.geometry?.coordinates;
+          } catch {}
+          if (center && pointInPoly(center, ring)) {
+            newSelection.add(zoneId);
+            return;
+          }
+
+          // 2. Vertex check: if any polygon vertex is inside lasso ring
+          const geom = feat.geometry;
+          if (geom && geom.coordinates) {
+            const coordsList = geom.type === 'MultiPolygon'
+              ? geom.coordinates.flat(2)
+              : (geom.type === 'Polygon' ? geom.coordinates[0] : []);
+            for (let c of coordsList) {
+              if (pointInPoly(c, ring)) {
+                newSelection.add(zoneId);
+                return;
+              }
+            }
+          }
+
+          // 3. Reverse check: if lasso was drawn entirely inside a large ward
+          try {
+            if (turf.booleanPointInPolygon(turf.point(ring[0]), feat)) {
+              newSelection.add(zoneId);
+              return;
+            }
+          } catch {}
+        });
+
+        // 4. Fallback: test cityWards centers if features list was empty
+        if (newSelection.size === prevCount && cityWards && cityWards.length > 0) {
+          cityWards.forEach(w => {
+            if (w.center && pointInPoly(w.center, ring)) {
+              const id = w.id || w.zone_id;
+              if (id) newSelection.add(id);
             }
           });
-          setSelectedZones(newSelection);
-        } catch {}
+        }
+
+        setSelectedZones(newSelection);
+        const addedCount = newSelection.size - prevCount;
+        if (addedCount > 0) {
+          setDataFeedToast({
+            type: 'live',
+            title: 'Multi-Lasso Selection',
+            message: `Encircled and selected ${addedCount} ward(s) (${newSelection.size} active in plan).`
+          });
+          setTimeout(() => setDataFeedToast(null), 4000);
+        }
       }
+
+      lassoCoordsRef.current = [];
       setLassoPath([]);
       setLassoPathLngLat([]);
     }
-  }, [interactionMode, isDrawingLasso, lassoPathLngLat, pointData, selectedZones]);
+  }, [interactionMode, isDrawingLasso, lassoPathLngLat, mapData, geoData, cityWards, selectedZones]);
+
+  // Global window pointer listener ensures lasso finishes even if mouse is released outside canvas
+  useEffect(() => {
+    if (!isDrawingLasso) return;
+    const handleGlobalRelease = () => {
+      onPointerUp();
+    };
+    window.addEventListener('mouseup', handleGlobalRelease);
+    window.addEventListener('pointerup', handleGlobalRelease);
+    return () => {
+      window.removeEventListener('mouseup', handleGlobalRelease);
+      window.removeEventListener('pointerup', handleGlobalRelease);
+    };
+  }, [isDrawingLasso, onPointerUp]);
 
   const onDblClick = useCallback(event => {
     if (interactionMode === 'polygon' && currentPolygonPath.length >= 3) {
@@ -840,7 +932,7 @@ export function MapView() {
 
   const svgPath = useMemo(() => {
     if (lassoPath.length === 0) return '';
-    return lassoPath.map((p, i) => (i === 0 ? `M ${p.x} ${p.y}` : `L ${p.x} ${p.y}`)).join(' ');
+    return lassoPath.map((p, i) => (i === 0 ? `M ${p.x} ${p.y}` : `L ${p.x} ${p.y}`)).join(' ') + (lassoPath.length > 2 ? ' Z' : '');
   }, [lassoPath]);
 
   const currentPass = MOCK_SATELLITE_PASSES[selectedPassIndex] || MOCK_SATELLITE_PASSES[0];
@@ -1021,6 +1113,21 @@ export function MapView() {
                   Exit Ruler
                 </button>
               </div>
+            ) : interactionMode === 'lasso' ? (
+              <div className="bg-white px-3.5 py-1.5 rounded-full shadow-lg border border-emerald-500 text-xs text-slate-800 flex items-center gap-2.5">
+                <span className="material-symbols-outlined text-[16px] text-emerald-600">gesture</span>
+                <span className="font-bold text-slate-900">Multi Lasso Active</span>
+                <span className="text-[11px] text-slate-500">Drag a loop on the map to encircle wards</span>
+                <span className="bg-emerald-100 text-emerald-800 font-mono font-bold text-[10px] px-2 py-0.5 rounded-full">
+                  {selectedZones.size} Selected
+                </span>
+                <button
+                  onClick={() => setInteractionMode('navigate')}
+                  className="ml-1 text-[11px] font-bold bg-slate-800 hover:bg-slate-900 text-white px-2.5 py-0.5 rounded-full shadow-xs transition-colors"
+                >
+                  ✓ Done (Pan)
+                </button>
+              </div>
             ) : (
               <div className="bg-white px-3.5 py-1.5 rounded-full shadow-md border border-slate-200 text-xs text-slate-700 flex items-center gap-2">
                 <span className="material-symbols-outlined text-[16px] text-emerald-600">draw</span>
@@ -1168,16 +1275,9 @@ export function MapView() {
             </button>
           </div>
 
-          {/* Lasso SVG overlay */}
-          {isDrawingLasso && (
-            <svg style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 100}}>
-              <path d={svgPath} fill="rgba(184, 67, 30, 0.2)" stroke="#b8431e" strokeWidth="2" strokeDasharray="4 4" />
-            </svg>
-          )}
-
           {/* Map Stage Container */}
           <div 
-            className="flex-1 w-full h-full relative" 
+            className="flex-1 w-full h-full relative overflow-hidden" 
             style={{
               cursor: interactionMode === 'navigate' 
                 ? (hoverInfo ? 'pointer' : 'grab') 
@@ -1186,6 +1286,13 @@ export function MapView() {
                   : 'crosshair'
             }}
           >
+            {/* Lasso SVG overlay (rendered directly over map canvas) */}
+            {isDrawingLasso && (
+              <svg className="absolute inset-0 w-full h-full pointer-events-none z-30">
+                <path d={svgPath} fill="rgba(16, 185, 129, 0.2)" stroke="#059669" strokeWidth="2.5" strokeDasharray="4 4" />
+              </svg>
+            )}
+
             <Map
               ref={mapRef}
               key={currentCity}
@@ -1197,8 +1304,11 @@ export function MapView() {
               onMouseDown={onMouseDown}
               onMouseUp={onPointerUp}
               onDblClick={onDblClick}
-              dragPan={true}
-              doubleClickZoom={true}
+              dragPan={interactionMode !== 'lasso'}
+              dragRotate={interactionMode !== 'lasso'}
+              touchZoomRotate={interactionMode !== 'lasso'}
+              boxZoom={interactionMode !== 'lasso'}
+              doubleClickZoom={interactionMode !== 'lasso' && interactionMode !== 'polygon'}
               onMove={(e) => {
                 if (e.viewState) {
                   setMapBearing(e.viewState.bearing || 0);
