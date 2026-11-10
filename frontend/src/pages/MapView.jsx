@@ -206,7 +206,15 @@ export function MapView() {
   const [isUsingMockData, setIsUsingMockData] = useState(false);
   const [dataFeedToast, setDataFeedToast] = useState(null);
 
-  const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || (typeof window !== 'undefined' && window.location.hostname === '127.0.0.1' ? 'http://127.0.0.1:8000' : 'http://localhost:8000')).replace(/\/$/, '');
+  let rawApiUrl = (import.meta.env.VITE_API_BASE_URL || '').trim();
+  if (rawApiUrl && !rawApiUrl.startsWith('http://') && !rawApiUrl.startsWith('https://')) {
+    if (!rawApiUrl.includes('.')) {
+      rawApiUrl = `https://${rawApiUrl}.onrender.com`;
+    } else {
+      rawApiUrl = `https://${rawApiUrl}`;
+    }
+  }
+  const API_BASE_URL = (rawApiUrl || (typeof window !== 'undefined' && window.location.hostname === '127.0.0.1' ? 'http://127.0.0.1:8000' : 'http://localhost:8000')).replace(/\/$/, '');
   const demoModeEnabled = import.meta.env.VITE_ENABLE_DEMO_MODE !== 'false';
 
   // Dynamic city wards derived from live GeoJSON features
