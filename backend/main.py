@@ -4,10 +4,13 @@ import sys
 import urllib.request
 from collections import OrderedDict
 from pathlib import Path
-from dotenv import load_dotenv
 
-# Load .env file from project root
-load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+try:
+    from dotenv import load_dotenv
+    # Load .env file from project root
+    load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+except ImportError:
+    pass
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -20,7 +23,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
 from urban_heat.utils import DATA_DIR, log, processed_dir
 from urban_heat.model import UrbanHeatModel
-from backend.models import SimulationRequest, SimulationResponse, SimulationResult
+try:
+    from backend.models import SimulationRequest, SimulationResponse, SimulationResult
+except ImportError:
+    from models import SimulationRequest, SimulationResponse, SimulationResult
 
 app = FastAPI(
     title="Urban Heat DSS API",
